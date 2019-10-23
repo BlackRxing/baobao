@@ -1,4 +1,10 @@
 <resources>
     <string name="app_name">BaoxiaojianApp</string>
     <string name="action_settings">Settings</string>
+
+    <string name="app_name_CN">包小鉴</string>
+
+    <string name="person_login">手机号登录</string>
+    <string name="enterprise_login">企业账号登录</string>
+
 </resources>

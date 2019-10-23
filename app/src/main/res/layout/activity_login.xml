@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/login_background">
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="#4D3F3E3E">
+
+        <TextView
+            android:id="@+id/app_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="包小鉴"
+            android:textColor="#FFFFFFFF"
+            android:textSize="28sp"
+            android:layout_marginTop="54dp"
+            android:layout_centerHorizontal="true"
+            android:textStyle="bold"
+            />
+        <LinearLayout
+           android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_below="@id/app_name"
+            android:layout_marginTop="42dp"
+            android:paddingLeft="85dp">
+            <Button
+                android:id="@+id/person_login"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/person_login"
+                android:textSize="14sp"
+                android:background="@drawable/login_choosebutton_selector"
+                />
+            <Button
+                android:id="@+id/enterprise"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="61dp"
+                android:text="@string/enterprise_login"
+                android:textSize="14sp"
+                />
+        </LinearLayout>>
+
+    </RelativeLayout>
+</FrameLayout>

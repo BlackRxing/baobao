@@ -1,7 +1,8 @@
-package com.example.baoxiaojianapp;
+package com.example.baoxiaojianapp.baoxiaojianapp.activity;
 
 import android.os.Bundle;
 
+import com.example.baoxiaojianapp.R;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.snackbar.Snackbar;
 
