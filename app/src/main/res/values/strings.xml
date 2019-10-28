@@ -7,4 +7,13 @@
     <string name="person_login">手机号登录</string>
     <string name="enterprise_login">企业账号登录</string>
 
+    <string name="enter_phonenumber">请输入手机号|</string>
+    <string name="vertify_code">验证码|</string>
+    <string name="request_vertify_code">获取验证码|</string>
+    <string name="login">登录</string>
+    <string name="account_password">账号密码|</string>
+    <string name="enterprise_login_new">企业账号登录|</string>
+    <string name="login_other_way">选择其他方式登录</string>
+
+
 </resources>
