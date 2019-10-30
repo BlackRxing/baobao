@@ -1,8 +1,13 @@
 package com.example.baoxiaojianapp.baoxiaojianapp.Utils;
 
+import android.app.Application;
+import android.content.SharedPreferences;
 import android.os.Handler;
 import android.os.Looper;
+import android.preference.PreferenceManager;
 import android.util.Log;
+
+import com.blankj.utilcode.util.DeviceUtils;
 
 import java.io.IOException;
 import java.util.concurrent.TimeUnit;
@@ -15,6 +20,7 @@ import okhttp3.Request;
 import okhttp3.RequestBody;
 import okhttp3.Response;
 
+import static android.content.Context.MODE_PRIVATE;
 import static java.util.concurrent.TimeUnit.*;
 
 public class OkHttpUtils {
@@ -88,8 +94,14 @@ public class OkHttpUtils {
      * @param realCallback 结果回调的方法
      */
     private void postRequest(String url, RequestBody requestBody, final RealCallback realCallback){
-
-        Request request = new Request.Builder().url(url).post(requestBody).build();
+        SharedPreferences sharedPreferences=MyApplication.getContext().getSharedPreferences("Session",MODE_PRIVATE);
+        String sessionid= sharedPreferences.getString("sessionid","null");
+        Log.i("session_out",sessionid);
+        Request request = new Request.Builder().url(url).post(requestBody).
+                addHeader("TS-DEVICE-I", DeviceUtils.getMacAddress()).
+                addHeader("TS-VERSION","V1.0").addHeader("TS-MOBILE",DeviceUtils.getModel()).
+                addHeader("TS-VERSION","TS-PLATFORM ANDROID").build();
+              //  addHeader("cookie",sessionid).build();
         deliveryResult(realCallback, okHttpClient.newCall(request));
     }
 

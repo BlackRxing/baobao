@@ -1,5 +1,6 @@
 package com.example.baoxiaojianapp.baoxiaojianapp.activity;
 
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.util.Log;
@@ -8,28 +9,37 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 
+import com.blankj.utilcode.util.EncryptUtils;
 import com.blankj.utilcode.util.ToastUtils;
 import com.example.baoxiaojianapp.R;
 import com.example.baoxiaojianapp.baoxiaojianapp.Utils.OkHttpUtils;
+import com.example.baoxiaojianapp.baoxiaojianapp.jsonclass.LoginRequest;
+import com.example.baoxiaojianapp.baoxiaojianapp.jsonclass.User;
+import com.google.gson.Gson;
+
 import org.json.JSONException;
 import org.json.JSONObject;
 import java.io.IOException;
+import java.util.List;
 import java.util.regex.Pattern;
 
 import okhttp3.Call;
 import okhttp3.Callback;
 import okhttp3.FormBody;
+import okhttp3.Headers;
 import okhttp3.MediaType;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.RequestBody;
 import okhttp3.Response;
+import okhttp3.internal.http2.Header;
 
 public class LoginActivity extends BaseActivity implements View.OnClickListener {
 
     Button person_login_button;
     Button enterprise_button;
     Button get_verfitycode_button;
+    Button loginButton;
     EditText firstEdit;
     EditText vertify_code_Edit;
     EditText account_password_Edit;
@@ -48,6 +58,9 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
         enterprise_button.setOnClickListener(this);
         person_login_button.setOnClickListener(this);
         get_verfitycode_button.setOnClickListener(this);
+        loginButton.setOnClickListener(this);
+
+
     }
 
     public void bindView(){
@@ -59,6 +72,7 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
         get_verfitycode_button=findViewById(R.id.vertify_code);
         vertify_code_Edit=findViewById(R.id.vertify_edit);
         account_password_Edit=findViewById(R.id.enterprise_password_edit);
+        loginButton=findViewById(R.id.login_button);
     }
 
     @Override
@@ -72,6 +86,9 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
                 break;
             case R.id.vertify_code:
                 requestVertifyCode();
+                break;
+            case R.id.login_button:
+                login();
                 break;
         }
     }
@@ -114,7 +131,15 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
             okHttpUtils.post("https://dev2.turingsenseai.com/account/sendSMS", requestBodyJson, new OkHttpUtils.RealCallback() {
                 @Override
                 public void onResponse(Call call, Response response) {
-
+                    Headers headers=response.headers();
+                    List cookies=headers.values("Set-Cookie");
+                    String session=cookies.get(0).toString();
+                    String sessionid=session.substring(0,session.indexOf(";"));
+                    SharedPreferences share = getApplicationContext().getSharedPreferences("Session",MODE_PRIVATE);
+                    SharedPreferences.Editor edit = share.edit();//编辑文件
+                    edit.putString("sessionid",sessionid);
+                    Log.i("sessionid_in",session);
+                    edit.commit();
                 }
 
                 @Override
@@ -138,7 +163,7 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
         linearLayout_person.setVisibility(View.INVISIBLE);
         linearLayout_enterprise.setVisibility(View.VISIBLE);
     }
-    public void vertifyCodeCountDown() {
+    private void vertifyCodeCountDown() {
         CountDownTimer countDownTimer = new CountDownTimer(60000, 1000) {
             @Override
             public void onTick(long millisUntilFinished) {
@@ -153,6 +178,73 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
             }
         };
         countDownTimer.start();
+    }
+
+    private void login(){
+        if(linearLayout_person.getVisibility()==View.VISIBLE){
+            LoginRequest loginRequest=new LoginRequest();
+            loginRequest.setLoginType(1);
+            loginRequest.setSms(vertify_code_Edit.getText().toString());
+            loginRequest.setPhoneNum(firstEdit.getText().toString());
+            Gson gson=new Gson();
+            String json=gson.toJson(loginRequest);
+            OkHttpUtils okHttpUtils=OkHttpUtils.getInstance();
+            RequestBody requestBodyJson = RequestBody.create(MediaType.parse("application/json; charset=utf-8"),json);
+            Log.i("jsonrequest",json);
+            okHttpUtils.post("https://dev2.turingsenseai.com/account/login", requestBodyJson, new OkHttpUtils.RealCallback() {
+                @Override
+                public void onResponse(Call call, Response response) {
+                    if(response.isSuccessful()){
+                      try {
+                         // User user=new Gson().fromJson(response.body().string(),User.class);
+                          Log.i("return info",response.body().string());
+                      }catch(IOException e){
+
+                      }
+
+                    }else {
+                        ToastUtils.showShort("服务器出错");
+                    }
+                }
+
+                @Override
+                public void onFailure(Call call, IOException e) {
+                    Log.e("error",e.toString());
+                }
+            });
+        }else {
+            LoginRequest loginRequest=new LoginRequest();
+            loginRequest.setLoginType(0);
+            loginRequest.setUsername(firstEdit.getText().toString());
+            loginRequest.setPassword(EncryptUtils.encryptDES2HexString(account_password_Edit.getText().toString().getBytes(),"BaoBaoV2".getBytes(),"DES",null));
+            Gson gson=new Gson();
+            String json=gson.toJson(loginRequest);
+            OkHttpUtils okHttpUtils=OkHttpUtils.getInstance();
+            RequestBody requestBodyJson = RequestBody.create(MediaType.parse("application/json; charset=utf-8"),json);
+            Log.i("jsonrequest",json);
+            okHttpUtils.post("https://dev2.turingsenseai.com/account/login", requestBodyJson, new OkHttpUtils.RealCallback() {
+                @Override
+                public void onResponse(Call call, Response response) {
+                    Log.i("return info1","get in");
+                    Log.i("return info2",response.body().toString());
+         //           if(response.isSuccessful()){
+                        try {
+                            // User user=new Gson().fromJson(response.body().string(),User.class);
+                            Log.i("return info",response.body().string());
+                        }catch(IOException e){
+
+                        }
+//
+//                    }else {
+//                        ToastUtils.showShort("服务器出错");
+//                    }
+                }
+                @Override
+                public void onFailure(Call call, IOException e) {
+                    Log.e("error",e.toString());
+                }
+            });
+        }
     }
 
 
