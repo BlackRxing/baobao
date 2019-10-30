@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        android:id="@+id/linearlayout_person"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/login_first_edit"
+        android:layout_marginTop="14dp"
+        android:orientation="horizontal"
+        >
+        <EditText
+            android:id="@+id/vertify_edit"
+            android:layout_height="40dp"
+            android:layout_width="212dp"
+            android:layout_centerHorizontal="true"
+            android:hint="@string/vertify_code"
+            android:textColorHint="@color/white"
+            android:textSize="14sp"
+            android:background="@drawable/login_textview_background"
+            android:paddingStart="28dp"
+            android:layout_marginStart="32dp"/>
+        <Button
+            android:id="@+id/vertify_code"
+            android:layout_width="100dp"
+            android:layout_height="40dp"
+            android:textColor="@color/white"
+            android:background="@drawable/vertifycode_button_background"
+            android:text="@string/get_vertifycode"
+            android:layout_marginLeft="15dp"
+            />
+</LinearLayout>
