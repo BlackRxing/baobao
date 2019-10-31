@@ -17,6 +17,8 @@
     <string name="get_vertifycode">获取验证码</string>
     <string name="get_vertifycode_again">重新获取</string>
 
+    <string name="appraisal">鉴定</string>
+    <string name="person">我的</string>
 
 
 </resources>
