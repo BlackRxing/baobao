@@ -97,11 +97,19 @@ public class OkHttpUtils {
         SharedPreferences sharedPreferences=MyApplication.getContext().getSharedPreferences("Session",MODE_PRIVATE);
         String sessionid= sharedPreferences.getString("sessionid","null");
         Log.i("session_out",sessionid);
-        Request request = new Request.Builder().url(url).post(requestBody).
-                addHeader("TS-DEVICE-I", DeviceUtils.getMacAddress()).
-                addHeader("TS-VERSION","V1.0").addHeader("TS-MOBILE",DeviceUtils.getModel()).
-                addHeader("TS-VERSION","TS-PLATFORM ANDROID").build();
-              //  addHeader("cookie",sessionid).build();
+        Request request;
+        if (url=="https://dev2.turingsenseai.com/account/login"){
+             request= new Request.Builder().url(url).post(requestBody).
+                    addHeader("TS-DEVICE-I", DeviceUtils.getMacAddress()).
+                    addHeader("TS-VERSION","V1.0").addHeader("TS-MOBILE",DeviceUtils.getModel()).
+                    addHeader("TS-VERSION","TS-PLATFORM ANDROID").
+                    addHeader("cookie",sessionid).build();
+        }else{
+            request = new Request.Builder().url(url).post(requestBody).
+                    addHeader("TS-DEVICE-I", DeviceUtils.getMacAddress()).
+                    addHeader("TS-VERSION","V1.0").addHeader("TS-MOBILE",DeviceUtils.getModel()).
+                    addHeader("TS-VERSION","TS-PLATFORM ANDROID").build();
+        }
         deliveryResult(realCallback, okHttpClient.newCall(request));
     }
 

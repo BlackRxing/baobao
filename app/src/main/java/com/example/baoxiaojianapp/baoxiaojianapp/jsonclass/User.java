@@ -4,12 +4,45 @@ import android.graphics.ImageDecoder;
 
 public class User {
     private int id;
-    private int is_enterprise;
+    private boolean is_enterprise;
     private String username;
     private String avatar_url;
-    private int phone_num;
+    private String phone_num;
     private int point;
     private int hasPunch;
+    private int third_party_type;
+    private String turing_token;
+    private String nick_name;
+    private String sex;
+    private String location;
+    private String weibo_token;
+
+    public String getWeibo_token() {
+        return weibo_token;
+    }
+
+    public void setWeibo_token(String weibo_token) {
+        this.weibo_token = weibo_token;
+    }
+
+    public String getWeixin_token() {
+        return weixin_token;
+    }
+
+    public void setWeixin_token(String weixin_token) {
+        this.weixin_token = weixin_token;
+    }
+
+    public String getOpen_id() {
+        return open_id;
+    }
+
+    public void setOpen_id(String open_id) {
+        this.open_id = open_id;
+    }
+
+    private String weixin_token;
+    private String open_id;
 
     public int getId() {
         return id;
@@ -19,7 +52,7 @@ public class User {
         this.id = id;
     }
 
-    public void setIs_enterprise(int is_enterprise) {
+    public void setIs_enterprise(boolean is_enterprise) {
         this.is_enterprise = is_enterprise;
     }
 
@@ -31,7 +64,7 @@ public class User {
         this.avatar_url = avatar_url;
     }
 
-    public void setPhone_num(int phone_num) {
+    public void setPhone_num(String phone_num) {
         this.phone_num = phone_num;
     }
 
@@ -47,7 +80,7 @@ public class User {
         this.third_party_type = third_party_type;
     }
 
-    public void setTuring_token(long turing_token) {
+    public void setTuring_token(String turing_token) {
         this.turing_token = turing_token;
     }
 
@@ -63,11 +96,8 @@ public class User {
         this.location = location;
     }
 
-    public void setAvatar_Info(ImageDecoder.ImageInfo avatar_Info) {
-        this.avatar_Info = avatar_Info;
-    }
 
-    public int getIs_enterprise() {
+    public boolean getIs_enterprise() {
         return is_enterprise;
     }
 
@@ -79,7 +109,7 @@ public class User {
         return avatar_url;
     }
 
-    public int getPhone_num() {
+    public String getPhone_num() {
         return phone_num;
     }
 
@@ -95,7 +125,7 @@ public class User {
         return third_party_type;
     }
 
-    public long getTuring_token() {
+    public String getTuring_token() {
         return turing_token;
     }
 
@@ -111,14 +141,7 @@ public class User {
         return location;
     }
 
-    public ImageDecoder.ImageInfo getAvatar_Info() {
-        return avatar_Info;
-    }
 
-    private int third_party_type;
-    private long turing_token;
-    private String nick_name;
-    private String sex;
-    private String location;
-    private ImageDecoder.ImageInfo avatar_Info;
+
+
 }

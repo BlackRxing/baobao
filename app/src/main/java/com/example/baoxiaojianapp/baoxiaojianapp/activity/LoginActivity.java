@@ -195,13 +195,16 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
                 @Override
                 public void onResponse(Call call, Response response) {
                     if(response.isSuccessful()){
-                      try {
-                         // User user=new Gson().fromJson(response.body().string(),User.class);
-                          Log.i("return info",response.body().string());
-                      }catch(IOException e){
-
-                      }
-
+                        try {
+                            JSONObject jsonObject=new JSONObject(response.body().string());
+                            User user=new Gson().fromJson(jsonObject.getJSONObject("user").toString(),User.class);
+                            Log.i("return info", jsonObject.getJSONObject("user").toString());
+                            Log.i("return user",String.valueOf(user.getTuring_token()));
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }catch (JSONException j){
+                            j.printStackTrace();
+                        }
                     }else {
                         ToastUtils.showShort("服务器出错");
                     }
@@ -225,19 +228,23 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
             okHttpUtils.post("https://dev2.turingsenseai.com/account/login", requestBodyJson, new OkHttpUtils.RealCallback() {
                 @Override
                 public void onResponse(Call call, Response response) {
-                    Log.i("return info1","get in");
-                    Log.i("return info2",response.body().toString());
-         //           if(response.isSuccessful()){
+                    if (response.isSuccessful()) {
                         try {
-                            // User user=new Gson().fromJson(response.body().string(),User.class);
-                            Log.i("return info",response.body().string());
-                        }catch(IOException e){
+                            JSONObject jsonObject=new JSONObject(response.body().string());
+                            User user=new Gson().fromJson(jsonObject.getJSONObject("user").toString(),User.class);
 
+                            Log.i("return info", jsonObject.getJSONObject("user").toString());
+                           Log.i("return user",String.valueOf(user.getTuring_token()));
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }catch (JSONException j){
+                            j.printStackTrace();
                         }
 //
 //                    }else {
 //                        ToastUtils.showShort("服务器出错");
 //                    }
+                    }
                 }
                 @Override
                 public void onFailure(Call call, IOException e) {
