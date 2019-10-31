@@ -16,5 +16,8 @@
         android:textColorHint="@color/white"
         android:textSize="14sp"
         android:background="@drawable/login_textview_background"
-        android:paddingStart="26dp"/>
+        android:paddingStart="26dp"
+        android:maxLines="1"
+        android:inputType="number"
+        />
 </LinearLayout>

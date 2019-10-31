@@ -21,6 +21,7 @@ import com.google.gson.Gson;
 
 import org.json.JSONException;
 import org.json.JSONObject;
+
 import java.io.IOException;
 import java.util.List;
 import java.util.regex.Pattern;
@@ -47,6 +48,7 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
     EditText account_password_Edit;
     LinearLayout linearLayout_person;
     LinearLayout linearLayout_enterprise;
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -55,7 +57,7 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
         init();
     }
 
-    public void init(){
+    public void init() {
         personLogin();
         enterprise_button.setOnClickListener(this);
         person_login_button.setOnClickListener(this);
@@ -65,21 +67,21 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
 
     }
 
-    public void bindView(){
-        person_login_button=findViewById(R.id.person_login);
-        enterprise_button=findViewById(R.id.enterprise);
-        firstEdit=findViewById(R.id.login_first_edit);
-        linearLayout_enterprise=findViewById(R.id.linearlayout_enterprise);
-        linearLayout_person=findViewById(R.id.linearlayout_person);
-        get_verfitycode_button=findViewById(R.id.vertify_code);
-        vertify_code_Edit=findViewById(R.id.vertify_edit);
-        account_password_Edit=findViewById(R.id.enterprise_password_edit);
-        loginButton=findViewById(R.id.login_button);
+    public void bindView() {
+        person_login_button = findViewById(R.id.person_login);
+        enterprise_button = findViewById(R.id.enterprise);
+        firstEdit = findViewById(R.id.login_first_edit);
+        linearLayout_enterprise = findViewById(R.id.linearlayout_enterprise);
+        linearLayout_person = findViewById(R.id.linearlayout_person);
+        get_verfitycode_button = findViewById(R.id.vertify_code);
+        vertify_code_Edit = findViewById(R.id.vertify_edit);
+        account_password_Edit = findViewById(R.id.enterprise_password_edit);
+        loginButton = findViewById(R.id.login_button);
     }
 
     @Override
     public void onClick(View v) {
-        switch(v.getId()){
+        switch (v.getId()) {
             case R.id.person_login:
                 personLogin();
                 break;
@@ -95,50 +97,49 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
         }
     }
 
-    public boolean checkPhoneNumber(){
-            String phoneNum=firstEdit.getText().toString();
-            if(phoneNum.length()==0||phoneNum==null){
-                ToastUtils.showShort("请输入手机号");
-                return  false;
-            }else{
-                if (RegexUtils.checkPhoneNumber(phoneNum)){
-                    return true;
-                }else {
-                    ToastUtils.showShort("请输入11位手机号");
-                    return false;
-                }
+    public boolean checkPhoneNumber() {
+        String phoneNum = firstEdit.getText().toString();
+        if (phoneNum.length() == 0 || phoneNum == null) {
+            ToastUtils.showShort("请输入手机号");
+            return false;
+        } else {
+            if (RegexUtils.checkPhoneNumber(phoneNum)) {
+                return true;
+            } else {
+                ToastUtils.showShort("请输入11位手机号");
+                return false;
             }
+        }
     }
-    public void requestVertifyCode(){
-        if(checkPhoneNumber()){
+
+    public void requestVertifyCode() {
+        if (checkPhoneNumber()) {
             vertifyCodeCountDown();
             //第一步创建OKHttpClient
             OkHttpClient client = new OkHttpClient.Builder()
                     .build();
             //第二步创建RequestBody（Form表达）
             //POST方式提交JSON：传递JSON同时设置son类型头（接口找一下）
-            JSONObject json=new JSONObject();
-            try
-            {
-                json.put("phoneNum","18252458715");
-            }
-            catch (JSONException e) {
+            JSONObject json = new JSONObject();
+            try {
+                json.put("phoneNum", "18252458715");
+            } catch (JSONException e) {
                 e.printStackTrace();
             }
             RequestBody requestBodyJson = RequestBody.create(MediaType.parse("application/json; charset=utf-8"), String.valueOf(json));
 
-            OkHttpUtils okHttpUtils=OkHttpUtils.getInstance();
+            OkHttpUtils okHttpUtils = OkHttpUtils.getInstance();
             okHttpUtils.post("https://dev2.turingsenseai.com/account/sendSMS", requestBodyJson, new OkHttpUtils.RealCallback() {
                 @Override
                 public void onResponse(Call call, Response response) {
-                    Headers headers=response.headers();
-                    List cookies=headers.values("Set-Cookie");
-                    String session=cookies.get(0).toString();
-                    String sessionid=session.substring(0,session.indexOf(";"));
-                    SharedPreferences share = getApplicationContext().getSharedPreferences("Session",MODE_PRIVATE);
+                    Headers headers = response.headers();
+                    List cookies = headers.values("Set-Cookie");
+                    String session = cookies.get(0).toString();
+                    String sessionid = session.substring(0, session.indexOf(";"));
+                    SharedPreferences share = getApplicationContext().getSharedPreferences("Session", MODE_PRIVATE);
                     SharedPreferences.Editor edit = share.edit();//编辑文件
-                    edit.putString("sessionid",sessionid);
-                    Log.i("sessionid_in",session);
+                    edit.putString("sessionid", sessionid);
+                    Log.i("sessionid_in", session);
                     edit.commit();
                 }
 
@@ -149,26 +150,31 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
             });
         }
     }
-    public void personLogin(){
+
+    public void personLogin() {
         enterprise_button.setBackgroundColor(getResources().getColor(R.color.transparent));
         person_login_button.setBackground(getResources().getDrawable(R.drawable.login_selector_selected));
         firstEdit.setHint(R.string.enter_phonenumber);
+        firstEdit.setText("");
         linearLayout_person.setVisibility(View.VISIBLE);
         linearLayout_enterprise.setVisibility(View.INVISIBLE);
     }
-    public void enterpriseLogin(){
+
+    public void enterpriseLogin() {
         person_login_button.setBackgroundColor(getResources().getColor(R.color.transparent));
         enterprise_button.setBackground(getResources().getDrawable(R.drawable.login_selector_selected));
         firstEdit.setHint(R.string.enterprise_login_new);
+        firstEdit.setText("");
         linearLayout_person.setVisibility(View.INVISIBLE);
         linearLayout_enterprise.setVisibility(View.VISIBLE);
     }
+
     private void vertifyCodeCountDown() {
         CountDownTimer countDownTimer = new CountDownTimer(60000, 1000) {
             @Override
             public void onTick(long millisUntilFinished) {
                 get_verfitycode_button.setClickable(false);
-                get_verfitycode_button.setText(millisUntilFinished/1000+"秒");
+                get_verfitycode_button.setText(millisUntilFinished / 1000 + "秒");
             }
 
             @Override
@@ -180,88 +186,86 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
         countDownTimer.start();
     }
 
-    private void login(){
-        if(!RegexUtils.checkVertifyCode(vertify_code_Edit.getText().toString())){
-            ToastUtils.showShort("所填信息不正确");
-            return;
-        }
-        if(linearLayout_person.getVisibility()==View.VISIBLE){
-            LoginRequest loginRequest=new LoginRequest();
+    private void login() {
+        if (linearLayout_person.getVisibility() == View.VISIBLE) {
+            if (!RegexUtils.checkVertifyCode(vertify_code_Edit.getText().toString())) {
+                ToastUtils.showShort("所填信息不正确");
+                return;
+            }
+            LoginRequest loginRequest = new LoginRequest();
             loginRequest.setLoginType(1);
             loginRequest.setSms(vertify_code_Edit.getText().toString());
             loginRequest.setPhoneNum(firstEdit.getText().toString());
-            Gson gson=new Gson();
-            String json=gson.toJson(loginRequest);
-            OkHttpUtils okHttpUtils=OkHttpUtils.getInstance();
-            final RequestBody requestBodyJson = RequestBody.create(MediaType.parse("application/json; charset=utf-8"),json);
-            Log.i("jsonrequest",json);
-            okHttpUtils.post("https://dev2.turingsenseai.com/account/login", requestBodyJson, new OkHttpUtils.RealCallback() {
-                @Override
-                public void onResponse(Call call, Response response) {
-                    if(response.isSuccessful()){
-                        try {
-
-                            JSONObject jsonObject=new JSONObject(response.body().string());
-                            User user=new Gson().fromJson(jsonObject.getJSONObject("user").toString(),User.class);
-                            UserInfoCashUtils userInfoCashUtils=UserInfoCashUtils.getInstance();
-                            userInfoCashUtils.clearUserInfoCash();
-                            userInfoCashUtils.saveUserInfoCash(user);
-                            Log.i("return info", jsonObject.getJSONObject("user").toString());
-                            Log.i("return user",String.valueOf(user.getTuring_token()));
-                        } catch (IOException e) {
-                            e.printStackTrace();
-                        }catch (JSONException j){
-                            ToastUtils.showShort("所填信息不正确");
-                            j.printStackTrace();
-                        }
-                    }else {
-
-                    }
-                }
-
-                @Override
-                public void onFailure(Call call, IOException e) {
-                    Log.e("error",e.toString());
-                }
-            });
-        }else {
-            LoginRequest loginRequest=new LoginRequest();
-            loginRequest.setLoginType(0);
-            loginRequest.setUsername(firstEdit.getText().toString());
-            loginRequest.setPassword(EncryptUtils.encryptDES2HexString(account_password_Edit.getText().toString().getBytes(),"BaoBaoV2".getBytes(),"DES",null));
-            Gson gson=new Gson();
-            String json=gson.toJson(loginRequest);
-            OkHttpUtils okHttpUtils=OkHttpUtils.getInstance();
-            RequestBody requestBodyJson = RequestBody.create(MediaType.parse("application/json; charset=utf-8"),json);
-            Log.i("jsonrequest",json);
+            Gson gson = new Gson();
+            String json = gson.toJson(loginRequest);
+            OkHttpUtils okHttpUtils = OkHttpUtils.getInstance();
+            final RequestBody requestBodyJson = RequestBody.create(MediaType.parse("application/json; charset=utf-8"), json);
+            Log.i("jsonrequest", json);
             okHttpUtils.post("https://dev2.turingsenseai.com/account/login", requestBodyJson, new OkHttpUtils.RealCallback() {
                 @Override
                 public void onResponse(Call call, Response response) {
                     if (response.isSuccessful()) {
                         try {
-                            JSONObject jsonObject=new JSONObject(response.body().string());
-                            User user=new Gson().fromJson(jsonObject.getJSONObject("user").toString(),User.class);
-                            UserInfoCashUtils userInfoCashUtils=new UserInfoCashUtils();
+
+                            JSONObject jsonObject = new JSONObject(response.body().string());
+                            User user = new Gson().fromJson(jsonObject.getJSONObject("user").toString(), User.class);
+                            UserInfoCashUtils userInfoCashUtils = UserInfoCashUtils.getInstance();
                             userInfoCashUtils.clearUserInfoCash();
                             userInfoCashUtils.saveUserInfoCash(user);
                             Log.i("return info", jsonObject.getJSONObject("user").toString());
-                            Log.i("return user",String.valueOf(user.getTuring_token()));
+                            Log.i("return user", String.valueOf(user.getTuring_token()));
                         } catch (IOException e) {
                             e.printStackTrace();
-                        }catch (JSONException j){
+                        } catch (JSONException j) {
+                            ToastUtils.showShort("所填信息不正确");
                             j.printStackTrace();
                         }
+                    } else {
 
+                    }
+                }
+
+                @Override
+                public void onFailure(Call call, IOException e) {
+                    Log.e("error", e.toString());
+                }
+            });
+        } else {
+            LoginRequest loginRequest = new LoginRequest();
+            loginRequest.setLoginType(0);
+            loginRequest.setUsername(firstEdit.getText().toString());
+            loginRequest.setPassword(EncryptUtils.encryptDES2HexString(account_password_Edit.getText().toString().getBytes(), "BaoBaoV2".getBytes(), "DES", null));
+            Gson gson = new Gson();
+            String json = gson.toJson(loginRequest);
+            OkHttpUtils okHttpUtils = OkHttpUtils.getInstance();
+            RequestBody requestBodyJson = RequestBody.create(MediaType.parse("application/json; charset=utf-8"), json);
+            Log.i("jsonrequest", json);
+            okHttpUtils.post("https://dev2.turingsenseai.com/account/login", requestBodyJson, new OkHttpUtils.RealCallback() {
+                @Override
+                public void onResponse(Call call, Response response) {
+                    if (response.isSuccessful()) {
+                        try {
+                            JSONObject jsonObject = new JSONObject(response.body().string());
+                            User user = new Gson().fromJson(jsonObject.getJSONObject("user").toString(), User.class);
+                            UserInfoCashUtils userInfoCashUtils = new UserInfoCashUtils();
+                            userInfoCashUtils.clearUserInfoCash();
+                            userInfoCashUtils.saveUserInfoCash(user);
+                            Log.i("return info", jsonObject.getJSONObject("user").toString());
+                            Log.i("return user", String.valueOf(user.getTuring_token()));
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        } catch (JSONException j) {
+                            j.printStackTrace();
+                        }
                     }
                 }
                 @Override
                 public void onFailure(Call call, IOException e) {
-                    Log.e("error",e.toString());
+                    Log.e("error", e.toString());
                 }
             });
         }
     }
-
 
     @Override
     public int getLayoutResId() {

@@ -18,7 +18,9 @@
             android:textSize="14sp"
             android:background="@drawable/login_textview_background"
             android:paddingStart="28dp"
-            android:layout_marginStart="32dp"/>
+            android:layout_marginStart="32dp"
+            android:maxLines="1"
+            android:inputType="number"/>
         <Button
             android:id="@+id/vertify_code"
             android:layout_width="100dp"

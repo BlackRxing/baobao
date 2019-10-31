@@ -56,6 +56,7 @@
             android:layout_below="@+id/login_choose"
             android:layout_marginTop="5dp"
             android:layout_centerHorizontal="true"
+            android:maxLines="1"
             android:hint="@string/enter_phonenumber"
             android:textColorHint="@color/white"
             android:textSize="14sp"
