@@ -13,6 +13,7 @@ import com.blankj.utilcode.util.EncryptUtils;
 import com.blankj.utilcode.util.ToastUtils;
 import com.example.baoxiaojianapp.R;
 import com.example.baoxiaojianapp.baoxiaojianapp.Utils.OkHttpUtils;
+import com.example.baoxiaojianapp.baoxiaojianapp.Utils.RegexUtils;
 import com.example.baoxiaojianapp.baoxiaojianapp.Utils.UserInfoCashUtils;
 import com.example.baoxiaojianapp.baoxiaojianapp.jsonclass.LoginRequest;
 import com.example.baoxiaojianapp.baoxiaojianapp.jsonclass.User;
@@ -98,14 +99,12 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
             String phoneNum=firstEdit.getText().toString();
             if(phoneNum.length()==0||phoneNum==null){
                 ToastUtils.showShort("请输入手机号");
-                return false;
+                return  false;
             }else{
-                String regex = "(1[0-9][0-9]|15[0-9]|18[0-9])\\d{8}";
-                Pattern p = Pattern.compile(regex);
-                if (p.matches(regex, phoneNum)){
+                if (RegexUtils.checkPhoneNumber(phoneNum)){
                     return true;
                 }else {
-                    ToastUtils.showShort("请输入1位手机号");
+                    ToastUtils.showShort("请输入11位手机号");
                     return false;
                 }
             }
@@ -182,6 +181,10 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
     }
 
     private void login(){
+        if(!RegexUtils.checkVertifyCode(vertify_code_Edit.getText().toString())){
+            ToastUtils.showShort("所填信息不正确");
+            return;
+        }
         if(linearLayout_person.getVisibility()==View.VISIBLE){
             LoginRequest loginRequest=new LoginRequest();
             loginRequest.setLoginType(1);
@@ -190,13 +193,14 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
             Gson gson=new Gson();
             String json=gson.toJson(loginRequest);
             OkHttpUtils okHttpUtils=OkHttpUtils.getInstance();
-            RequestBody requestBodyJson = RequestBody.create(MediaType.parse("application/json; charset=utf-8"),json);
+            final RequestBody requestBodyJson = RequestBody.create(MediaType.parse("application/json; charset=utf-8"),json);
             Log.i("jsonrequest",json);
             okHttpUtils.post("https://dev2.turingsenseai.com/account/login", requestBodyJson, new OkHttpUtils.RealCallback() {
                 @Override
                 public void onResponse(Call call, Response response) {
                     if(response.isSuccessful()){
                         try {
+
                             JSONObject jsonObject=new JSONObject(response.body().string());
                             User user=new Gson().fromJson(jsonObject.getJSONObject("user").toString(),User.class);
                             UserInfoCashUtils userInfoCashUtils=UserInfoCashUtils.getInstance();
@@ -207,10 +211,11 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
                         } catch (IOException e) {
                             e.printStackTrace();
                         }catch (JSONException j){
+                            ToastUtils.showShort("所填信息不正确");
                             j.printStackTrace();
                         }
                     }else {
-                        ToastUtils.showShort("服务器出错");
+
                     }
                 }
 
