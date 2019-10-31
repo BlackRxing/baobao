@@ -240,10 +240,7 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
                         }catch (JSONException j){
                             j.printStackTrace();
                         }
-//
-//                    }else {
-//                        ToastUtils.showShort("服务器出错");
-//                    }
+
                     }
                 }
                 @Override
@@ -255,12 +252,8 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
     }
 
 
-
-
     @Override
     public int getLayoutResId() {
         return R.layout.activity_login;
     }
-
-
 }

@@ -3,6 +3,7 @@ package com.example.baoxiaojianapp.baoxiaojianapp.jsonclass;
 import android.graphics.ImageDecoder;
 
 public class User {
+    private static User user;
     private int id;
     private boolean is_enterprise;
     private String username;
@@ -16,6 +17,16 @@ public class User {
     private String sex;
     private String location;
     private String weibo_token;
+    public static User getInstance(){
+        if(user==null){
+            synchronized (User.class){
+                if (user==null){
+                    user=new User();
+                }
+            }
+        }
+        return user;
+    }
 
     public String getWeibo_token() {
         return weibo_token;
