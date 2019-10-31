@@ -13,6 +13,7 @@ import com.blankj.utilcode.util.EncryptUtils;
 import com.blankj.utilcode.util.ToastUtils;
 import com.example.baoxiaojianapp.R;
 import com.example.baoxiaojianapp.baoxiaojianapp.Utils.OkHttpUtils;
+import com.example.baoxiaojianapp.baoxiaojianapp.Utils.UserInfoCashUtils;
 import com.example.baoxiaojianapp.baoxiaojianapp.jsonclass.LoginRequest;
 import com.example.baoxiaojianapp.baoxiaojianapp.jsonclass.User;
 import com.google.gson.Gson;
@@ -198,6 +199,9 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
                         try {
                             JSONObject jsonObject=new JSONObject(response.body().string());
                             User user=new Gson().fromJson(jsonObject.getJSONObject("user").toString(),User.class);
+                            UserInfoCashUtils userInfoCashUtils=UserInfoCashUtils.getInstance();
+                            userInfoCashUtils.clearUserInfoCash();
+                            userInfoCashUtils.saveUserInfoCash(user);
                             Log.i("return info", jsonObject.getJSONObject("user").toString());
                             Log.i("return user",String.valueOf(user.getTuring_token()));
                         } catch (IOException e) {
@@ -232,9 +236,11 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
                         try {
                             JSONObject jsonObject=new JSONObject(response.body().string());
                             User user=new Gson().fromJson(jsonObject.getJSONObject("user").toString(),User.class);
-
+                            UserInfoCashUtils userInfoCashUtils=new UserInfoCashUtils();
+                            userInfoCashUtils.clearUserInfoCash();
+                            userInfoCashUtils.saveUserInfoCash(user);
                             Log.i("return info", jsonObject.getJSONObject("user").toString());
-                           Log.i("return user",String.valueOf(user.getTuring_token()));
+                            Log.i("return user",String.valueOf(user.getTuring_token()));
                         } catch (IOException e) {
                             e.printStackTrace();
                         }catch (JSONException j){
