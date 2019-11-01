@@ -2,10 +2,10 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
     <item
         android:id="@+id/main_appraisal"
-        android:icon="@drawable/appraisal_tab_Unselected"
+        android:icon="@drawable/appraisal_tab_unselected"
         android:title="@string/appraisal"/>
     <item
         android:id="@+id/main_person"
-        android:icon="@drawable/person_tab_Unselect"
+        android:icon="@drawable/person_tab_unselect"
         android:title="@string/person"/>
 </menu>
