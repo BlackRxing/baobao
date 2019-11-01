@@ -29,5 +29,4 @@ public class PersonFragment extends Fragment {
         return inflater.inflate(R.layout.fragment_person, container, false);
     }
 
-
 }

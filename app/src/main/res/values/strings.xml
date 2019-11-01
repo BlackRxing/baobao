@@ -19,6 +19,7 @@
 
     <string name="appraisal">鉴定</string>
     <string name="person">我的</string>
+    <string name="appraisal_main">鉴  定</string>
 
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>

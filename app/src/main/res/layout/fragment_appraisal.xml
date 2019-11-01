@@ -5,12 +5,68 @@
     android:layout_height="match_parent"
     tools:context=".baoxiaojianapp.fragment.AppraisalFragment">
 
-    <!-- TODO: Update blank fragment layout -->
-    <TextView
+    <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:text="appraisal fragmentffffffff"
-        android:textSize="40sp"
-        android:layout_gravity="center"/>
+        android:layout_height="match_parent">
 
+        <ImageView
+            android:id="@+id/main_title"
+            android:layout_width="match_parent"
+            android:layout_height="25dp"
+            android:src="@drawable/baoxiaojianfont"
+            android:scaleType="fitCenter"
+            android:textSize="40sp"
+            android:layout_marginTop="10dp"
+            />
+        <ImageView
+            android:id="@+id/main_banner"
+            android:layout_width="match_parent"
+            android:layout_height="385dp"
+            android:src="@drawable/banner"
+            android:layout_below="@+id/main_title"
+            android:textSize="40sp"
+            android:layout_marginTop="5dp"
+            />
+        <TextView
+            android:id="@+id/main_apparasal_text"
+            android:layout_height="wrap_content"
+            android:layout_width="match_parent"
+            android:layout_below="@+id/main_banner"
+            android:text="鉴    定"
+            android:textSize="25sp"
+            android:textStyle="bold"
+            android:textColor="@color/black"
+            android:gravity="center_horizontal"
+            android:layout_marginTop="19dp"
+            />
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="200dp"
+            android:layout_below="@+id/main_apparasal_text"
+            >
+            <androidx.cardview.widget.CardView
+                android:id="@+id/bag_card"
+                android:layout_width="111dp"
+                android:layout_height="134dp"
+                android:layout_toLeftOf="@+id/shoe_card"
+                android:layout_centerVertical="true"
+                android:layout_marginRight="10dp"/>
+            <androidx.cardview.widget.CardView
+                android:id="@+id/shoe_card"
+                android:layout_width="111dp"
+                android:layout_height="134dp"
+                android:layout_centerInParent="true"/>
+            <androidx.cardview.widget.CardView
+                android:id="@+id/watch_card"
+                android:layout_width="111dp"
+                android:layout_height="134dp"
+                android:layout_toRightOf="@+id/shoe_card"
+                android:layout_centerVertical="true"
+                android:layout_marginLeft="10dp"/>
+        </RelativeLayout>
+
+
+
+
+    </RelativeLayout>
 </FrameLayout>
