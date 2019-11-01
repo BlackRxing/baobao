@@ -40,7 +40,7 @@ import java.io.IOException;
 import java.util.List;
 
 
-public class AppraisalFragment extends Fragment {
+public class AppraisalFragment extends Fragment implements View.OnClickListener {
 
     private CardView shoeCard;
     private CardView bagCard;
@@ -52,10 +52,10 @@ public class AppraisalFragment extends Fragment {
         loadPic();
     }
 
-    private void bindView(){
-        shoeCard=getView().findViewById(R.id.shoe_card);
-        bagCard=getView().findViewById(R.id.bag_card);
-        watchCard=getView().findViewById(R.id.watch_card);
+    public void init(){
+        shoeCard.setOnClickListener(this);
+        bagCard.setOnClickListener(this);
+        watchCard.setOnClickListener(this);
     }
 
     private void loadPic(){
@@ -110,7 +110,6 @@ public class AppraisalFragment extends Fragment {
         }catch (JSONException j){
             j.printStackTrace();
         }
-
     }
 
     @Override
@@ -120,7 +119,12 @@ public class AppraisalFragment extends Fragment {
         shoeCard=view.findViewById(R.id.shoe_card);
         bagCard=view.findViewById(R.id.bag_card);
         watchCard=view.findViewById(R.id.watch_card);
+        init();
         return view;
     }
 
+    @Override
+    public void onClick(View v) {
+
+    }
 }
