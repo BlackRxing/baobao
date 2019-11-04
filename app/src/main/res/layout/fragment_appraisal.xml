@@ -4,8 +4,10 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".baoxiaojianapp.fragment.AppraisalFragment">
-
+    <include layout="@layout/mainappraisal_subclass_layout"
+        android:visibility="gone"/>
     <RelativeLayout
+        android:id="@+id/mainappraisal_layout"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 

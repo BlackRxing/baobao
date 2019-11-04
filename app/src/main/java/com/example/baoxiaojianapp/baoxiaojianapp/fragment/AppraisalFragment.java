@@ -21,6 +21,10 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
+import android.widget.TextView;
 
 import com.blankj.utilcode.util.ToastUtils;
 import com.bumptech.glide.Glide;
@@ -45,6 +49,10 @@ public class AppraisalFragment extends Fragment implements View.OnClickListener 
     private CardView shoeCard;
     private CardView bagCard;
     private CardView watchCard;
+    private LinearLayout subclassLayout;
+    private RelativeLayout mainappraisalLayout;
+    private Button subclassButton;
+    private TextView subclassText;
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -56,6 +64,7 @@ public class AppraisalFragment extends Fragment implements View.OnClickListener 
         shoeCard.setOnClickListener(this);
         bagCard.setOnClickListener(this);
         watchCard.setOnClickListener(this);
+        subclassButton.setOnClickListener(this);
     }
 
     private void loadPic(){
@@ -119,12 +128,46 @@ public class AppraisalFragment extends Fragment implements View.OnClickListener 
         shoeCard=view.findViewById(R.id.shoe_card);
         bagCard=view.findViewById(R.id.bag_card);
         watchCard=view.findViewById(R.id.watch_card);
+        mainappraisalLayout=view.findViewById(R.id.mainappraisal_layout);
+        subclassLayout=view.findViewById(R.id.mainappraisal_subclass_layout);
+        subclassButton=view.findViewById(R.id.mainappraisal_subclass_button);
+        subclassText=view.findViewById(R.id.subclass_text);
         init();
         return view;
     }
 
+    private void showSubclass(int i){
+        switch (i){
+            case 0:
+                subclassText.setText("包");
+                break;
+            case 1:
+                subclassText.setText("表");
+                break;
+            case 2:
+                subclassText.setText("鞋");
+                break;
+        }
+        subclassLayout.setVisibility(View.VISIBLE);
+        mainappraisalLayout.setVisibility(View.INVISIBLE);
+    }
+
     @Override
     public void onClick(View v) {
-
+        switch (v.getId()){
+            case R.id.mainappraisal_subclass_button:
+                subclassLayout.setVisibility(View.INVISIBLE);
+                mainappraisalLayout.setVisibility(View.VISIBLE);
+                break;
+            case R.id.bag_card:
+                showSubclass(0);
+                break;
+            case R.id.shoe_card:
+                showSubclass(1);
+                break;
+            case R.id.watch_card:
+                showSubclass(2);
+                break;
+        }
     }
 }
