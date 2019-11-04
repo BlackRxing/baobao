@@ -1,14 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:id="@+id/mainappraisal_subclass_layout">
+    android:id="@+id/mainappraisal_subclass_layout"
+    android:background="@color/white">
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="30dp"
         android:layout_marginTop="32dp"
-        android:background="#F8F8F8">
+        android:background="@color/white">
         <Button
             android:id="@+id/mainappraisal_subclass_button"
             android:layout_width="8dp"
@@ -34,7 +36,23 @@
             android:layout_width="144dp"
             android:layout_height="134dp"
             android:layout_marginLeft="40dp"
-            android:layout_marginTop="38dp"/>
+            android:layout_marginTop="38dp"
+            app:cardCornerRadius="@dimen/subclasscardview_radius"
+            android:background="@color/white"
+            app:cardBackgroundColor="@color/white">
+            <ImageView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent" />
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:textSize="28sp"
+                android:textColor="@color/white"
+                android:gravity="center"
+                />
+        </androidx.cardview.widget.CardView>>
+
         <androidx.cardview.widget.CardView
             android:id="@+id/sub_2"
             android:layout_width="144dp"
@@ -42,28 +60,74 @@
             android:layout_marginTop="38dp"
             android:layout_toRightOf="@id/sub_1"
             android:layout_marginLeft="43dp"
-        />
+            app:cardCornerRadius="@dimen/subclasscardview_radius">
+            <ImageView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent" />
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:textSize="28sp"
+                android:text="dior"
+                android:textColor="@color/white" />
+        </androidx.cardview.widget.CardView>
         <androidx.cardview.widget.CardView
             android:id="@+id/sub_3"
             android:layout_width="144dp"
             android:layout_height="134dp"
             android:layout_marginLeft="40dp"
             android:layout_below="@id/sub_1"
-            android:layout_marginTop="38dp"/>
+            android:layout_marginTop="38dp"
+            app:cardCornerRadius="@dimen/subclasscardview_radius">
+            <ImageView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent" />
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:textSize="28sp"
+                android:textColor="@color/white" />
+        </androidx.cardview.widget.CardView>
         <androidx.cardview.widget.CardView
             android:id="@+id/sub_4"
             android:layout_width="144dp"
             android:layout_height="134dp"
             android:layout_alignRight="@id/sub_2"
             android:layout_marginTop="38dp"
-            android:layout_below="@id/sub_2"/>
+            android:layout_below="@id/sub_2"
+            app:cardCornerRadius="@dimen/subclasscardview_radius">
+            <ImageView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent" />
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:textSize="28sp"
+                android:text="dior"
+                android:textColor="@color/white" />
+        </androidx.cardview.widget.CardView>
         <androidx.cardview.widget.CardView
             android:id="@+id/sub_5"
             android:layout_width="144dp"
             android:layout_height="134dp"
             android:layout_marginLeft="40dp"
             android:layout_marginTop="38dp"
-            android:layout_below="@id/sub_3"/>
+            android:layout_below="@id/sub_3"
+            app:cardCornerRadius="@dimen/subclasscardview_radius">
+            <ImageView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent" />
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:textSize="28sp"
+                android:text="dior"
+                android:textColor="@color/white" />
+        </androidx.cardview.widget.CardView>
         <androidx.cardview.widget.CardView
             android:id="@+id/sub_6"
             android:layout_width="144dp"
@@ -71,7 +135,19 @@
             android:layout_marginLeft="40dp"
             android:layout_below="@id/sub_4"
             android:layout_alignRight="@id/sub_4"
-            android:layout_marginTop="38dp"/>
+            android:layout_marginTop="38dp"
+            app:cardCornerRadius="@dimen/subclasscardview_radius">
+            <ImageView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent" />
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:textSize="28sp"
+                android:text="dior"
+                android:textColor="@color/white" />
+        </androidx.cardview.widget.CardView>
     </RelativeLayout>
 
 </LinearLayout>

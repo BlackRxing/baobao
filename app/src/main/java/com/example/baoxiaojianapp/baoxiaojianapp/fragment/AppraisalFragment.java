@@ -22,6 +22,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -97,21 +98,35 @@ public class AppraisalFragment extends Fragment implements View.OnClickListener 
     private void showSubclassPic(JSONArray jsonArray){
         int subkind=jsonArray.length();
         String subclassImageUrl=null;
-        for(int i=0;i<subkind;i++){
+        String brandName="";
+        int i;
+        Log.d("cardView",String.valueOf(subkind));
+        for(i=0;i<subkind;i++){
             try {
                 subclassImageUrl=jsonArray.getJSONObject(i).getString("imageUrl");
+                brandName=jsonArray.getJSONObject(i).getString("brandName");
             }catch (JSONException j){
                 j.printStackTrace();
             }
             final CardView cardView=(CardView)subclassCardViews.getChildAt(i);
+            cardView.setVisibility(View.VISIBLE);
+            TextView textView=(TextView) cardView.getChildAt(1);
+            textView.setText(brandName);
             Glide.with(getView()).load(subclassImageUrl).into(new SimpleTarget<Drawable>() {
                 @Override
                 public void onResourceReady(@NonNull Drawable resource, @Nullable Transition<? super Drawable> transition) {
-                    cardView.setBackground(resource);
+                     cardView.getChildAt(0).setBackground(resource);
                 }
             });
         }
+        for (;i<6;i++){
+            subclassCardViews.getChildAt(i).setVisibility(View.INVISIBLE);
+        }
+
+
     }
+
+
 
     private void showPic(JSONArray jsonArray){
         try {
@@ -200,6 +215,7 @@ public class AppraisalFragment extends Fragment implements View.OnClickListener 
 
             }
         });
+
     }
 
     @Override
