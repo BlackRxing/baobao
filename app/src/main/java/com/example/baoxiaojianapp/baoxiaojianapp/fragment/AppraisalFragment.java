@@ -53,10 +53,11 @@ public class AppraisalFragment extends Fragment implements View.OnClickListener 
     private RelativeLayout mainappraisalLayout;
     private Button subclassButton;
     private TextView subclassText;
+    private RelativeLayout subclassCardViews;
+    private static final String[] subClasscategory=new String[]{"bag","shoe","watch"};
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
         loadPic();
     }
 
@@ -91,6 +92,25 @@ public class AppraisalFragment extends Fragment implements View.OnClickListener 
 
             }
         });
+    }
+
+    private void showSubclassPic(JSONArray jsonArray){
+        int subkind=jsonArray.length();
+        String subclassImageUrl=null;
+        for(int i=0;i<subkind;i++){
+            try {
+                subclassImageUrl=jsonArray.getJSONObject(i).getString("imageUrl");
+            }catch (JSONException j){
+                j.printStackTrace();
+            }
+            final CardView cardView=(CardView)subclassCardViews.getChildAt(i);
+            Glide.with(getView()).load(subclassImageUrl).into(new SimpleTarget<Drawable>() {
+                @Override
+                public void onResourceReady(@NonNull Drawable resource, @Nullable Transition<? super Drawable> transition) {
+                    cardView.setBackground(resource);
+                }
+            });
+        }
     }
 
     private void showPic(JSONArray jsonArray){
@@ -132,6 +152,7 @@ public class AppraisalFragment extends Fragment implements View.OnClickListener 
         subclassLayout=view.findViewById(R.id.mainappraisal_subclass_layout);
         subclassButton=view.findViewById(R.id.mainappraisal_subclass_button);
         subclassText=view.findViewById(R.id.subclass_text);
+        subclassCardViews=view.findViewById(R.id.subclass_cardviews);
         init();
         return view;
     }
@@ -142,14 +163,43 @@ public class AppraisalFragment extends Fragment implements View.OnClickListener 
                 subclassText.setText("包");
                 break;
             case 1:
-                subclassText.setText("表");
+                subclassText.setText("鞋");
                 break;
             case 2:
-                subclassText.setText("鞋");
+                subclassText.setText("表");
                 break;
         }
         subclassLayout.setVisibility(View.VISIBLE);
         mainappraisalLayout.setVisibility(View.INVISIBLE);
+        JSONObject json = new JSONObject();
+        try {
+            json.put("type", subClasscategory[i]);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        RequestBody requestBodyJson = RequestBody.create(MediaType.parse("application/json; charset=utf-8"), String.valueOf(json));
+        String subclassrequest="https://dev2.turingsenseai.com/secondClass";
+        OkHttpUtils okHttpUtils = OkHttpUtils.getInstance();
+        okHttpUtils.post(subclassrequest,requestBodyJson,new OkHttpUtils.RealCallback() {
+            @Override
+            public void onResponse(Call call, Response response) {
+                try {
+                    JSONObject jsonObject = new JSONObject(response.body().string());
+                    JSONArray jsonArray=jsonObject.getJSONArray("appraisalBrand");
+                    showSubclassPic(jsonArray);
+                    Log.i("return info",jsonObject.toString());
+                } catch (IOException e) {
+                    e.printStackTrace();
+                } catch (JSONException j){
+                    j.printStackTrace();
+                }
+            }
+
+            @Override
+            public void onFailure(Call call, IOException e) {
+
+            }
+        });
     }
 
     @Override

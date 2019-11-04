@@ -27,7 +27,8 @@
     </RelativeLayout>
     <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:id="@+id/subclass_cardviews">
         <androidx.cardview.widget.CardView
             android:id="@+id/sub_1"
             android:layout_width="144dp"
