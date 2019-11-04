@@ -32,6 +32,7 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.target.SimpleTarget;
 import com.bumptech.glide.request.transition.Transition;
 import com.example.baoxiaojianapp.R;
+import com.example.baoxiaojianapp.baoxiaojianapp.Utils.NetInterface;
 import com.example.baoxiaojianapp.baoxiaojianapp.Utils.OkHttpUtils;
 import com.example.baoxiaojianapp.baoxiaojianapp.Utils.UserInfoCashUtils;
 import com.example.baoxiaojianapp.baoxiaojianapp.jsonclass.User;
@@ -73,7 +74,7 @@ public class AppraisalFragment extends Fragment implements View.OnClickListener 
 
         OkHttpUtils okHttpUtils = OkHttpUtils.getInstance();
         RequestBody requestBody = RequestBody.create(null, new byte[]{});
-        okHttpUtils.post("https://dev2.turingsenseai.com/appraisalIndex",requestBody,new OkHttpUtils.RealCallback() {
+        okHttpUtils.post(NetInterface.TSAppraisalPageReques,requestBody,new OkHttpUtils.RealCallback() {
             @Override
             public void onResponse(Call call, Response response) {
                 try {
@@ -193,7 +194,7 @@ public class AppraisalFragment extends Fragment implements View.OnClickListener 
             e.printStackTrace();
         }
         RequestBody requestBodyJson = RequestBody.create(MediaType.parse("application/json; charset=utf-8"), String.valueOf(json));
-        String subclassrequest="https://dev2.turingsenseai.com/secondClass";
+        String subclassrequest=NetInterface.TSCategoryPageRequest;
         OkHttpUtils okHttpUtils = OkHttpUtils.getInstance();
         okHttpUtils.post(subclassrequest,requestBodyJson,new OkHttpUtils.RealCallback() {
             @Override

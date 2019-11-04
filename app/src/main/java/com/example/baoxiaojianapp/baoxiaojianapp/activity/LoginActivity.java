@@ -12,6 +12,7 @@ import android.widget.LinearLayout;
 import com.blankj.utilcode.util.EncryptUtils;
 import com.blankj.utilcode.util.ToastUtils;
 import com.example.baoxiaojianapp.R;
+import com.example.baoxiaojianapp.baoxiaojianapp.Utils.NetInterface;
 import com.example.baoxiaojianapp.baoxiaojianapp.Utils.OkHttpUtils;
 import com.example.baoxiaojianapp.baoxiaojianapp.Utils.RegexUtils;
 import com.example.baoxiaojianapp.baoxiaojianapp.Utils.UserInfoCashUtils;
@@ -129,7 +130,7 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
             RequestBody requestBodyJson = RequestBody.create(MediaType.parse("application/json; charset=utf-8"), String.valueOf(json));
 
             OkHttpUtils okHttpUtils = OkHttpUtils.getInstance();
-            okHttpUtils.post("https://dev2.turingsenseai.com/account/sendSMS", requestBodyJson, new OkHttpUtils.RealCallback() {
+            okHttpUtils.post(NetInterface.TSloginSMSRequest, requestBodyJson, new OkHttpUtils.RealCallback() {
                 @Override
                 public void onResponse(Call call, Response response) {
                     Headers headers = response.headers();
@@ -201,7 +202,7 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
             OkHttpUtils okHttpUtils = OkHttpUtils.getInstance();
             final RequestBody requestBodyJson = RequestBody.create(MediaType.parse("application/json; charset=utf-8"), json);
             Log.i("jsonrequest", json);
-            okHttpUtils.post("https://dev2.turingsenseai.com/account/login", requestBodyJson, new OkHttpUtils.RealCallback() {
+            okHttpUtils.post(NetInterface.TSloginRequest, requestBodyJson, new OkHttpUtils.RealCallback() {
                 @Override
                 public void onResponse(Call call, Response response) {
                     if (response.isSuccessful()) {
@@ -240,7 +241,7 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
             OkHttpUtils okHttpUtils = OkHttpUtils.getInstance();
             RequestBody requestBodyJson = RequestBody.create(MediaType.parse("application/json; charset=utf-8"), json);
             Log.i("jsonrequest", json);
-            okHttpUtils.post("https://dev2.turingsenseai.com/account/login", requestBodyJson, new OkHttpUtils.RealCallback() {
+            okHttpUtils.post(NetInterface.TSloginRequest, requestBodyJson, new OkHttpUtils.RealCallback() {
                 @Override
                 public void onResponse(Call call, Response response) {
                     if (response.isSuccessful()) {
