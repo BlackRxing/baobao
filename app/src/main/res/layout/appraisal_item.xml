@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="327dp"
+    android:layout_height="176dp">
+    <ImageView
+        android:id="@+id/appraisal_image"
+        android:layout_width="122dp"
+        android:layout_height="111dp"
+        android:layout_gravity="center_vertical"
+        android:layout_marginLeft="15dp"
+        />
+    <TextView
+        android:id="@+id/appraisal_brand"
+        android:layout_width="wrap_content"
+        android:layout_height="22dp"
+        android:layout_marginLeft="159dp"
+        android:layout_marginTop="55dp"
+        android:textStyle="bold"
+        android:textSize="17sp" />
+    <TextView
+        android:id="@+id/appraisal_data"
+        android:layout_width="wrap_content"
+        android:layout_height="18dp"
+        android:layout_marginLeft="159dp"
+        android:layout_marginTop="77dp"
+        android:textSize="13sp"
+        android:textColor="@color/gray"/>
+    <TextView
+        android:id="@+id/appraisal_id"
+        android:layout_width="wrap_content"
+        android:layout_height="20dp"
+        android:layout_marginLeft="159dp"
+        android:layout_marginTop="108dp"
+        android:textSize="15sp"
+        android:textColor="@color/red"/>
+
+</androidx.cardview.widget.CardView>

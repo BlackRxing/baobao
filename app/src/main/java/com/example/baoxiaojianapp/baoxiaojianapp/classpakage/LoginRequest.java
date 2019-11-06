@@ -1,4 +1,4 @@
-package com.example.baoxiaojianapp.baoxiaojianapp.jsonclass;
+package com.example.baoxiaojianapp.baoxiaojianapp.classpakage;
 
 public class LoginRequest {
     int loginType;

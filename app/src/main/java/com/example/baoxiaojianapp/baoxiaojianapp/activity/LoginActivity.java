@@ -16,8 +16,8 @@ import com.example.baoxiaojianapp.baoxiaojianapp.Utils.NetInterface;
 import com.example.baoxiaojianapp.baoxiaojianapp.Utils.OkHttpUtils;
 import com.example.baoxiaojianapp.baoxiaojianapp.Utils.RegexUtils;
 import com.example.baoxiaojianapp.baoxiaojianapp.Utils.UserInfoCashUtils;
-import com.example.baoxiaojianapp.baoxiaojianapp.jsonclass.LoginRequest;
-import com.example.baoxiaojianapp.baoxiaojianapp.jsonclass.User;
+import com.example.baoxiaojianapp.baoxiaojianapp.classpakage.LoginRequest;
+import com.example.baoxiaojianapp.baoxiaojianapp.classpakage.User;
 import com.google.gson.Gson;
 
 import org.json.JSONException;
@@ -25,18 +25,13 @@ import org.json.JSONObject;
 
 import java.io.IOException;
 import java.util.List;
-import java.util.regex.Pattern;
 
 import okhttp3.Call;
-import okhttp3.Callback;
-import okhttp3.FormBody;
 import okhttp3.Headers;
 import okhttp3.MediaType;
 import okhttp3.OkHttpClient;
-import okhttp3.Request;
 import okhttp3.RequestBody;
 import okhttp3.Response;
-import okhttp3.internal.http2.Header;
 
 public class LoginActivity extends BaseActivity implements View.OnClickListener {
 

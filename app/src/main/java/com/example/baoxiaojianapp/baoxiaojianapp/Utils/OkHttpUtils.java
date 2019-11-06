@@ -93,23 +93,24 @@ public class OkHttpUtils {
      * @param requestBody 请求参数
      * @param realCallback 结果回调的方法
      */
-    private void postRequest(String url, RequestBody requestBody, final RealCallback realCallback){
+    private void postRequest(String url, RequestBody requestBody, final RealCallback realCallback, boolean needToken){
         SharedPreferences sharedPreferences=MyApplication.getContext().getSharedPreferences("Session",MODE_PRIVATE);
         String sessionid= sharedPreferences.getString("sessionid","null");
         Log.i("session_out",sessionid);
-        Request request;
+        Request.Builder builder;
+        builder= new Request.Builder().url(url).post(requestBody).
+                addHeader("TS-DEVICE-I", DeviceUtils.getMacAddress()).
+                addHeader("TS-VERSION","V1.0").
+                addHeader("TS-MOBILE",DeviceUtils.getModel()).
+                addHeader("TS-VERSION","TS-PLATFORM ANDROID");
         if (url=="https://dev2.turingsenseai.com/account/login"){
-             request= new Request.Builder().url(url).post(requestBody).
-                    addHeader("TS-DEVICE-I", DeviceUtils.getMacAddress()).
-                    addHeader("TS-VERSION","V1.0").addHeader("TS-MOBILE",DeviceUtils.getModel()).
-                    addHeader("TS-VERSION","TS-PLATFORM ANDROID").
-                    addHeader("cookie",sessionid).build();
+             builder.addHeader("cookie",sessionid);
         }else{
-            request = new Request.Builder().url(url).post(requestBody).
-                    addHeader("TS-DEVICE-I", DeviceUtils.getMacAddress()).
-                    addHeader("TS-VERSION","V1.0").addHeader("TS-MOBILE",DeviceUtils.getModel()).
-                    addHeader("TS-VERSION","TS-PLATFORM ANDROID").build();
+            if (needToken){
+                builder.addHeader("Token",sharedPreferences.getString("turing_token",null));
+            }
         }
+        Request request=builder.build();
         deliveryResult(realCallback, okHttpClient.newCall(request));
     }
 
@@ -179,10 +180,13 @@ public class OkHttpUtils {
      * @param realCallback  请求回调
      * @param requestBody    请求参数
      */
-    public void post(String url, RequestBody requestBody, final RealCallback realCallback){
-        postRequest(url,requestBody,realCallback);
+    public void post(String url, RequestBody requestBody, final RealCallback realCallback,boolean needToken){
+        postRequest(url,requestBody,realCallback,needToken);
     }
 
+    public void post(String url, RequestBody requestBody, final RealCallback realCallback){
+        post(url,requestBody,realCallback,false);
+    }
     /**
      * http请求回调类,回调方法在UI线程中执行
      */

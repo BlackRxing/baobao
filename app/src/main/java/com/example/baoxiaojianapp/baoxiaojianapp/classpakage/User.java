@@ -1,6 +1,4 @@
-package com.example.baoxiaojianapp.baoxiaojianapp.jsonclass;
-
-import android.graphics.ImageDecoder;
+package com.example.baoxiaojianapp.baoxiaojianapp.classpakage;
 
 public class User {
     private static User user;

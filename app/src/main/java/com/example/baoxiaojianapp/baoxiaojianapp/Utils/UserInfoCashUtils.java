@@ -3,7 +3,7 @@ package com.example.baoxiaojianapp.baoxiaojianapp.Utils;
 import android.content.Context;
 import android.content.SharedPreferences;
 
-import com.example.baoxiaojianapp.baoxiaojianapp.jsonclass.User;
+import com.example.baoxiaojianapp.baoxiaojianapp.classpakage.User;
 
 public class UserInfoCashUtils {
     private static UserInfoCashUtils userInfoCashUtils;

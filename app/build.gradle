@@ -37,4 +37,5 @@ dependencies {
     implementation 'com.android.support:design:29.0.0'
     implementation 'com.ogaclejapan.smarttablayout:utils-v4:1.6.1@aar'
     implementation 'com.ogaclejapan.smarttablayout:library:1.6.1@aar'
+    implementation 'com.github.nuptboyzhb.lib.uikit:superswiperefreshlayout:1.0.0'
 }
