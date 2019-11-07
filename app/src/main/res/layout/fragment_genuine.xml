@@ -6,6 +6,15 @@
     tools:context=".baoxiaojianapp.fragment.GenuineFragment"
     android:layout_gravity="center_horizontal"
     >
+    <ImageView
+        android:layout_gravity="center"
+        android:id="@+id/image_noresult_holder"
+        android:layout_width="210dp"
+        android:layout_height="210dp"
+        android:src="@drawable/no_appraisalresult"
+        />
+
+
     <com.github.nuptboyzhb.lib.SuperSwipeRefreshLayout
         android:id="@+id/swipe_refresh"
         android:layout_width="match_parent"

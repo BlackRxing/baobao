@@ -35,6 +35,7 @@ import static android.content.Context.MODE_PRIVATE;
 import static com.example.baoxiaojianapp.baoxiaojianapp.fragment.GenuineFragment.appraisalItemAdapter;
 import static com.example.baoxiaojianapp.baoxiaojianapp.fragment.GenuineFragment.appraisalResults;
 import static com.example.baoxiaojianapp.baoxiaojianapp.fragment.GenuineFragment.getInstance;
+import static com.example.baoxiaojianapp.baoxiaojianapp.fragment.GenuineFragment.hasMoreData;
 
 public class Callback {
     public static int itemlength;
@@ -101,6 +102,12 @@ public class Callback {
                         appraisalResult.setAppraisalImage(jsonObject1.getString("imageUrl"));
                         appraisalResults.add(appraisalResult);
                     }
+                    if (jsonArray.length()==0){
+                        GenuineFragment.hasMoreData=false;
+                    }else {
+                        hasMoreData=true;
+                    }
+                    GenuineFragment.init();
                     fragmentActivity.runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
@@ -152,6 +159,9 @@ public class Callback {
                         appraisalResult.setAppraisalImage(jsonObject1.getString("imageUrl"));
                         appraisalResults.add(appraisalResult);
                         itemlength=jsonArray.length();
+                    }
+                    if(jsonArray.length()<10){
+                        hasMoreData=false;
                     }
                 } catch (IOException e) {
                     e.printStackTrace();

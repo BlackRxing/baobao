@@ -59,10 +59,11 @@ import static android.content.Context.MODE_PRIVATE;
 
 public class GenuineFragment extends Fragment {
 
-    private SuperSwipeRefreshLayout swipeRefreshLayout;
+    private static SuperSwipeRefreshLayout swipeRefreshLayout;
     public static RecyclerView recyclerView;
     public static AppraisalItemAdapter appraisalItemAdapter;
-    private static boolean hasMoreData=true;
+    public static boolean hasMoreData;
+    private static ImageView holderImage;
 
 
     public static List<AppraisalResult> appraisalResults=new ArrayList<>();
@@ -94,6 +95,15 @@ public class GenuineFragment extends Fragment {
         super.onCreate(savedInstanceState);
         LoginTest();
         Callback.loadData(getActivity());
+    }
+    public static void init(){
+        if(hasMoreData){
+            holderImage.setVisibility(View.INVISIBLE);
+            swipeRefreshLayout.setVisibility(View.VISIBLE);
+        }else{
+            holderImage.setVisibility(View.VISIBLE);
+            swipeRefreshLayout.setVisibility(View.INVISIBLE);
+        }
     }
 
 
@@ -190,6 +200,7 @@ public class GenuineFragment extends Fragment {
         recyclerView=view.findViewById(R.id.recycler_view);
         LinearLayoutManager linearLayoutManager=new LinearLayoutManager(getContext());
         recyclerView.setLayoutManager(linearLayoutManager);
+        holderImage=view.findViewById(R.id.image_noresult_holder);
         HashMap<String, Integer> stringIntegerHashMap = new HashMap<>();
         stringIntegerHashMap.put(RecyclerViewSpacesItemDecoration.TOP_DECORATION,7);//top间距
         stringIntegerHashMap.put(RecyclerViewSpacesItemDecoration.BOTTOM_DECORATION,7);//底部间距
@@ -216,19 +227,26 @@ public class GenuineFragment extends Fragment {
         swipeRefreshLayout.setOnPushLoadMoreListener(new SuperSwipeRefreshLayout.OnPushLoadMoreListener(){
             @Override
             public void onLoadMore() {
-                currentPage++;
-                Callback.loadMore(getActivity(),currentPage);
-                footerTextView.setText("正在加载...");
-                footerImageView.setVisibility(View.GONE);
-                footerProgressBar.setVisibility(View.VISIBLE);
-                new Handler().postDelayed(new Runnable() {
-                    @Override
-                    public void run() {
-                        footerView.setVisibility(View.GONE);
-                        swipeRefreshLayout.setLoadMore(false);
-                        appraisalItemAdapter.notifyItemRangeInserted(appraisalItemAdapter.getItemCount(),Callback.itemlength);
-                    }
-                }, 3000);
+                if (hasMoreData){
+                    currentPage++;
+                    Callback.loadMore(getActivity(),currentPage);
+                    footerTextView.setText("正在加载...");
+                    footerImageView.setVisibility(View.GONE);
+                    footerProgressBar.setVisibility(View.VISIBLE);
+                    new Handler().postDelayed(new Runnable() {
+                        @Override
+                        public void run() {
+                            footerView.setVisibility(View.GONE);
+                            swipeRefreshLayout.setLoadMore(false);
+                            appraisalItemAdapter.notifyItemRangeInserted(appraisalItemAdapter.getItemCount(),Callback.itemlength);
+                        }
+                    }, 3000);
+                }else {
+                    ToastUtils.showShort("没有更多数据");
+                    footerView.setVisibility(View.GONE);
+                    swipeRefreshLayout.setLoadMore(false);
+                }
+
             }
 
             @Override
@@ -237,6 +255,7 @@ public class GenuineFragment extends Fragment {
                 footerTextView.setText(enable ? "松开加载" : "上拉加载");
                 footerImageView.setVisibility(View.VISIBLE);
                 footerImageView.setRotation(enable ? 0 : 180);
+                footerProgressBar.setVisibility(View.GONE);
             }
 
             @Override
