@@ -202,14 +202,13 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
                 public void onResponse(Call call, Response response) {
                     if (response.isSuccessful()) {
                         try {
-
                             JSONObject jsonObject = new JSONObject(response.body().string());
                             User user = new Gson().fromJson(jsonObject.getJSONObject("user").toString(), User.class);
                             UserInfoCashUtils userInfoCashUtils = UserInfoCashUtils.getInstance();
                             userInfoCashUtils.clearUserInfoCash();
                             userInfoCashUtils.saveUserInfoCash(user);
                             Log.i("return info", jsonObject.getJSONObject("user").toString());
-                            Log.i("return user", String.valueOf(user.getTuring_token()));
+                            Log.i("return user", String.valueOf(user.getTuring_token())+"where");
                         } catch (IOException e) {
                             e.printStackTrace();
                         } catch (JSONException j) {

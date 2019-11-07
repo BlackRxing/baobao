@@ -95,8 +95,11 @@ public class OkHttpUtils {
      */
     private void postRequest(String url, RequestBody requestBody, final RealCallback realCallback, boolean needToken){
         SharedPreferences sharedPreferences=MyApplication.getContext().getSharedPreferences("Session",MODE_PRIVATE);
-        String sessionid= sharedPreferences.getString("sessionid","null");
+        SharedPreferences sharedPreferences1=MyApplication.getContext().getSharedPreferences("userinfo_cash",MODE_PRIVATE);
+        String sessionid= sharedPreferences.getString("sessionid","");
+        String token=sharedPreferences1.getString("turing_token","");
         Log.i("session_out",sessionid);
+        Log.i("token",token+"no?");
         Request.Builder builder;
         builder= new Request.Builder().url(url).post(requestBody).
                 addHeader("TS-DEVICE-I", DeviceUtils.getMacAddress()).
@@ -107,7 +110,7 @@ public class OkHttpUtils {
              builder.addHeader("cookie",sessionid);
         }else{
             if (needToken){
-                builder.addHeader("Token",sharedPreferences.getString("turing_token",null));
+                builder.addHeader("Authorization","Token "+token);
             }
         }
         Request request=builder.build();

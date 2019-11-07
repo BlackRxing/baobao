@@ -33,7 +33,7 @@ public class AppraisalItemAdapter extends RecyclerView.Adapter<AppraisalItemAdap
     @NonNull
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View view= LayoutInflater.from(parent.getContext()).inflate(R.layout.appraisal_item,parent,false);
+        View view= LayoutInflater.from(MyApplication.getContext()).inflate(R.layout.appraisal_item,parent,false);
         itemView=view;
         ViewHolder holder=new ViewHolder(view);
         return holder;
@@ -43,7 +43,7 @@ public class AppraisalItemAdapter extends RecyclerView.Adapter<AppraisalItemAdap
     public void onBindViewHolder(@NonNull final ViewHolder holder, int position) {
         AppraisalResult appraisalResult=appraisalResults.get(position);
         holder.appraisalBrand.setText(appraisalResult.getAppraisalBrand());
-        holder.appraisalId.setText(appraisalResult.getAppraisalId());
+        holder.appraisalId.setText("鉴定号:"+appraisalResult.getAppraisalId());
         holder.appraisalData.setText(appraisalResult.getAppraisalData());
         Glide.with(MyApplication.getContext()).load(appraisalResult.getAppraisalImage()).into(new SimpleTarget<Drawable>() {
             @Override
