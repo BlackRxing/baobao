@@ -74,21 +74,8 @@ public class GenuineFragment extends Fragment {
     private ImageView footerImageView;
     private View footerView;
     private static GenuineFragment genuineFragment;
-
     private int currentPage=1;
 
-
-
-    public static GenuineFragment getInstance(){
-        if(genuineFragment==null){
-            synchronized (GenuineFragment.class){
-                if (genuineFragment==null){
-                    genuineFragment=new GenuineFragment();
-                }
-            }
-        }
-        return genuineFragment;
-    }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -105,90 +92,6 @@ public class GenuineFragment extends Fragment {
             swipeRefreshLayout.setVisibility(View.INVISIBLE);
         }
     }
-
-
-    public void loadData(){
-        SharedPreferences sharedPreferences1= MyApplication.getContext().getSharedPreferences("userinfo_cash",MODE_PRIVATE);
-        String token=sharedPreferences1.getString("turing_token","");
-        OkHttpClient client = new OkHttpClient.Builder()
-                .build();
-        //第二步创建RequestBody
-        RequestBody requestBody = RequestBody.create(null, new byte[]{});
-        //第三步创建Rquest
-        Request request = new Request.Builder()
-                .url(NetInterface.TSPersonCenterPageRequest)
-                .post(requestBody).addHeader("Authorization","Token "+token)
-                .build();
-        //第四步创建call回调对象
-        final Call call = client.newCall(request);
-        //第五步发起请求
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-                try {
-                    Response response = call.execute();
-                    String result = response.body().string();
-                    Log.i("response", result);
-                    JSONObject jsonObject=new JSONObject(result);
-                    JSONArray jsonArray=jsonObject.getJSONArray("realList");
-                    for (int i=0;i<jsonArray.length();i++){
-                        AppraisalResult appraisalResult=new AppraisalResult();
-                        JSONObject jsonObject1=jsonArray.getJSONObject(i);
-                        appraisalResult.setAppraisalBrand(jsonObject1.getString("brandName"));
-                        appraisalResult.setAppraisalData(jsonObject1.getString("timestamp"));
-                        appraisalResult.setAppraisalId(jsonObject1.getString("modelNumber"));
-                        appraisalResult.setAppraisalImage(jsonObject1.getString("imageUrl"));
-                        appraisalResults.add(appraisalResult);
-                    }
-                    getActivity().runOnUiThread(new Runnable() {
-                        @Override
-                        public void run() {
-                            AppraisalItemAdapter appraisalItemAdapter=new AppraisalItemAdapter(appraisalResults);
-                            recyclerView.setAdapter(appraisalItemAdapter);
-                        }
-                    });
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }catch (JSONException j){
-                    j.printStackTrace();
-                }
-            }
-        }).start();
-
-//        OkHttpUtils okHttpUtils = OkHttpUtils.getInstance();
-//        RequestBody requestBody = RequestBody.create(null, new byte[]{});
-//        okHttpUtils.post(NetInterface.TSPersonCenterPageRequest, requestBody, new OkHttpUtils.RealCallback() {
-//            @Override
-//            public void onResponse(Call call, Response response) {
-//                if (response.isSuccessful()) {
-//                    try {
-//
-////                        JSONObject jsonObject = new JSONObject(response.body().string());
-////                        User user = new Gson().fromJson(jsonObject.getJSONObject("user").toString(), User.class);
-////                        UserInfoCashUtils userInfoCashUtils = UserInfoCashUtils.getInstance();
-////                        userInfoCashUtils.clearUserInfoCash();
-////                        userInfoCashUtils.saveUserInfoCash(user);
-//                        Log.i("userCenter",response.body().string());
-////                        Log.i("return info", user.getTuring_token());
-//                        ToastUtils.showShort("sucesslogin");
-//                    } catch (IOException e) {
-//                        e.printStackTrace();
-//                    }
-////                    catch (JSONException j) {
-////                        j.printStackTrace();
-////                    }
-//                } else {
-//
-//                }
-//            }
-//
-//            @Override
-//            public void onFailure(Call call, IOException e) {
-//                Log.e("error", e.toString());
-//            }
-//        },true);
-    }
-
 
 
     @Override
@@ -297,6 +200,87 @@ public class GenuineFragment extends Fragment {
         return footerView;
     }
 
+//    public void loadData(){
+//        SharedPreferences sharedPreferences1= MyApplication.getContext().getSharedPreferences("userinfo_cash",MODE_PRIVATE);
+//        String token=sharedPreferences1.getString("turing_token","");
+//        OkHttpClient client = new OkHttpClient.Builder()
+//                .build();
+//        //第二步创建RequestBody
+//        RequestBody requestBody = RequestBody.create(null, new byte[]{});
+//        //第三步创建Rquest
+//        Request request = new Request.Builder()
+//                .url(NetInterface.TSPersonCenterPageRequest)
+//                .post(requestBody).addHeader("Authorization","Token "+token)
+//                .build();
+//        //第四步创建call回调对象
+//        final Call call = client.newCall(request);
+//        //第五步发起请求
+//        new Thread(new Runnable() {
+//            @Override
+//            public void run() {
+//                try {
+//                    Response response = call.execute();
+//                    String result = response.body().string();
+//                    Log.i("response", result);
+//                    JSONObject jsonObject=new JSONObject(result);
+//                    JSONArray jsonArray=jsonObject.getJSONArray("realList");
+//                    for (int i=0;i<jsonArray.length();i++){
+//                        AppraisalResult appraisalResult=new AppraisalResult();
+//                        JSONObject jsonObject1=jsonArray.getJSONObject(i);
+//                        appraisalResult.setAppraisalBrand(jsonObject1.getString("brandName"));
+//                        appraisalResult.setAppraisalData(jsonObject1.getString("timestamp"));
+//                        appraisalResult.setAppraisalId(jsonObject1.getString("modelNumber"));
+//                        appraisalResult.setAppraisalImage(jsonObject1.getString("imageUrl"));
+//                        appraisalResults.add(appraisalResult);
+//                    }
+//                    getActivity().runOnUiThread(new Runnable() {
+//                        @Override
+//                        public void run() {
+//                            AppraisalItemAdapter appraisalItemAdapter=new AppraisalItemAdapter(appraisalResults);
+//                            recyclerView.setAdapter(appraisalItemAdapter);
+//                        }
+//                    });
+//                } catch (IOException e) {
+//                    e.printStackTrace();
+//                }catch (JSONException j){
+//                    j.printStackTrace();
+//                }
+//            }
+//        }).start();
+//
+////        OkHttpUtils okHttpUtils = OkHttpUtils.getInstance();
+////        RequestBody requestBody = RequestBody.create(null, new byte[]{});
+////        okHttpUtils.post(NetInterface.TSPersonCenterPageRequest, requestBody, new OkHttpUtils.RealCallback() {
+////            @Override
+////            public void onResponse(Call call, Response response) {
+////                if (response.isSuccessful()) {
+////                    try {
+////
+//////                        JSONObject jsonObject = new JSONObject(response.body().string());
+//////                        User user = new Gson().fromJson(jsonObject.getJSONObject("user").toString(), User.class);
+//////                        UserInfoCashUtils userInfoCashUtils = UserInfoCashUtils.getInstance();
+//////                        userInfoCashUtils.clearUserInfoCash();
+//////                        userInfoCashUtils.saveUserInfoCash(user);
+////                        Log.i("userCenter",response.body().string());
+//////                        Log.i("return info", user.getTuring_token());
+////                        ToastUtils.showShort("sucesslogin");
+////                    } catch (IOException e) {
+////                        e.printStackTrace();
+////                    }
+//////                    catch (JSONException j) {
+//////                        j.printStackTrace();
+//////                    }
+////                } else {
+////
+////                }
+////            }
+////
+////            @Override
+////            public void onFailure(Call call, IOException e) {
+////                Log.e("error", e.toString());
+////            }
+////        },true);
+//    }
 
 
 

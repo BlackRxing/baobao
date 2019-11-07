@@ -5,10 +5,26 @@
     android:layout_height="match_parent"
     tools:context=".baoxiaojianapp.fragment.FakeFragment">
 
-    <!-- TODO: Update blank fragment layout -->
-    <TextView
+    <ImageView
+        android:layout_gravity="center"
+        android:id="@+id/image_noresult_holder"
+        android:layout_width="210dp"
+        android:layout_height="210dp"
+        android:src="@drawable/no_appraisalresult"
+        />
+
+
+    <com.github.nuptboyzhb.lib.SuperSwipeRefreshLayout
+        android:id="@+id/swipe_refresh"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:text="@string/hello_blank_fragment" />
+        android:layout_gravity="center_horizontal"
+        >
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/recycler_view"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"/>
+    </com.github.nuptboyzhb.lib.SuperSwipeRefreshLayout>
 
 </FrameLayout>
