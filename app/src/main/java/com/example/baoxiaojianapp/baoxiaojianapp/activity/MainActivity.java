@@ -53,6 +53,9 @@ public class MainActivity extends BaseActivity implements BottomNavigationView.O
         getSupportFragmentManager().beginTransaction().add(R.id.fragment_frame,fragments.get(0)).show(fragments.get(0)).commit();
     }
 
+    
+
+
     private void switchfragment(){
         FragmentTransaction fragmentTransaction=getSupportFragmentManager().beginTransaction();
         if(lastFragment==0){

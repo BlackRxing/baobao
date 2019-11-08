@@ -5,7 +5,7 @@ android {
     buildToolsVersion "29.0.2"
     defaultConfig {
         applicationId "com.example.baoxiaojianapp"
-        minSdkVersion 21
+        minSdkVersion 23
         targetSdkVersion 29
         versionCode 1
         versionName "1.0"
@@ -38,4 +38,5 @@ dependencies {
     implementation 'com.ogaclejapan.smarttablayout:utils-v4:1.6.1@aar'
     implementation 'com.ogaclejapan.smarttablayout:library:1.6.1@aar'
     implementation 'com.github.nuptboyzhb.lib.uikit:superswiperefreshlayout:1.0.0'
+    implementation 'com.android.actionsheetdialog:actionsheet:1.0.3'
 }

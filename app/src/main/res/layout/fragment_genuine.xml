@@ -14,7 +14,6 @@
         android:src="@drawable/no_appraisalresult"
         />
 
-
     <com.github.nuptboyzhb.lib.SuperSwipeRefreshLayout
         android:id="@+id/swipe_refresh"
         android:layout_width="match_parent"
