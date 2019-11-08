@@ -38,6 +38,10 @@ public class UserInfoCashUtils {
         editor.putString("open_id",user.getOpen_id());
         editor.apply();
     }
+    public static String getUserInfo(String key){
+        SharedPreferences sharedPreferences=MyApplication.getContext().getSharedPreferences("userinfo_cash",Context.MODE_PRIVATE);
+        return sharedPreferences.getString(key,"");
+    }
     /*
     清空用户信息缓存
     */
