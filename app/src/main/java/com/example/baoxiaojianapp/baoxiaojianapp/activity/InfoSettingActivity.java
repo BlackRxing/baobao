@@ -44,10 +44,12 @@ public class InfoSettingActivity extends BaseActivity implements View.OnClickLis
     private RelativeLayout sexLayout;
     private CircleImageView profileImage;
     private static TextView nicknameText;
-    private TextView regionText;
-    private TextView sexText;
+    private static TextView regionText;
+    private static TextView sexText;
     private BottomDialog bottomDialog;
     private LinearLayout mContent;
+    private ActionSheetDialog sexActionSheetDialog;
+    private ActionSheetDialog profileImageActionSheetDialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -58,24 +60,22 @@ public class InfoSettingActivity extends BaseActivity implements View.OnClickLis
         initData();
     }
 
-    public static void changeNickName(){
-        nicknameText.setText(UserInfoCashUtils.getUserInfo("nick_name"));
-    }
+
 
     private void initData(){
-        SharedPreferences sharedPreferences=this.getSharedPreferences("userinfo_cash",MODE_PRIVATE);
-        String nickname=sharedPreferences.getString("nick_name","");
-        String location=sharedPreferences.getString("location","");
-        String sex=sharedPreferences.getString("sex","");
+        String nickname=UserInfoCashUtils.getUserInfo("nick_name");
+        String location=UserInfoCashUtils.getUserInfo("location");
+        String sex=UserInfoCashUtils.getUserInfo("sex");
         nicknameText.setText(nickname);
         Log.i("locaiton",location);
         if(!location.equals("null"))
             regionText.setText(location);
-        if(sex=="m")
+        if ((sex.equals("m"))) {
             sexText.setText("男");
-        if(sex=="f")
+        } else {
             sexText.setText("女");
-        Glide.with(this).load(sharedPreferences.getString("avatar_url","")).into(new SimpleTarget<Drawable>() {
+        }
+        Glide.with(this).load(UserInfoCashUtils.getUserInfo("avatar_url")).into(new SimpleTarget<Drawable>() {
             @Override
             public void onResourceReady(@NonNull Drawable resource, @Nullable Transition<? super Drawable> transition) {
                 profileImage.setBackground(resource);
@@ -98,6 +98,7 @@ public class InfoSettingActivity extends BaseActivity implements View.OnClickLis
         nickNameLayout.setOnClickListener(this);
         profileImageLayout.setOnClickListener(this);
         regionLayout.setOnClickListener(this);
+        sexLayout.setOnClickListener(this);
 
     }
 
@@ -119,6 +120,9 @@ public class InfoSettingActivity extends BaseActivity implements View.OnClickLis
                 break;
             case R.id.region_layout:
                 selectRegion();
+                break;
+            case R.id.sex_layout:
+                sexChoose();
                 break;
         }
     }
@@ -150,7 +154,6 @@ public class InfoSettingActivity extends BaseActivity implements View.OnClickLis
     public void onAddressSelected(Province province, City city, County county, Street street) {
         String region = (province == null ? "" : province.name) + (city == null ? "" : city.name) + (county == null ? "" : county.name) +
                 (street == null ? "" : street.name);
-        regionText.setText(region);
         if (bottomDialog!=null){
             bottomDialog.dismiss();
         }
@@ -162,10 +165,46 @@ public class InfoSettingActivity extends BaseActivity implements View.OnClickLis
         if(bottomDialog!=null){
             bottomDialog.dismiss();
         }
+
     }
+
+    private void sexChoose(){
+        profileImageActionSheetDialog=new ActionSheetDialog.ActionSheetBuilder(this,R.style.ActionSheetDialogBase_SampleStyle)
+                .setItems(new CharSequence[]{"男","女"}, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        String sexvalue=(which==0?"m":"f");
+                        NetResquest.RevisePersonInfo(NetResquest.SEX,sexvalue);
+                        profileImageActionSheetDialog.dismiss();
+                    }
+                })
+                .setCancelable(true)
+                .create();
+        profileImageActionSheetDialog.show();
+
+    }
+
+
 
     @Override
     public void selectorAreaPosition(int provincePosition, int cityPosition, int countyPosition, int streetPosition) {
 
     }
+
+    public static void changeUI(String key){
+        switch (key){
+            case NetResquest.NICK_NAME:
+                nicknameText.setText(UserInfoCashUtils.getUserInfo("nick_name"));
+                break;
+            case NetResquest.SEX:
+                sexText.setText(UserInfoCashUtils.getUserInfo("sex")=="m"?"男":"女");
+                break;
+            case NetResquest.LOCATION:
+                regionText.setText(UserInfoCashUtils.getUserInfo("location"));
+                break;
+        }
+
+    }
+
+
 }

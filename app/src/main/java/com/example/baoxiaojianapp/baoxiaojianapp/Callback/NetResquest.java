@@ -39,13 +39,15 @@ public class NetResquest {
                         switch (key){
                             case NICK_NAME:
                                 UserInfoCashUtils.setUserInfo("nick_name",value);
-                                InfoSettingActivity.changeNickName();
+                                InfoSettingActivity.changeUI(NICK_NAME);
                                 break;
                             case LOCATION:
                                 UserInfoCashUtils.setUserInfo("location",value);
+                                InfoSettingActivity.changeUI(LOCATION);
                                 break;
                             case SEX:
                                 UserInfoCashUtils.setUserInfo("sex",value);
+                                InfoSettingActivity.changeUI(SEX);
                                 break;
                         }
                     }

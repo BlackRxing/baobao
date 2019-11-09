@@ -71,6 +71,7 @@
             android:layout_marginLeft="24dp"
             android:background="@null"
             android:textCursorDrawable="@null"
+            android:singleLine="true"
             />
         <Button
             android:id="@+id/delete_button"
