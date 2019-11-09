@@ -5,8 +5,12 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context=".baoxiaojianapp.activity.InfoSettingActivity">
-
+    tools:context=".baoxiaojianapp.activity.InfoSettingActivity"
+    android:id="@+id/container_layout">
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
     <RelativeLayout
         android:id="@+id/back_layout"
         android:layout_width="wrap_content"
@@ -121,4 +125,5 @@
             style="@style/indicatorStyle"/>
     </RelativeLayout>
     <include layout="@layout/divider"/>
+    </LinearLayout>
 </LinearLayout>

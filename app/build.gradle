@@ -39,4 +39,5 @@ dependencies {
     implementation 'com.ogaclejapan.smarttablayout:library:1.6.1@aar'
     implementation 'com.github.nuptboyzhb.lib.uikit:superswiperefreshlayout:1.0.0'
     implementation 'com.android.actionsheetdialog:actionsheet:1.0.3'
+    implementation 'com.smartTop:jd-address:1.0.3'
 }

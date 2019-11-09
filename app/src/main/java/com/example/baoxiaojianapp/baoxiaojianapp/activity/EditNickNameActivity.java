@@ -104,7 +104,6 @@ public class EditNickNameActivity extends AppCompatActivity implements View.OnCl
 
     @Override
     public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-
     }
 
     @Override

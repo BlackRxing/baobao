@@ -19,6 +19,11 @@ public class UserInfoCashUtils {
         }
         return userInfoCashUtils;
     }
+    public static void setUserInfo(String key,String value){
+        SharedPreferences.Editor editor=MyApplication.getContext().getSharedPreferences("userinfo_cash", Context.MODE_PRIVATE).edit();
+        editor.putString(key,value);
+        editor.apply();
+    }
 
     public static void saveUserInfoCash(User user){
         SharedPreferences.Editor editor=MyApplication.getContext().getSharedPreferences("userinfo_cash", Context.MODE_PRIVATE).edit();

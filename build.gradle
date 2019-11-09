@@ -22,6 +22,7 @@ allprojects {
             url  "http://dl.bintray.com/nuptboyzhb/maven"
         }
 
+
     }
 }
 

@@ -8,6 +8,7 @@ import de.hdodenhof.circleimageview.CircleImageView;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.util.Log;
@@ -17,12 +18,24 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.android.actionsheetdialog.ActionSheetDialog;
+import com.blankj.utilcode.util.ToastUtils;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.target.SimpleTarget;
 import com.bumptech.glide.request.transition.Transition;
 import com.example.baoxiaojianapp.R;
+import com.example.baoxiaojianapp.baoxiaojianapp.Callback.NetResquest;
+import com.example.baoxiaojianapp.baoxiaojianapp.Utils.UserInfoCashUtils;
+import com.smarttop.library.bean.City;
+import com.smarttop.library.bean.County;
+import com.smarttop.library.bean.Province;
+import com.smarttop.library.bean.Street;
+import com.smarttop.library.utils.LogUtil;
+import com.smarttop.library.widget.AddressSelector;
+import com.smarttop.library.widget.BottomDialog;
+import com.smarttop.library.widget.OnAddressSelectedListener;
 
-public class InfoSettingActivity extends BaseActivity implements View.OnClickListener {
+
+public class InfoSettingActivity extends BaseActivity implements View.OnClickListener,OnAddressSelectedListener,AddressSelector.OnDialogCloseListener,AddressSelector.onSelectorAreaPositionListener {
 
     private RelativeLayout backLayout;
     private RelativeLayout profileImageLayout;
@@ -30,18 +43,23 @@ public class InfoSettingActivity extends BaseActivity implements View.OnClickLis
     private RelativeLayout regionLayout;
     private RelativeLayout sexLayout;
     private CircleImageView profileImage;
-    private TextView nicknameText;
+    private static TextView nicknameText;
     private TextView regionText;
     private TextView sexText;
-
-
+    private BottomDialog bottomDialog;
+    private LinearLayout mContent;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_info_setting);
+        mContent=findViewById(R.id.container_layout);
         bindView();
         initData();
+    }
+
+    public static void changeNickName(){
+        nicknameText.setText(UserInfoCashUtils.getUserInfo("nick_name"));
     }
 
     private void initData(){
@@ -79,6 +97,7 @@ public class InfoSettingActivity extends BaseActivity implements View.OnClickLis
         sexText=findViewById(R.id.sex_textview);
         nickNameLayout.setOnClickListener(this);
         profileImageLayout.setOnClickListener(this);
+        regionLayout.setOnClickListener(this);
 
     }
 
@@ -98,11 +117,24 @@ public class InfoSettingActivity extends BaseActivity implements View.OnClickLis
             case R.id.nickname_layout:
                 startActivity(new Intent(this,EditNickNameActivity.class));
                 break;
+            case R.id.region_layout:
+                selectRegion();
+                break;
         }
     }
 
+    private void selectRegion(){
+        bottomDialog= new BottomDialog(this);
+        bottomDialog.setOnAddressSelectedListener(this);
+        bottomDialog.setDialogDismisListener(this);
+        bottomDialog.setSelectorAreaPositionListener(this);
+        bottomDialog.setTextSelectedColor(R.color.black);
+        bottomDialog.setTextUnSelectedColor(R.color.black);
+        bottomDialog.show();
+    }
+
     private void chooseProfileImage(){
-        ActionSheetDialog dialog = new ActionSheetDialog.ActionSheetBuilder(this,R.style.ActionSheetDialogBase_SampleStyle)
+        ActionSheetDialog actionSheetDialog = new ActionSheetDialog.ActionSheetBuilder(this,R.style.ActionSheetDialogBase_SampleStyle)
                 .setItems(new CharSequence[]{"从相册选取","拍照"}, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
@@ -111,7 +143,29 @@ public class InfoSettingActivity extends BaseActivity implements View.OnClickLis
                 })
                 .setCancelable(true)
                 .create();
-        dialog.show();
+        actionSheetDialog.show();
+    }
+
+    @Override
+    public void onAddressSelected(Province province, City city, County county, Street street) {
+        String region = (province == null ? "" : province.name) + (city == null ? "" : city.name) + (county == null ? "" : county.name) +
+                (street == null ? "" : street.name);
+        regionText.setText(region);
+        if (bottomDialog!=null){
+            bottomDialog.dismiss();
+        }
+        NetResquest.RevisePersonInfo("location",region);
+    }
+
+    @Override
+    public void dialogclose() {
+        if(bottomDialog!=null){
+            bottomDialog.dismiss();
+        }
+    }
+
+    @Override
+    public void selectorAreaPosition(int provincePosition, int cityPosition, int countyPosition, int streetPosition) {
 
     }
 }

@@ -3,6 +3,8 @@ package com.example.baoxiaojianapp.baoxiaojianapp.Callback;
 import com.blankj.utilcode.util.ToastUtils;
 import com.example.baoxiaojianapp.baoxiaojianapp.Utils.NetInterface;
 import com.example.baoxiaojianapp.baoxiaojianapp.Utils.OkHttpUtils;
+import com.example.baoxiaojianapp.baoxiaojianapp.Utils.UserInfoCashUtils;
+import com.example.baoxiaojianapp.baoxiaojianapp.activity.InfoSettingActivity;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -16,7 +18,9 @@ import okhttp3.Response;
 
 public class NetResquest {
     public static final String NICK_NAME="nickName";
-    public static void RevisePersonInfo(String key,String value){
+    public static final String LOCATION="location";
+    public static final String SEX="sex";
+    public static void RevisePersonInfo(final String key, final String value){
         final JSONObject json = new JSONObject();
         try {
             json.put(key,value);
@@ -30,8 +34,24 @@ public class NetResquest {
             public void onResponse(Call call, Response response) {
                 try{
                     JSONObject jsonObject=new JSONObject(response.body().string());
-                    if(jsonObject.getInt("code")==0)
+                    if(jsonObject.getInt("code")==0){
                         ToastUtils.showShort("修改成功");
+                        switch (key){
+                            case NICK_NAME:
+                                UserInfoCashUtils.setUserInfo("nick_name",value);
+                                InfoSettingActivity.changeNickName();
+                                break;
+                            case LOCATION:
+                                UserInfoCashUtils.setUserInfo("location",value);
+                                break;
+                            case SEX:
+                                UserInfoCashUtils.setUserInfo("sex",value);
+                                break;
+                        }
+                    }
+                    else {
+                        ToastUtils.showShort("网络错误");
+                    }
                 } catch (IOException i){
                     i.printStackTrace();
                 }catch (JSONException j){
