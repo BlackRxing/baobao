@@ -54,7 +54,7 @@
         android:textSize="14sp"
         />
     <RelativeLayout
-        android:id="@+id/profile_image_layout"
+        android:id="@+id/editinfo_layout"
         android:layout_width="match_parent"
         android:layout_height="50dp"
         android:background="#F4F4F4">

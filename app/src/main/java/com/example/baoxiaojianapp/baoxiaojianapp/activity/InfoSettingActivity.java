@@ -2,15 +2,15 @@ package com.example.baoxiaojianapp.baoxiaojianapp.activity;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.content.FileProvider;
 import de.hdodenhof.circleimageview.CircleImageView;
 
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.SharedPreferences;
-import android.graphics.Color;
 import android.graphics.drawable.Drawable;
+import android.net.Uri;
 import android.os.Bundle;
+import android.os.Environment;
 import android.util.Log;
 import android.view.View;
 import android.widget.LinearLayout;
@@ -18,24 +18,34 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.android.actionsheetdialog.ActionSheetDialog;
-import com.blankj.utilcode.util.ToastUtils;
+import com.blankj.utilcode.util.AppUtils;
+import com.blankj.utilcode.util.UriUtils;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.target.SimpleTarget;
 import com.bumptech.glide.request.transition.Transition;
 import com.example.baoxiaojianapp.R;
 import com.example.baoxiaojianapp.baoxiaojianapp.Callback.NetResquest;
+import com.example.baoxiaojianapp.baoxiaojianapp.Utils.MyApplication;
+import com.example.baoxiaojianapp.baoxiaojianapp.Utils.PathUtils;
 import com.example.baoxiaojianapp.baoxiaojianapp.Utils.UserInfoCashUtils;
+
+import com.jph.takephoto.app.TakePhoto;
+import com.jph.takephoto.app.TakePhotoActivity;
+import com.jph.takephoto.compress.CompressConfig;
+import com.jph.takephoto.model.CropOptions;
+import com.jph.takephoto.model.TException;
 import com.smarttop.library.bean.City;
 import com.smarttop.library.bean.County;
 import com.smarttop.library.bean.Province;
 import com.smarttop.library.bean.Street;
-import com.smarttop.library.utils.LogUtil;
 import com.smarttop.library.widget.AddressSelector;
 import com.smarttop.library.widget.BottomDialog;
 import com.smarttop.library.widget.OnAddressSelectedListener;
 
+import java.io.File;
 
-public class InfoSettingActivity extends BaseActivity implements View.OnClickListener,OnAddressSelectedListener,AddressSelector.OnDialogCloseListener,AddressSelector.onSelectorAreaPositionListener {
+
+public class InfoSettingActivity extends TakePhotoActivity implements View.OnClickListener,OnAddressSelectedListener,AddressSelector.OnDialogCloseListener,AddressSelector.onSelectorAreaPositionListener {
 
     private RelativeLayout backLayout;
     private RelativeLayout profileImageLayout;
@@ -81,8 +91,6 @@ public class InfoSettingActivity extends BaseActivity implements View.OnClickLis
                 profileImage.setBackground(resource);
             }
         });
-
-
     }
 
     private void bindView(){
@@ -99,22 +107,18 @@ public class InfoSettingActivity extends BaseActivity implements View.OnClickLis
         profileImageLayout.setOnClickListener(this);
         regionLayout.setOnClickListener(this);
         sexLayout.setOnClickListener(this);
-
     }
 
-    @Override
-    public int getLayoutResId() {
-        return 0;
-    }
+
 
     @Override
     public void onClick(View v) {
         switch (v.getId()){
             case R.id.back_layout:
                 break;
-            case R.id.profile_image_layout:
-                chooseProfileImage();
-                break;
+//            case R.id.profile_image_layout:
+//                chooseProfileImage();
+//                break;
             case R.id.nickname_layout:
                 startActivity(new Intent(this,EditNickNameActivity.class));
                 break;
@@ -124,8 +128,17 @@ public class InfoSettingActivity extends BaseActivity implements View.OnClickLis
             case R.id.sex_layout:
                 sexChoose();
                 break;
+            case R.id.profile_image_layout:
+                chooseProfileImage();
+                break;
         }
     }
+
+
+
+
+
+
 
     private void selectRegion(){
         bottomDialog= new BottomDialog(this);
@@ -138,16 +151,36 @@ public class InfoSettingActivity extends BaseActivity implements View.OnClickLis
     }
 
     private void chooseProfileImage(){
-        ActionSheetDialog actionSheetDialog = new ActionSheetDialog.ActionSheetBuilder(this,R.style.ActionSheetDialogBase_SampleStyle)
+        profileImageActionSheetDialog = new ActionSheetDialog.ActionSheetBuilder(this,R.style.ActionSheetDialogBase_SampleStyle)
                 .setItems(new CharSequence[]{"从相册选取","拍照"}, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-
+                        switch (which){
+                            case 0:
+                                FromGallery(getTakePhoto());
+                                profileImageActionSheetDialog.dismiss();
+                                break;
+                            case 1:
+                                FromCamera(getTakePhoto());
+                                profileImageActionSheetDialog.dismiss();
+                                break;
+                        }
                     }
                 })
                 .setCancelable(true)
                 .create();
-        actionSheetDialog.show();
+        profileImageActionSheetDialog.show();
+    }
+
+    @Override
+    public void takeSuccess(String imagePath) {
+        super.takeSuccess(imagePath);
+        Glide.with(MyApplication.getContext()).load(imagePath).into(new SimpleTarget<Drawable>() {
+            @Override
+            public void onResourceReady(@NonNull Drawable resource, @Nullable Transition<? super Drawable> transition) {
+                profileImage.setImageDrawable(resource);
+            }
+        });
     }
 
     @Override
@@ -165,31 +198,48 @@ public class InfoSettingActivity extends BaseActivity implements View.OnClickLis
         if(bottomDialog!=null){
             bottomDialog.dismiss();
         }
-
     }
 
     private void sexChoose(){
-        profileImageActionSheetDialog=new ActionSheetDialog.ActionSheetBuilder(this,R.style.ActionSheetDialogBase_SampleStyle)
+        sexActionSheetDialog=new ActionSheetDialog.ActionSheetBuilder(this,R.style.ActionSheetDialogBase_SampleStyle)
                 .setItems(new CharSequence[]{"男","女"}, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         String sexvalue=(which==0?"m":"f");
                         NetResquest.RevisePersonInfo(NetResquest.SEX,sexvalue);
-                        profileImageActionSheetDialog.dismiss();
+                        sexActionSheetDialog.dismiss();
                     }
                 })
                 .setCancelable(true)
                 .create();
-        profileImageActionSheetDialog.show();
+        sexActionSheetDialog.show();
 
     }
 
-
-
-    @Override
-    public void selectorAreaPosition(int provincePosition, int cityPosition, int countyPosition, int streetPosition) {
-
+    public void FromCamera(TakePhoto takePhoto){
+        configCompress(takePhoto);
+        File file = new File(PathUtils.getFilePath(this,"temp"), System.currentTimeMillis() + ".jpg");
+        Uri photoOutputUri= FileProvider.getUriForFile(this,"com.example.baoxiaojianapp.fileProvider",file);
+        takePhoto.onPickFromCaptureWithCrop(photoOutputUri,new CropOptions.Builder().setAspectX(1).setAspectY(1).setWithOwnCrop(true).create());
     }
+
+    public void FromGallery(TakePhoto takePhoto) {
+        configCompress(takePhoto);
+        File file = new File(PathUtils.getFilePath(this,"temp"), System.currentTimeMillis() + ".jpg");
+        takePhoto.onPickFromGalleryWithCrop(Uri.fromFile(file),new CropOptions.Builder().setAspectX(1).setAspectY(1).setWithOwnCrop(true).create());
+    }
+    private void configCompress(TakePhoto takePhoto) {//压缩配置
+        int maxSize = Integer.parseInt("409600");//最大 压缩B
+        int width = Integer.parseInt("500");//宽
+        int height = Integer.parseInt("500");//高
+        CompressConfig config;
+        config = new CompressConfig.Builder().setMaxSize(maxSize)
+                .setMaxPixel(width >= height ? width : height)
+                .create();
+        takePhoto.onEnableCompress(config, false);//是否显示进度条
+    }
+
+
 
     public static void changeUI(String key){
         switch (key){
@@ -207,4 +257,8 @@ public class InfoSettingActivity extends BaseActivity implements View.OnClickLis
     }
 
 
+    @Override
+    public void selectorAreaPosition(int provincePosition, int cityPosition, int countyPosition, int streetPosition) {
+
+    }
 }

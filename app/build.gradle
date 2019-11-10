@@ -40,4 +40,5 @@ dependencies {
     implementation 'com.github.nuptboyzhb.lib.uikit:superswiperefreshlayout:1.0.0'
     implementation 'com.android.actionsheetdialog:actionsheet:1.0.3'
     implementation 'com.smartTop:jd-address:1.0.3'
+    implementation 'com.jph.takephoto:takephoto_library:2.0.4'
 }
