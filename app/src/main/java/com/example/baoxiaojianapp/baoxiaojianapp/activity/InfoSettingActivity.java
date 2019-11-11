@@ -27,6 +27,7 @@ import com.example.baoxiaojianapp.baoxiaojianapp.Callback.NetResquest;
 import com.example.baoxiaojianapp.baoxiaojianapp.Utils.MyApplication;
 import com.example.baoxiaojianapp.baoxiaojianapp.Utils.PathUtils;
 
+import com.example.baoxiaojianapp.baoxiaojianapp.Utils.PicProcessUtils;
 import com.example.baoxiaojianapp.baoxiaojianapp.Utils.UserInfoCashUtils;
 
 import com.jph.takephoto.app.TakePhoto;
@@ -48,14 +49,14 @@ import com.smarttop.library.widget.OnAddressSelectedListener;
 import java.io.File;
 
 
-public class InfoSettingActivity extends TakePhotoActivity implements View.OnClickListener,OnAddressSelectedListener,AddressSelector.OnDialogCloseListener,AddressSelector.onSelectorAreaPositionListener {
+public class InfoSettingActivity extends TakePhotoActivity implements View.OnClickListener,OnAddressSelectedListener,AddressSelector.OnDialogCloseListener {
 
     private RelativeLayout backLayout;
     private RelativeLayout profileImageLayout;
     private RelativeLayout nickNameLayout;
     private RelativeLayout regionLayout;
     private RelativeLayout sexLayout;
-    private CircleImageView profileImage;
+    private static CircleImageView profileImage;
     private static TextView nicknameText;
     private static TextView regionText;
     private static TextView sexText;
@@ -98,7 +99,7 @@ public class InfoSettingActivity extends TakePhotoActivity implements View.OnCli
         Glide.with(this).load(UserInfoCashUtils.getUserInfo("avatar_url")).into(new SimpleTarget<Drawable>() {
             @Override
             public void onResourceReady(@NonNull Drawable resource, @Nullable Transition<? super Drawable> transition) {
-                profileImage.setBackground(resource);
+                profileImage.setImageDrawable(resource);
             }
         });
     }
@@ -154,7 +155,6 @@ public class InfoSettingActivity extends TakePhotoActivity implements View.OnCli
         bottomDialog= new BottomDialog(this);
         bottomDialog.setOnAddressSelectedListener(this);
         bottomDialog.setDialogDismisListener(this);
-        bottomDialog.setSelectorAreaPositionListener(this);
         bottomDialog.setTextSelectedColor(R.color.black);
         bottomDialog.setTextUnSelectedColor(R.color.black);
         bottomDialog.show();
@@ -192,14 +192,22 @@ public class InfoSettingActivity extends TakePhotoActivity implements View.OnCli
                     profileImage.setImageDrawable(resource);
                 }
             });
+            upLoadAvatar(corpedimage.getPath());
             takePhotostate=false;
+        }else{
+            Glide.with(MyApplication.getContext()).load(result.getImage().getCompressPath()).into(new SimpleTarget<Drawable>() {
+                @Override
+                public void onResourceReady(@NonNull Drawable resource, @Nullable Transition<? super Drawable> transition) {
+                    profileImage.setImageDrawable(resource);
+                }
+            });
+            upLoadAvatar(result.getImage().getCompressPath());
         }
-        Glide.with(MyApplication.getContext()).load(result.getImage().getCompressPath()).into(new SimpleTarget<Drawable>() {
-            @Override
-            public void onResourceReady(@NonNull Drawable resource, @Nullable Transition<? super Drawable> transition) {
-                profileImage.setImageDrawable(resource);
-            }
-        });
+    }
+
+    private void upLoadAvatar(String avatar_path){
+        String avtar_base64=PicProcessUtils.convertIconToString(PicProcessUtils.getCompressBm(avatar_path));
+        NetResquest.RevisePersonInfo("avatar",avtar_base64);
     }
 
     @Override
@@ -289,8 +297,6 @@ public class InfoSettingActivity extends TakePhotoActivity implements View.OnCli
         }
     }
 
-
-
     public static void changeUI(String key){
         switch (key){
             case NetResquest.NICK_NAME:
@@ -302,12 +308,9 @@ public class InfoSettingActivity extends TakePhotoActivity implements View.OnCli
             case NetResquest.LOCATION:
                 regionText.setText(UserInfoCashUtils.getUserInfo("location"));
                 break;
+            case NetResquest.AVATAR:
+                break;
+
         }
-    }
-
-
-    @Override
-    public void selectorAreaPosition(int provincePosition, int cityPosition, int countyPosition, int streetPosition) {
-
     }
 }

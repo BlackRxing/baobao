@@ -20,6 +20,7 @@ public class NetResquest {
     public static final String NICK_NAME="nickName";
     public static final String LOCATION="location";
     public static final String SEX="sex";
+    public static final String AVATAR="avatar";
     public static void RevisePersonInfo(final String key, final String value){
         final JSONObject json = new JSONObject();
         try {
@@ -48,6 +49,9 @@ public class NetResquest {
                             case SEX:
                                 UserInfoCashUtils.setUserInfo("sex",value);
                                 InfoSettingActivity.changeUI(SEX);
+                                break;
+                            case AVATAR:
+                                InfoSettingActivity.changeUI(AVATAR);
                                 break;
                         }
                     }

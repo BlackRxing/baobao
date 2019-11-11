@@ -4,13 +4,41 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Matrix;
 import android.media.ExifInterface;
+import android.util.Base64;
 
+import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
 
-public class RotatePicUtil {
+public class PicProcessUtils {
+
+    /**
+     * 图片bitmap转成base64数据
+     *
+     * @param bitmap
+     * @return
+     */
+    public static String convertIconToString(Bitmap bitmap) {
+        ByteArrayOutputStream baos = new ByteArrayOutputStream();// outputstream
+        bitmap.compress(Bitmap.CompressFormat.PNG, 100, baos);
+        byte[] appicon = baos.toByteArray();// 转为byte数组
+        String bitString = Base64.encodeToString(appicon, Base64.DEFAULT);
+        return bitString;
+    }
+
+    /**
+     * 将图片base64数据转化为bitmap
+     * @param imgBase64
+     */
+    public Bitmap base64ToPicture(String imgBase64) {
+        byte[] decode = Base64.decode(imgBase64, Base64.DEFAULT);
+        Bitmap bitmap = BitmapFactory.decodeByteArray(decode, 0, decode.length);
+        return bitmap;
+    }
+
+
     /**
      *
      * 获取指定路径指定大小的图片（500*500）
