@@ -9,8 +9,9 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
-import android.os.Environment;
+import android.provider.MediaStore;
 import android.util.Log;
 import android.view.View;
 import android.widget.LinearLayout;
@@ -18,8 +19,6 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.android.actionsheetdialog.ActionSheetDialog;
-import com.blankj.utilcode.util.AppUtils;
-import com.blankj.utilcode.util.UriUtils;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.target.SimpleTarget;
 import com.bumptech.glide.request.transition.Transition;
@@ -27,13 +26,17 @@ import com.example.baoxiaojianapp.R;
 import com.example.baoxiaojianapp.baoxiaojianapp.Callback.NetResquest;
 import com.example.baoxiaojianapp.baoxiaojianapp.Utils.MyApplication;
 import com.example.baoxiaojianapp.baoxiaojianapp.Utils.PathUtils;
+
 import com.example.baoxiaojianapp.baoxiaojianapp.Utils.UserInfoCashUtils;
 
 import com.jph.takephoto.app.TakePhoto;
 import com.jph.takephoto.app.TakePhotoActivity;
 import com.jph.takephoto.compress.CompressConfig;
 import com.jph.takephoto.model.CropOptions;
+
 import com.jph.takephoto.model.TException;
+import com.jph.takephoto.model.TResult;
+import com.jph.takephoto.model.TakePhotoOptions;
 import com.smarttop.library.bean.City;
 import com.smarttop.library.bean.County;
 import com.smarttop.library.bean.Province;
@@ -60,6 +63,13 @@ public class InfoSettingActivity extends TakePhotoActivity implements View.OnCli
     private LinearLayout mContent;
     private ActionSheetDialog sexActionSheetDialog;
     private ActionSheetDialog profileImageActionSheetDialog;
+    private Uri photoOutputUri;
+    private File file;
+    private Uri corpedimage;
+    private Boolean takePhotostate=false;
+
+    public static final int TAKE_PHOTO = 1;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -173,9 +183,18 @@ public class InfoSettingActivity extends TakePhotoActivity implements View.OnCli
     }
 
     @Override
-    public void takeSuccess(String imagePath) {
-        super.takeSuccess(imagePath);
-        Glide.with(MyApplication.getContext()).load(imagePath).into(new SimpleTarget<Drawable>() {
+    public void takeSuccess(TResult result) {
+        super.takeSuccess(result);
+        if (takePhotostate){
+            Glide.with(MyApplication.getContext()).load(corpedimage).into(new SimpleTarget<Drawable>() {
+                @Override
+                public void onResourceReady(@NonNull Drawable resource, @Nullable Transition<? super Drawable> transition) {
+                    profileImage.setImageDrawable(resource);
+                }
+            });
+            takePhotostate=false;
+        }
+        Glide.with(MyApplication.getContext()).load(result.getImage().getCompressPath()).into(new SimpleTarget<Drawable>() {
             @Override
             public void onResourceReady(@NonNull Drawable resource, @Nullable Transition<? super Drawable> transition) {
                 profileImage.setImageDrawable(resource);
@@ -217,10 +236,17 @@ public class InfoSettingActivity extends TakePhotoActivity implements View.OnCli
     }
 
     public void FromCamera(TakePhoto takePhoto){
-        configCompress(takePhoto);
-        File file = new File(PathUtils.getFilePath(this,"temp"), System.currentTimeMillis() + ".jpg");
-        Uri photoOutputUri= FileProvider.getUriForFile(this,"com.example.baoxiaojianapp.fileProvider",file);
-        takePhoto.onPickFromCaptureWithCrop(photoOutputUri,new CropOptions.Builder().setAspectX(1).setAspectY(1).setWithOwnCrop(true).create());
+        file = new File(PathUtils.getFilePath(this,"temp"), System.currentTimeMillis() + ".jpg");
+        if (Build.VERSION.SDK_INT >= 24) {
+            Log.i("path",file.toString());
+            photoOutputUri = FileProvider.getUriForFile(this,"com.example.baoxiaojianapp.filesProvider",file);
+        } else {
+            //将File对象转换成URI对象，这个URI对象标识着output_image.jpg这张图片的本地真是路径
+            photoOutputUri = Uri.fromFile(file);
+        }
+        Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+        intent.putExtra(MediaStore.EXTRA_OUTPUT, photoOutputUri);
+        startActivityForResult(intent, TAKE_PHOTO);
     }
 
     public void FromGallery(TakePhoto takePhoto) {
@@ -228,15 +254,39 @@ public class InfoSettingActivity extends TakePhotoActivity implements View.OnCli
         File file = new File(PathUtils.getFilePath(this,"temp"), System.currentTimeMillis() + ".jpg");
         takePhoto.onPickFromGalleryWithCrop(Uri.fromFile(file),new CropOptions.Builder().setAspectX(1).setAspectY(1).setWithOwnCrop(true).create());
     }
+
     private void configCompress(TakePhoto takePhoto) {//压缩配置
-        int maxSize = Integer.parseInt("409600");//最大 压缩B
+        int maxSize = Integer.parseInt("11409600");//最大 压缩B
         int width = Integer.parseInt("500");//宽
         int height = Integer.parseInt("500");//高
         CompressConfig config;
         config = new CompressConfig.Builder().setMaxSize(maxSize)
                 .setMaxPixel(width >= height ? width : height)
                 .create();
-        takePhoto.onEnableCompress(config, false);//是否显示进度条
+        takePhoto.onEnableCompress(config, false);//是否显示进度
+    }
+
+    private void cropAndCompressCameraPhoto(){
+        TakePhoto takePhoto=getTakePhoto();
+        corpedimage=Uri.fromFile(new File(PathUtils.getFilePath(this,"temp"),System.currentTimeMillis() + ".jpg"));
+        try{
+            takePhoto.onCrop(Uri.fromFile(file),corpedimage,new CropOptions.Builder().setAspectX(1).setAspectY(1).setWithOwnCrop(true).create());
+            takePhotostate=true;
+        }catch (TException t){
+            t.printStackTrace();
+        }
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        switch (requestCode) {
+            case TAKE_PHOTO:
+                cropAndCompressCameraPhoto();
+                break;
+            default:
+                break;
+        }
     }
 
 
@@ -253,7 +303,6 @@ public class InfoSettingActivity extends TakePhotoActivity implements View.OnCli
                 regionText.setText(UserInfoCashUtils.getUserInfo("location"));
                 break;
         }
-
     }
 
 

@@ -8,6 +8,7 @@
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.CAMERA" />
 
+
     <application
         android:name=".baoxiaojianapp.Utils.MyApplication"
         android:allowBackup="false"
@@ -20,7 +21,8 @@
         tools:ignore="GoogleAppIndexingWarning"
         tools:replace="android:allowBackup">
         <activity android:name=".baoxiaojianapp.activity.EditNickNameActivity"></activity>
-        <activity android:name=".baoxiaojianapp.activity.InfoSettingActivity">
+        <activity android:name=".baoxiaojianapp.activity.InfoSettingActivity"
+            android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -34,8 +36,8 @@
             android:screenOrientation="portrait" />
 
         <provider
-            android:name="androidx.core.content.FileProvider"
-            android:authorities="com.example.baoxiaojianapp.fileProvider"
+            android:name=".baoxiaojianapp.Utils.MyProvider"
+            android:authorities="com.example.baoxiaojianapp.filesProvider"
             android:exported="false"
             android:grantUriPermissions="true">
             <meta-data
