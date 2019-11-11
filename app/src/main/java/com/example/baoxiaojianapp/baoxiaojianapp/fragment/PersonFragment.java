@@ -1,6 +1,7 @@
 package com.example.baoxiaojianapp.baoxiaojianapp.fragment;
 
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.drawable.Drawable;
 import android.icu.text.CaseMap;
@@ -26,6 +27,7 @@ import com.bumptech.glide.request.target.SimpleTarget;
 import com.bumptech.glide.request.transition.Transition;
 import com.example.baoxiaojianapp.R;
 import com.example.baoxiaojianapp.baoxiaojianapp.Utils.MyApplication;
+import com.example.baoxiaojianapp.baoxiaojianapp.activity.InfoSettingActivity;
 import com.google.android.material.tabs.TabLayout;
 import com.ogaclejapan.smarttablayout.SmartTabLayout;
 import com.ogaclejapan.smarttablayout.utils.v4.FragmentPagerItemAdapter;
@@ -36,7 +38,7 @@ import java.util.ArrayList;
 import static android.content.Context.MODE_PRIVATE;
 
 
-public class PersonFragment extends Fragment {
+public class PersonFragment extends Fragment implements View.OnClickListener {
 
     private TabLayout tabLayout;
     private ViewPager viewPager;
@@ -50,7 +52,7 @@ public class PersonFragment extends Fragment {
     private Button settingButton;
     private CircleImageView profileImage;
     private TextView usernameText;
-    private LinearLayout eidtLinearLayout;
+    private LinearLayout editLinearLayout;
 
 
     @Override
@@ -113,7 +115,9 @@ public class PersonFragment extends Fragment {
         settingButton=view.findViewById(R.id.setting_button);
         profileImage=view.findViewById(R.id.profile_image);
         usernameText=view.findViewById(R.id.username_text);
-        eidtLinearLayout=view.findViewById(R.id.editinfo_layout);
+        editLinearLayout=view.findViewById(R.id.editinfo_layout);
+        editLinearLayout.setOnClickListener(this);
+        settingButton.setOnClickListener(this);
         return view;
     }
 
@@ -121,5 +125,16 @@ public class PersonFragment extends Fragment {
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         init();
+    }
+
+    @Override
+    public void onClick(View v) {
+        switch (v.getId()){
+            case R.id.editinfo_layout:
+                startActivity(new Intent(getContext(), InfoSettingActivity.class));
+                break;
+            case R.id.setting_button:
+                break;
+        }
     }
 }

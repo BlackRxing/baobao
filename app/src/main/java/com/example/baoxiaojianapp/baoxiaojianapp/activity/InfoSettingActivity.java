@@ -114,6 +114,7 @@ public class InfoSettingActivity extends TakePhotoActivity implements View.OnCli
         nicknameText=findViewById(R.id.nickname_textview);
         regionText=findViewById(R.id.region_textview);
         sexText=findViewById(R.id.sex_textview);
+        backLayout.setOnClickListener(this);
         nickNameLayout.setOnClickListener(this);
         profileImageLayout.setOnClickListener(this);
         regionLayout.setOnClickListener(this);
@@ -125,8 +126,6 @@ public class InfoSettingActivity extends TakePhotoActivity implements View.OnCli
     @Override
     public void onClick(View v) {
         switch (v.getId()){
-            case R.id.back_layout:
-                break;
 //            case R.id.profile_image_layout:
 //                chooseProfileImage();
 //                break;
@@ -141,6 +140,9 @@ public class InfoSettingActivity extends TakePhotoActivity implements View.OnCli
                 break;
             case R.id.profile_image_layout:
                 chooseProfileImage();
+                break;
+            case R.id.back_layout:
+                finish();
                 break;
         }
     }
