@@ -43,8 +43,8 @@
     <string name="clicktoshare">点击分享给好友</string>
     <string name="rateus">给我们评分</string>
     <string name="corporate_info">公司信息</string>
-    <string name="user_protocal">用户协议</string>
-    <string name="private_policy">隐私政策</string>
+    <string name="user_protocal">《用户协议》</string>
+    <string name="private_policy">《隐私政策》</string>
     <string name="IP">©2019 TuringSense All rights Reserved</string>
     <string name="weibo">微博</string>
     <string name="weixin">微信</string>

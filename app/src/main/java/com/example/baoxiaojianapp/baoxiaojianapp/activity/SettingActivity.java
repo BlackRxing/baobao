@@ -43,6 +43,7 @@ public class SettingActivity extends AppCompatActivity implements View.OnClickLi
             case R.id.offline_button:
                 break;
             case R.id.about_layout:
+                startActivity(new Intent(this,AboutActivity.class));
                 break;
             case R.id.feedback_layout:
                 startActivity(new Intent(this,FeedbackActivity.class));
