@@ -34,6 +34,10 @@
     <string name="feedAndSuggestion">反馈与建议</string>
     <string name="contactus">联系我们</string>
     <string name="offline">退出登录</string>
+    <string name="contactus_toast">如果您想要与我们合作或想获得任何技术支持，请联系微信18351922280</string>
 
+    <string name="send">发送</string>
+    <string name="userevaluate">用户评价</string>
+    <string name="feedbacktext">请描述你的问题和意见，感谢支持</string>
 
 </resources>

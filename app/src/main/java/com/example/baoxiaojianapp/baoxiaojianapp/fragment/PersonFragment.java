@@ -28,6 +28,7 @@ import com.bumptech.glide.request.transition.Transition;
 import com.example.baoxiaojianapp.R;
 import com.example.baoxiaojianapp.baoxiaojianapp.Utils.MyApplication;
 import com.example.baoxiaojianapp.baoxiaojianapp.activity.InfoSettingActivity;
+import com.example.baoxiaojianapp.baoxiaojianapp.activity.SettingActivity;
 import com.google.android.material.tabs.TabLayout;
 import com.ogaclejapan.smarttablayout.SmartTabLayout;
 import com.ogaclejapan.smarttablayout.utils.v4.FragmentPagerItemAdapter;
@@ -68,7 +69,7 @@ public class PersonFragment extends Fragment implements View.OnClickListener {
         Glide.with(getView()).load(sharedPreferences.getString("avatar_url","")).into(new SimpleTarget<Drawable>() {
             @Override
             public void onResourceReady(@NonNull Drawable resource, @Nullable Transition<? super Drawable> transition) {
-                profileImage.setBackground(resource);
+                profileImage.setImageDrawable(resource);
             }
         });
         usernameText.setText(sharedPreferences.getString("nick_name",""));
@@ -134,6 +135,7 @@ public class PersonFragment extends Fragment implements View.OnClickListener {
                 startActivity(new Intent(getContext(), InfoSettingActivity.class));
                 break;
             case R.id.setting_button:
+                startActivity(new Intent(getContext(), SettingActivity.class));
                 break;
         }
     }

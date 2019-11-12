@@ -2,11 +2,13 @@ package com.example.baoxiaojianapp.baoxiaojianapp.activity;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.RelativeLayout;
 
+import com.blankj.utilcode.util.ToastUtils;
 import com.example.baoxiaojianapp.R;
 
 public class SettingActivity extends AppCompatActivity implements View.OnClickListener {
@@ -43,10 +45,13 @@ public class SettingActivity extends AppCompatActivity implements View.OnClickLi
             case R.id.about_layout:
                 break;
             case R.id.feedback_layout:
+                startActivity(new Intent(this,FeedbackActivity.class));
                 break;
             case R.id.contact_layout:
+                ToastUtils.showShort(getText(R.string.contactus_toast));
                 break;
             case R.id.back_layout:
+                finish();
                 break;
         }
     }

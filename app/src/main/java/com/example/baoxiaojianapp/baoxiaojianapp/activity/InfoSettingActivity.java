@@ -312,7 +312,6 @@ public class InfoSettingActivity extends TakePhotoActivity implements View.OnCli
                 break;
             case NetResquest.AVATAR:
                 break;
-
         }
     }
 }
