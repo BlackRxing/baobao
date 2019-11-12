@@ -19,14 +19,13 @@
         android:usesCleartextTraffic="true"
         tools:ignore="GoogleAppIndexingWarning"
         tools:replace="android:allowBackup">
-        <activity android:name=".baoxiaojianapp.activity.FeedbackActivity">
-        </activity>
+        <activity android:name=".baoxiaojianapp.activity.AboutActivity"></activity>
+        <activity android:name=".baoxiaojianapp.activity.FeedbackActivity"></activity>
         <activity android:name=".baoxiaojianapp.activity.SettingActivity" />
         <activity android:name=".baoxiaojianapp.activity.EditNickNameActivity" />
         <activity
             android:name=".baoxiaojianapp.activity.InfoSettingActivity"
-            android:screenOrientation="portrait" >
-        </activity>
+            android:screenOrientation="portrait"></activity>
         <activity android:name=".baoxiaojianapp.activity.MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

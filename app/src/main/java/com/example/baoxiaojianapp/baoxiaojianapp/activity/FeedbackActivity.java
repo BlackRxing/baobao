@@ -49,13 +49,13 @@ public class FeedbackActivity extends AppCompatActivity implements TextWatcher, 
     @Override
     public void onTextChanged(CharSequence s, int start, int before, int count) {
         feedbackLimitsText.setText("昵称"+s.length()+"/300");
-        if(s.length()>=300){
+        if(s.length()>=400){
             ToastUtils.showShort("最多400字哦");
             feedbackedit.setFocusable(false);
             feedbackedit.setFocusableInTouchMode(false );
             KeyboardUtils.hideSoftInput(this);  //取消焦点后收起键盘，没有焦点就无法出发键盘，就无法输入
         }
-        if(s.length()<300){
+        if(s.length()<400){
             feedbackedit.setFocusable(true);
             feedbackedit.setFocusableInTouchMode(true);
         }
