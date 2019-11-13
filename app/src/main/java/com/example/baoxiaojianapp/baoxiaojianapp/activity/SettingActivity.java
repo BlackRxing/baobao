@@ -1,8 +1,11 @@
 package com.example.baoxiaojianapp.baoxiaojianapp.activity;
 
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
@@ -41,6 +44,7 @@ public class SettingActivity extends AppCompatActivity implements View.OnClickLi
     public void onClick(View v) {
         switch (v.getId()){
             case R.id.offline_button:
+                offLine();
                 break;
             case R.id.about_layout:
                 startActivity(new Intent(this,AboutActivity.class));
@@ -55,5 +59,25 @@ public class SettingActivity extends AppCompatActivity implements View.OnClickLi
                 finish();
                 break;
         }
+    }
+
+    private void offLine(){
+            AlertDialog alertDialog = new AlertDialog.Builder(this)
+                    .setMessage("确定要退出吗").setPositiveButton("确定", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialogInterface, int i) {
+                            ToastUtils.showShort("yes");
+                            dialogInterface.dismiss();
+                        }
+                    }).setNegativeButton("取消", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialogInterface, int i) {
+                            ToastUtils.showShort("no");
+                            dialogInterface.dismiss();
+                        }
+                    }).create();
+            alertDialog.show();
+            alertDialog.getButton(AlertDialog.BUTTON_NEGATIVE).setTextColor(getResources().getColor(R.color.black));
+            alertDialog.getButton(AlertDialog.BUTTON_POSITIVE).setTextColor(getResources().getColor(R.color.black));
     }
 }

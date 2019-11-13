@@ -2,6 +2,9 @@ package com.example.baoxiaojianapp.baoxiaojianapp.activity;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
@@ -15,10 +18,22 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners;
 import com.bumptech.glide.request.RequestOptions;
 import com.example.baoxiaojianapp.R;
+import com.example.baoxiaojianapp.baoxiaojianapp.Utils.Constants;
+import com.example.baoxiaojianapp.baoxiaojianapp.Utils.ShareUtils;
 import com.example.baoxiaojianapp.baoxiaojianapp.fragment.PersonFragment;
 import com.google.android.material.bottomsheet.BottomSheetDialog;
+import com.sina.weibo.sdk.WbSdk;
+import com.sina.weibo.sdk.api.ImageObject;
+import com.sina.weibo.sdk.api.TextObject;
+import com.sina.weibo.sdk.api.WebpageObject;
+import com.sina.weibo.sdk.api.WeiboMultiMessage;
+import com.sina.weibo.sdk.auth.AuthInfo;
+import com.sina.weibo.sdk.constant.WBConstants;
+import com.sina.weibo.sdk.share.WbShareCallback;
+import com.sina.weibo.sdk.share.WbShareHandler;
+import com.sina.weibo.sdk.utils.Utility;
 
-public class AboutActivity extends AppCompatActivity implements View.OnClickListener {
+public class AboutActivity extends AppCompatActivity implements View.OnClickListener, WbShareCallback {
 
     private RelativeLayout rateLayout;
     private RelativeLayout corporateInfoLayout;
@@ -31,6 +46,9 @@ public class AboutActivity extends AppCompatActivity implements View.OnClickList
     private LinearLayout weiboLayout;
     private LinearLayout weixinLayout;
     private LinearLayout friendCircleLayout;
+
+    private WbShareHandler wbShareHandler;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -55,6 +73,7 @@ public class AboutActivity extends AppCompatActivity implements View.OnClickList
     }
 
     private void initView(){
+
         View bottomview=View.inflate(this,R.layout.share_bottomsheet_layout,null);
         bottomSheetDialog=new BottomSheetDialog(this);
         bottomSheetDialog.setContentView(bottomview);
@@ -87,18 +106,68 @@ public class AboutActivity extends AppCompatActivity implements View.OnClickList
             case R.id.privacypolicy_textview:
                 break;
             case R.id.weixin_button:
-                ToastUtils.showShort("weixin");
+                shareToWX();
+                bottomSheetDialog.dismiss();
                 break;
             case R.id.weibo_button:
-                ToastUtils.showShort("wwebo");
+                shareToWB();
+                bottomSheetDialog.dismiss();
                 break;
             case R.id.friendcircle_button:
                 ToastUtils.showShort("friend");
+                bottomSheetDialog.dismiss();
                 break;
+        }
+    }
+    private void shareToWX(){
+
+    }
+    private void shareToWB(){
+        try {
+            WbSdk.install(this,new AuthInfo(this, Constants.APP_KEY,Constants.REDIRECT_URL,Constants.SCOPE));
+            wbShareHandler=new WbShareHandler(this);
+            wbShareHandler.registerApp();
+            WeiboMultiMessage weiboMultiMessage=new WeiboMultiMessage();
+            weiboMultiMessage.textObject= ShareUtils.getTextObj();
+//            weiboMultiMessage.imageObject=getImageObj();
+            weiboMultiMessage.mediaObject=ShareUtils.getWebpageObj();
+            wbShareHandler.shareMessage(weiboMultiMessage,true);
+        }catch (UnsatisfiedLinkError e){
+            e.printStackTrace();
+            ToastUtils.showShort("请安装微信客户端");
+        }catch(NoClassDefFoundError e){
+            e.printStackTrace();
+            ToastUtils.showShort("请安装微信客户端");
         }
     }
 
     private void showShareBottom(){
         bottomSheetDialog.show();
+    }
+
+
+
+
+
+    @Override
+    public void onWbShareSuccess() {
+        ToastUtils.showShort("分享成功");
+        bottomSheetDialog.dismiss();
+    }
+
+    @Override
+    public void onWbShareCancel() {
+        ToastUtils.showShort("取消分享");
+    }
+
+    @Override
+    public void onWbShareFail() {
+        ToastUtils.showShort("分享失败");
+    }
+
+    @Override
+    protected void onNewIntent(Intent intent) {
+        super.onNewIntent(intent);
+        wbShareHandler.doResultIntent(intent,this);
     }
 }

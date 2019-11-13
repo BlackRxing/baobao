@@ -21,10 +21,15 @@ allprojects {
         maven {
             url  "http://dl.bintray.com/nuptboyzhb/maven"
         }
-
-
+        flatDir {
+            dirs 'libs'
+        }
 
     }
+
+
+
+
 }
 
 task clean(type: Delete) {
