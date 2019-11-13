@@ -23,6 +23,7 @@
                 android:layout_marginRight="25dp"/>
         </LinearLayout>
         <RelativeLayout
+            android:id="@+id/online_top"
             android:layout_height="80dp"
             android:layout_width="match_parent"
             android:layout_marginTop="15dp">
@@ -53,6 +54,9 @@
                 android:layout_marginTop="8dp"
                 android:layout_marginLeft="30dp"/>
         </RelativeLayout>
+        <include android:id="@+id/offline_top"
+            layout="@layout/offline_personfragment_top"
+            android:visibility="gone"/>
         <View
             android:layout_height="1dp"
             android:layout_width="match_parent"

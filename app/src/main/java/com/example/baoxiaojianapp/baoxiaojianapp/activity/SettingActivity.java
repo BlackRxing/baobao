@@ -13,6 +13,7 @@ import android.widget.RelativeLayout;
 
 import com.blankj.utilcode.util.ToastUtils;
 import com.example.baoxiaojianapp.R;
+import com.example.baoxiaojianapp.baoxiaojianapp.Utils.UserInfoCashUtils;
 
 public class SettingActivity extends AppCompatActivity implements View.OnClickListener {
 
@@ -26,6 +27,16 @@ public class SettingActivity extends AppCompatActivity implements View.OnClickLi
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_setting);
         bindView();
+        initView();
+    }
+    private void initView(){
+        if (!UserInfoCashUtils.getUserLoginState()){
+            offlineButton.setBackground(getResources().getDrawable(R.drawable.login_button_background));
+            offlineButton.setText(getText(R.string.click_login));
+        }else {
+            offlineButton.setBackground(getResources().getDrawable(R.drawable.offline_button_background));
+            offlineButton.setText(getText(R.string.offline));
+        }
     }
     private void bindView(){
         backLayout=findViewById(R.id.back_layout);
@@ -44,7 +55,11 @@ public class SettingActivity extends AppCompatActivity implements View.OnClickLi
     public void onClick(View v) {
         switch (v.getId()){
             case R.id.offline_button:
-                offLine();
+                if (UserInfoCashUtils.getUserLoginState()){
+                    offLineDialog();
+                }else {
+                    startActivity(new Intent(this,LoginActivity.class));
+                }
                 break;
             case R.id.about_layout:
                 startActivity(new Intent(this,AboutActivity.class));
@@ -61,23 +76,26 @@ public class SettingActivity extends AppCompatActivity implements View.OnClickLi
         }
     }
 
-    private void offLine(){
+    private void offLineDialog(){
             AlertDialog alertDialog = new AlertDialog.Builder(this)
                     .setMessage("确定要退出吗").setPositiveButton("确定", new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialogInterface, int i) {
-                            ToastUtils.showShort("yes");
+                            offLine();
+                            initView();
                             dialogInterface.dismiss();
                         }
                     }).setNegativeButton("取消", new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialogInterface, int i) {
-                            ToastUtils.showShort("no");
                             dialogInterface.dismiss();
                         }
                     }).create();
             alertDialog.show();
             alertDialog.getButton(AlertDialog.BUTTON_NEGATIVE).setTextColor(getResources().getColor(R.color.black));
             alertDialog.getButton(AlertDialog.BUTTON_POSITIVE).setTextColor(getResources().getColor(R.color.black));
+    }
+    private void offLine(){
+        UserInfoCashUtils.clearUserInfoCash();
     }
 }

@@ -27,17 +27,17 @@
         </activity>
         <activity android:name=".baoxiaojianapp.activity.FeedbackActivity"></activity>
         <activity android:name=".baoxiaojianapp.activity.SettingActivity">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
         </activity>
         <activity android:name=".baoxiaojianapp.activity.EditNickNameActivity" />
         <activity
             android:name=".baoxiaojianapp.activity.InfoSettingActivity"
             android:screenOrientation="portrait"></activity>
         <activity android:name=".baoxiaojianapp.activity.MainActivity">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
         </activity>
         <activity android:name=".baoxiaojianapp.activity.SplashActivity" />
         <activity

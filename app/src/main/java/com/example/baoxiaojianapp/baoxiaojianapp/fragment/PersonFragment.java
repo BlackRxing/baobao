@@ -20,14 +20,18 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.blankj.utilcode.util.ToastUtils;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.target.SimpleTarget;
 import com.bumptech.glide.request.transition.Transition;
 import com.example.baoxiaojianapp.R;
 import com.example.baoxiaojianapp.baoxiaojianapp.Utils.MyApplication;
+import com.example.baoxiaojianapp.baoxiaojianapp.Utils.UserInfoCashUtils;
 import com.example.baoxiaojianapp.baoxiaojianapp.activity.InfoSettingActivity;
+import com.example.baoxiaojianapp.baoxiaojianapp.activity.LoginActivity;
 import com.example.baoxiaojianapp.baoxiaojianapp.activity.SettingActivity;
 import com.google.android.material.tabs.TabLayout;
 import com.ogaclejapan.smarttablayout.SmartTabLayout;
@@ -55,6 +59,10 @@ public class PersonFragment extends Fragment implements View.OnClickListener {
     private TextView usernameText;
     private LinearLayout editLinearLayout;
 
+    private RelativeLayout onlineTop;
+    private RelativeLayout offlineTop;
+    private Button loginButton;
+
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -76,6 +84,10 @@ public class PersonFragment extends Fragment implements View.OnClickListener {
 
     }
     private void init(){
+        onlineTop.setVisibility(View.VISIBLE);
+        offlineTop.setVisibility(View.GONE);
+        tabLayout.setVisibility(View.VISIBLE);
+        viewPager.setVisibility(View.VISIBLE);
         titleList.add("真货");
         titleList.add("假货");
         genuineFragment=new GenuineFragment();
@@ -117,15 +129,35 @@ public class PersonFragment extends Fragment implements View.OnClickListener {
         profileImage=view.findViewById(R.id.profile_image);
         usernameText=view.findViewById(R.id.username_text);
         editLinearLayout=view.findViewById(R.id.editinfo_layout);
+        onlineTop=view.findViewById(R.id.online_top);
+        offlineTop=view.findViewById(R.id.offline_top);
+        loginButton=view.findViewById(R.id.login_button);
         editLinearLayout.setOnClickListener(this);
         settingButton.setOnClickListener(this);
+        loginButton.setOnClickListener(this);
         return view;
     }
 
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        init();
+        Viewinit();
+
+    }
+
+    private void Viewinit(){
+        if (UserInfoCashUtils.getUserLoginState()){
+            init();
+        }else{
+            offlineinit();
+        }
+    }
+
+    private void offlineinit(){
+        onlineTop.setVisibility(View.GONE);
+        offlineTop.setVisibility(View.VISIBLE);
+        tabLayout.setVisibility(View.GONE);
+        viewPager.setVisibility(View.GONE);
     }
 
     @Override
@@ -136,6 +168,9 @@ public class PersonFragment extends Fragment implements View.OnClickListener {
                 break;
             case R.id.setting_button:
                 startActivity(new Intent(getContext(), SettingActivity.class));
+                break;
+            case R.id.login_button:
+                startActivity(new Intent(getContext(), LoginActivity.class));
                 break;
         }
     }

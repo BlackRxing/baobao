@@ -51,9 +51,10 @@ public class Callback {
                     UserInfoCashUtils userInfoCashUtils = UserInfoCashUtils.getInstance();
                     userInfoCashUtils.clearUserInfoCash();
                     userInfoCashUtils.saveUserInfoCash(user);
+                    userInfoCashUtils.setLogin();
                     Log.i("return info", user.getPhone_num());
                     Log.i("return info", user.getTuring_token());
-                    ToastUtils.showShort("sucesslogin");
+                    ToastUtils.showShort("登录成功");
                 } catch (IOException e) {
                     e.printStackTrace();
                 } catch (JSONException j) {

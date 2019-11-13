@@ -1,5 +1,6 @@
 package com.example.baoxiaojianapp.baoxiaojianapp.activity;
 
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.CountDownTimer;
@@ -12,6 +13,7 @@ import android.widget.LinearLayout;
 import com.blankj.utilcode.util.EncryptUtils;
 import com.blankj.utilcode.util.ToastUtils;
 import com.example.baoxiaojianapp.R;
+import com.example.baoxiaojianapp.baoxiaojianapp.Callback.Callback;
 import com.example.baoxiaojianapp.baoxiaojianapp.Utils.NetInterface;
 import com.example.baoxiaojianapp.baoxiaojianapp.Utils.OkHttpUtils;
 import com.example.baoxiaojianapp.baoxiaojianapp.Utils.RegexUtils;
@@ -182,6 +184,9 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
         countDownTimer.start();
     }
 
+
+
+
     private void login() {
         if (linearLayout_person.getVisibility() == View.VISIBLE) {
             if (!RegexUtils.checkVertifyCode(vertify_code_Edit.getText().toString())) {
@@ -196,35 +201,7 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
             String json = gson.toJson(loginRequest);
             OkHttpUtils okHttpUtils = OkHttpUtils.getInstance();
             final RequestBody requestBodyJson = RequestBody.create(MediaType.parse("application/json; charset=utf-8"), json);
-            Log.i("jsonrequest", json);
-            okHttpUtils.post(NetInterface.TSloginRequest, requestBodyJson, new OkHttpUtils.RealCallback() {
-                @Override
-                public void onResponse(Call call, Response response) {
-                    if (response.isSuccessful()) {
-                        try {
-                            JSONObject jsonObject = new JSONObject(response.body().string());
-                            User user = new Gson().fromJson(jsonObject.getJSONObject("user").toString(), User.class);
-                            UserInfoCashUtils userInfoCashUtils = UserInfoCashUtils.getInstance();
-                            userInfoCashUtils.clearUserInfoCash();
-                            userInfoCashUtils.saveUserInfoCash(user);
-                            Log.i("return info", jsonObject.getJSONObject("user").toString());
-                            Log.i("return user", String.valueOf(user.getTuring_token())+"where");
-                        } catch (IOException e) {
-                            e.printStackTrace();
-                        } catch (JSONException j) {
-                            ToastUtils.showShort("所填信息不正确");
-                            j.printStackTrace();
-                        }
-                    } else {
-
-                    }
-                }
-
-                @Override
-                public void onFailure(Call call, IOException e) {
-                    Log.e("error", e.toString());
-                }
-            });
+            okHttpUtils.post(NetInterface.TSloginRequest, requestBodyJson,Callback.LoginTestCallback);
         } else {
             LoginRequest loginRequest = new LoginRequest();
             loginRequest.setLoginType(0);
@@ -233,32 +210,8 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
             Gson gson = new Gson();
             String json = gson.toJson(loginRequest);
             OkHttpUtils okHttpUtils = OkHttpUtils.getInstance();
-            RequestBody requestBodyJson = RequestBody.create(MediaType.parse("application/json; charset=utf-8"), json);
-            Log.i("jsonrequest", json);
-            okHttpUtils.post(NetInterface.TSloginRequest, requestBodyJson, new OkHttpUtils.RealCallback() {
-                @Override
-                public void onResponse(Call call, Response response) {
-                    if (response.isSuccessful()) {
-                        try {
-                            JSONObject jsonObject = new JSONObject(response.body().string());
-                            User user = new Gson().fromJson(jsonObject.getJSONObject("user").toString(), User.class);
-                            UserInfoCashUtils userInfoCashUtils = new UserInfoCashUtils();
-                            userInfoCashUtils.clearUserInfoCash();
-                            userInfoCashUtils.saveUserInfoCash(user);
-                            Log.i("return info", jsonObject.getJSONObject("user").toString());
-                            Log.i("return user", String.valueOf(user.getTuring_token()));
-                        } catch (IOException e) {
-                            e.printStackTrace();
-                        } catch (JSONException j) {
-                            j.printStackTrace();
-                        }
-                    }
-                }
-                @Override
-                public void onFailure(Call call, IOException e) {
-                    Log.e("error", e.toString());
-                }
-            });
+            final RequestBody requestBodyJson = RequestBody.create(MediaType.parse("application/json; charset=utf-8"), json);
+            okHttpUtils.post(NetInterface.TSloginRequest, requestBodyJson,Callback.LoginTestCallback);
         }
     }
 

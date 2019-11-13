@@ -24,6 +24,11 @@ public class UserInfoCashUtils {
         editor.putString(key,value);
         editor.apply();
     }
+    public static void setLogin(){
+        SharedPreferences.Editor editor=MyApplication.getContext().getSharedPreferences("userinfo_cash", Context.MODE_PRIVATE).edit();
+        editor.putBoolean("login_state",true);
+        editor.apply();
+    }
 
     public static void saveUserInfoCash(User user){
         SharedPreferences.Editor editor=MyApplication.getContext().getSharedPreferences("userinfo_cash", Context.MODE_PRIVATE).edit();
@@ -47,6 +52,16 @@ public class UserInfoCashUtils {
         SharedPreferences sharedPreferences=MyApplication.getContext().getSharedPreferences("userinfo_cash",Context.MODE_PRIVATE);
         return sharedPreferences.getString(key,"");
     }
+    public static boolean getUserLoginState(){
+        SharedPreferences sharedPreferences=MyApplication.getContext().getSharedPreferences("userinfo_cash",Context.MODE_PRIVATE);
+        return sharedPreferences.getBoolean("login_state",false);
+    }
+    public static int getUserLoginState(String key){
+        SharedPreferences sharedPreferences=MyApplication.getContext().getSharedPreferences("userinfo_cash",Context.MODE_PRIVATE);
+        return sharedPreferences.getInt(key,-1);
+    }
+
+
     /*
     清空用户信息缓存
     */

@@ -80,7 +80,6 @@ public class GenuineFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        LoginTest();
         Callback.loadData(getActivity());
     }
     public static void init(){
@@ -172,17 +171,7 @@ public class GenuineFragment extends Fragment {
     }
 
 
-    public void LoginTest(){
-        LoginRequest loginRequest = new LoginRequest();
-        loginRequest.setLoginType(1);
-        loginRequest.setSms("1116");
-        loginRequest.setPhoneNum("18051982306");
-        Gson gson = new Gson();
-        String json = gson.toJson(loginRequest);
-        OkHttpUtils okHttpUtils = OkHttpUtils.getInstance();
-        final RequestBody requestBodyJson = RequestBody.create(MediaType.parse("application/json; charset=utf-8"), json);
-        okHttpUtils.post(NetInterface.TSloginRequest, requestBodyJson,Callback.LoginTestCallback);
-    }
+
 
     private View createFooterView() {
         footerView = LayoutInflater.from(swipeRefreshLayout.getContext())
@@ -199,90 +188,5 @@ public class GenuineFragment extends Fragment {
         footerTextView.setText("上拉加载更多...");
         return footerView;
     }
-
-//    public void loadData(){
-//        SharedPreferences sharedPreferences1= MyApplication.getContext().getSharedPreferences("userinfo_cash",MODE_PRIVATE);
-//        String token=sharedPreferences1.getString("turing_token","");
-//        OkHttpClient client = new OkHttpClient.Builder()
-//                .build();
-//        //第二步创建RequestBody
-//        RequestBody requestBody = RequestBody.create(null, new byte[]{});
-//        //第三步创建Rquest
-//        Request request = new Request.Builder()
-//                .url(NetInterface.TSPersonCenterPageRequest)
-//                .post(requestBody).addHeader("Authorization","Token "+token)
-//                .build();
-//        //第四步创建call回调对象
-//        final Call call = client.newCall(request);
-//        //第五步发起请求
-//        new Thread(new Runnable() {
-//            @Override
-//            public void run() {
-//                try {
-//                    Response response = call.execute();
-//                    String result = response.body().string();
-//                    Log.i("response", result);
-//                    JSONObject jsonObject=new JSONObject(result);
-//                    JSONArray jsonArray=jsonObject.getJSONArray("realList");
-//                    for (int i=0;i<jsonArray.length();i++){
-//                        AppraisalResult appraisalResult=new AppraisalResult();
-//                        JSONObject jsonObject1=jsonArray.getJSONObject(i);
-//                        appraisalResult.setAppraisalBrand(jsonObject1.getString("brandName"));
-//                        appraisalResult.setAppraisalData(jsonObject1.getString("timestamp"));
-//                        appraisalResult.setAppraisalId(jsonObject1.getString("modelNumber"));
-//                        appraisalResult.setAppraisalImage(jsonObject1.getString("imageUrl"));
-//                        appraisalResults.add(appraisalResult);
-//                    }
-//                    getActivity().runOnUiThread(new Runnable() {
-//                        @Override
-//                        public void run() {
-//                            AppraisalItemAdapter appraisalItemAdapter=new AppraisalItemAdapter(appraisalResults);
-//                            recyclerView.setAdapter(appraisalItemAdapter);
-//                        }
-//                    });
-//                } catch (IOException e) {
-//                    e.printStackTrace();
-//                }catch (JSONException j){
-//                    j.printStackTrace();
-//                }
-//            }
-//        }).start();
-//
-////        OkHttpUtils okHttpUtils = OkHttpUtils.getInstance();
-////        RequestBody requestBody = RequestBody.create(null, new byte[]{});
-////        okHttpUtils.post(NetInterface.TSPersonCenterPageRequest, requestBody, new OkHttpUtils.RealCallback() {
-////            @Override
-////            public void onResponse(Call call, Response response) {
-////                if (response.isSuccessful()) {
-////                    try {
-////
-//////                        JSONObject jsonObject = new JSONObject(response.body().string());
-//////                        User user = new Gson().fromJson(jsonObject.getJSONObject("user").toString(), User.class);
-//////                        UserInfoCashUtils userInfoCashUtils = UserInfoCashUtils.getInstance();
-//////                        userInfoCashUtils.clearUserInfoCash();
-//////                        userInfoCashUtils.saveUserInfoCash(user);
-////                        Log.i("userCenter",response.body().string());
-//////                        Log.i("return info", user.getTuring_token());
-////                        ToastUtils.showShort("sucesslogin");
-////                    } catch (IOException e) {
-////                        e.printStackTrace();
-////                    }
-//////                    catch (JSONException j) {
-//////                        j.printStackTrace();
-//////                    }
-////                } else {
-////
-////                }
-////            }
-////
-////            @Override
-////            public void onFailure(Call call, IOException e) {
-////                Log.e("error", e.toString());
-////            }
-////        },true);
-//    }
-
-
-
 
 }
