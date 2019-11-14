@@ -18,7 +18,6 @@
         android:background="@drawable/login_textview_background"
         android:paddingStart="26dp"
         android:maxLines="1"
-        android:inputType="number"
         />
 
 </LinearLayout>

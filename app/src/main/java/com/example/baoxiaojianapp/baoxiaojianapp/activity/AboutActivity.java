@@ -100,6 +100,7 @@ public class AboutActivity extends AppCompatActivity implements View.OnClickList
             case R.id.RateLayout:
                 break;
             case R.id.corporateInfoLayout:
+                startActivity(new Intent(this,CorporationInfoActivity.class));
                 break;
             case R.id.userprotocal_textview:
                 break;
@@ -117,6 +118,7 @@ public class AboutActivity extends AppCompatActivity implements View.OnClickList
                 ToastUtils.showShort("friend");
                 bottomSheetDialog.dismiss();
                 break;
+
         }
     }
     private void shareToWX(){
