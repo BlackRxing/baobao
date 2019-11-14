@@ -35,13 +35,32 @@
                 />
         </RelativeLayout>
         <ScrollView
+            android:id="@+id/pic_scroll"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:padding="10dp">
+            <LinearLayout
+                android:orientation="vertical"
+                android:id="@+id/scrollLinear"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
             <ImageView
-                android:id="@+id/corporate_info"
+                android:id="@+id/user_protocal_1"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content" />
+            <ImageView
+                android:id="@+id/user_protocal_2"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+            <ImageView
+                android:id="@+id/user_protocal_3"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+            <ImageView
+                android:id="@+id/user_protocal_4"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+            </LinearLayout>
         </ScrollView>
     </LinearLayout>
 </LinearLayout>

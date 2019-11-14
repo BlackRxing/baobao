@@ -42,7 +42,7 @@ public class CorporationInfoActivity extends AppCompatActivity {
             corporateImage.setImageBitmap(bitmap);
         }catch (IOException e){
             e.printStackTrace();
-            ToastUtils.showShort("图片加载识别");
+            ToastUtils.showShort("图片加载错误");
         }
 
     }

@@ -54,7 +54,7 @@ public class AboutActivity extends AppCompatActivity implements View.OnClickList
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_about);
         bindView();
-        initView();
+        initBottomView();
     }
     private void bindView(){
         rateLayout=findViewById(R.id.RateLayout);
@@ -70,9 +70,11 @@ public class AboutActivity extends AppCompatActivity implements View.OnClickList
         backLayout.setOnClickListener(this);
         userProtocalText.setOnClickListener(this);
         privacyPolicyText.setOnClickListener(this);
+        userProtocalText.setOnClickListener(this);
+
     }
 
-    private void initView(){
+    private void initBottomView(){
 
         View bottomview=View.inflate(this,R.layout.share_bottomsheet_layout,null);
         bottomSheetDialog=new BottomSheetDialog(this);
@@ -103,6 +105,7 @@ public class AboutActivity extends AppCompatActivity implements View.OnClickList
                 startActivity(new Intent(this,CorporationInfoActivity.class));
                 break;
             case R.id.userprotocal_textview:
+                startActivity(new Intent(this,UserProtacalActivity.class));
                 break;
             case R.id.privacypolicy_textview:
                 break;
