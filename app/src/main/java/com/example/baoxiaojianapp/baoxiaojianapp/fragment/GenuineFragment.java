@@ -35,6 +35,7 @@ import com.example.baoxiaojianapp.baoxiaojianapp.Utils.NetInterface;
 import com.example.baoxiaojianapp.baoxiaojianapp.Utils.OkHttpUtils;
 import com.example.baoxiaojianapp.baoxiaojianapp.Utils.RecyclerViewSpacesItemDecoration;
 import com.example.baoxiaojianapp.baoxiaojianapp.Utils.UserInfoCashUtils;
+import com.example.baoxiaojianapp.baoxiaojianapp.Utils.ViewUtils;
 import com.example.baoxiaojianapp.baoxiaojianapp.adapter.AppraisalItemAdapter;
 import com.example.baoxiaojianapp.baoxiaojianapp.classpakage.AppraisalResult;
 import com.example.baoxiaojianapp.baoxiaojianapp.classpakage.LoginRequest;
@@ -107,6 +108,10 @@ public class GenuineFragment extends Fragment {
         stringIntegerHashMap.put(RecyclerViewSpacesItemDecoration.TOP_DECORATION,7);//top间距
         stringIntegerHashMap.put(RecyclerViewSpacesItemDecoration.BOTTOM_DECORATION,7);//底部间距
         recyclerView.addItemDecoration(new RecyclerViewSpacesItemDecoration(stringIntegerHashMap));
+
+//        //限制recyclerview滑动速度
+//        ViewUtils.setMaxFlingVelocity(recyclerView,100);
+
         swipeRefreshLayout.setRefreshing(false);
         swipeRefreshLayout.setFooterView(createFooterView());
         swipeRefreshLayout.setTargetScrollWithLayout(true);
@@ -169,6 +174,8 @@ public class GenuineFragment extends Fragment {
         });
         return view;
     }
+
+
 
 
 

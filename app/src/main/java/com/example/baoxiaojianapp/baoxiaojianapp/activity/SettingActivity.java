@@ -68,7 +68,7 @@ public class SettingActivity extends AppCompatActivity implements View.OnClickLi
                 startActivity(new Intent(this,FeedbackActivity.class));
                 break;
             case R.id.contact_layout:
-                ToastUtils.showShort(getText(R.string.contactus_toast));
+                ToastUtils.showLong(getText(R.string.contactus_toast));
                 break;
             case R.id.back_layout:
                 finish();

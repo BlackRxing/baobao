@@ -48,12 +48,13 @@ public class EditNickNameActivity extends AppCompatActivity implements View.OnCl
     private Button   backButton;
 
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_edit_nick_name);
         bindView();
-        LoginTest();
+         LoginTest();
     }
 
     private void bindView(){
@@ -70,6 +71,10 @@ public class EditNickNameActivity extends AppCompatActivity implements View.OnCl
         saveTextView.setOnClickListener(this);
         backTextView.setOnClickListener(this);
         backButton.setOnClickListener(this);
+        if (UserInfoCashUtils.getUserInfo("nick_name")!=""){
+            nicknameedit.setText(UserInfoCashUtils.getUserInfo("nick_name"));
+        }
+
     }
 
     @Override

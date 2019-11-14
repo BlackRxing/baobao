@@ -59,7 +59,7 @@ public class FakeFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        LoginTest();
+   //     LoginTest();
         Callback.FakeloadData(getActivity());
     }
     public static void init(){

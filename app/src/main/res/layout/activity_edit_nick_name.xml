@@ -35,7 +35,7 @@
             android:id="@+id/save_text"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/send"
+            android:text="@string/save"
             android:textSize="17sp"
             android:textColor="@color/black"
             android:layout_alignParentEnd="true"
@@ -50,7 +50,6 @@
         android:layout_height="28dp"
         android:layout_marginLeft="24dp"
         android:layout_marginTop="20dp"
-        android:text="@string/userevaluate"
         android:textSize="14sp"
         />
     <RelativeLayout
