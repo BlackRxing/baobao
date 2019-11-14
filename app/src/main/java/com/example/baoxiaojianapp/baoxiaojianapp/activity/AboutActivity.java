@@ -108,6 +108,7 @@ public class AboutActivity extends AppCompatActivity implements View.OnClickList
                 startActivity(new Intent(this,UserProtacalActivity.class));
                 break;
             case R.id.privacypolicy_textview:
+                startActivity(new Intent(this,PrivatePolicyActivity.class));
                 break;
             case R.id.weixin_button:
                 shareToWX();

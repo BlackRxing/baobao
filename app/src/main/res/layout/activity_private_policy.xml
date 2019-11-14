@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context=".baoxiaojianapp.activity.InfoSettingActivity"
+    android:id="@+id/container_layout">
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <RelativeLayout
+            android:id="@+id/back_layout"
+            android:layout_width="wrap_content"
+            android:layout_height="30dp"
+            android:layout_marginTop="32dp">
+            <Button
+                android:id="@+id/back_button"
+                android:layout_width="8dp"
+                android:layout_height="14dp"
+                android:background="@drawable/backarrow"
+                android:layout_marginLeft="18dp"
+                android:layout_centerVertical="true"/>
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/back"
+                android:textSize="17sp"
+                android:textColor="@color/black"
+                android:layout_marginLeft="10dp"
+                android:layout_toRightOf="@+id/back_button"
+                android:layout_centerVertical="true"
+                android:gravity="center_vertical"
+                />
+        </RelativeLayout>
+        <ScrollView
+            android:id="@+id/pic_scroll"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:padding="10dp">
+            <LinearLayout
+                android:orientation="vertical"
+                android:id="@+id/scrollLinear"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+                <ImageView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content" />
+                <ImageView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content" />
+                <ImageView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content" />
+                <ImageView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content" />
+                <ImageView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content" />
+            </LinearLayout>
+        </ScrollView>
+    </LinearLayout>
+</LinearLayout>
