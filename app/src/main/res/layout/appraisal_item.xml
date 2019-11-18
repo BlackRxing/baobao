@@ -23,7 +23,6 @@
         android:id="@+id/appraisal_image"
         android:layout_width="122dp"
         android:layout_height="111dp"
-
         />
     </androidx.cardview.widget.CardView>
     <TextView

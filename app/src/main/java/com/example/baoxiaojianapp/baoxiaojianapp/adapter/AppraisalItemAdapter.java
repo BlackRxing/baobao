@@ -45,12 +45,7 @@ public class AppraisalItemAdapter extends RecyclerView.Adapter<AppraisalItemAdap
         holder.appraisalBrand.setText(appraisalResult.getAppraisalBrand());
         holder.appraisalId.setText("鉴定号:"+appraisalResult.getAppraisalId());
         holder.appraisalData.setText(appraisalResult.getAppraisalData());
-        Glide.with(MyApplication.getContext()).load(appraisalResult.getAppraisalImage()).into(new SimpleTarget<Drawable>() {
-            @Override
-            public void onResourceReady(@NonNull Drawable resource, @Nullable Transition<? super Drawable> transition) {
-                holder.appraisalImage.setBackground(resource);
-            }
-        });
+        Glide.with(MyApplication.getContext()).load(appraisalResult.getAppraisalImage()).centerCrop().into(holder.appraisalImage);
     }
 
     @Override

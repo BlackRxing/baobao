@@ -51,6 +51,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.IOException;
+import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -93,6 +94,21 @@ public class GenuineFragment extends Fragment {
         }
     }
 
+    /**
+     * 改变Recycler的滑动速度
+     * @param recyclerView
+     * @param velocity      //滑动速度默认是8000dp
+     */
+    public static void setMaxFlingVelocity(RecyclerView recyclerView, int velocity){
+        try{
+            Field field = recyclerView.getClass().getDeclaredField("mMaxFlingVelocity");
+            field.setAccessible(true);
+            field.set(recyclerView, velocity);
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+    }
+
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -103,6 +119,9 @@ public class GenuineFragment extends Fragment {
         recyclerView=view.findViewById(R.id.recycler_view);
         LinearLayoutManager linearLayoutManager=new LinearLayoutManager(getContext());
         recyclerView.setLayoutManager(linearLayoutManager);
+        //禁止滚动
+        setMaxFlingVelocity(recyclerView,3000);
+
         holderImage=view.findViewById(R.id.image_noresult_holder);
         HashMap<String, Integer> stringIntegerHashMap = new HashMap<>();
         stringIntegerHashMap.put(RecyclerViewSpacesItemDecoration.TOP_DECORATION,7);//top间距
