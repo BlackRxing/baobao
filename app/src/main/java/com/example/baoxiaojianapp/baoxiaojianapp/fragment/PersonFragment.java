@@ -64,6 +64,8 @@ public class PersonFragment extends Fragment implements View.OnClickListener {
     private Button loginButton;
 
 
+
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -81,13 +83,21 @@ public class PersonFragment extends Fragment implements View.OnClickListener {
             }
         });
         usernameText.setText(sharedPreferences.getString("nick_name",""));
-
     }
-    private void init(){
+
+    private void initTop(){
         onlineTop.setVisibility(View.VISIBLE);
         offlineTop.setVisibility(View.GONE);
         tabLayout.setVisibility(View.VISIBLE);
         viewPager.setVisibility(View.VISIBLE);
+    }
+    private void setOfflineTop(){
+        onlineTop.setVisibility(View.GONE);
+        offlineTop.setVisibility(View.VISIBLE);
+        tabLayout.setVisibility(View.GONE);
+        viewPager.setVisibility(View.GONE);
+    }
+    private void init(){
         titleList.add("真货");
         titleList.add("假货");
         genuineFragment=new GenuineFragment();
@@ -141,24 +151,29 @@ public class PersonFragment extends Fragment implements View.OnClickListener {
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        Viewinit();
-
+        viewTopinit();
+        init();
     }
 
-    private void Viewinit(){
+    @Override
+    public void onStart() {
+        super.onStart();
+    }
+
+    @Override
+    public void onResume() {
+        viewTopinit();
+        super.onResume();
+    }
+
+    private void viewTopinit(){
         if (UserInfoCashUtils.getUserLoginState()){
-            init();
+            initTop();
         }else{
-            offlineinit();
+            setOfflineTop();
         }
     }
 
-    private void offlineinit(){
-        onlineTop.setVisibility(View.GONE);
-        offlineTop.setVisibility(View.VISIBLE);
-        tabLayout.setVisibility(View.GONE);
-        viewPager.setVisibility(View.GONE);
-    }
 
     @Override
     public void onClick(View v) {

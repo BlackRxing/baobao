@@ -5,6 +5,7 @@ import android.content.SharedPreferences;
 import android.util.Log;
 import android.view.inspector.StaticInspectionCompanionProvider;
 
+import com.blankj.utilcode.util.ActivityUtils;
 import com.blankj.utilcode.util.ToastUtils;
 import com.example.baoxiaojianapp.baoxiaojianapp.Utils.MyApplication;
 import com.example.baoxiaojianapp.baoxiaojianapp.Utils.NetInterface;
@@ -54,8 +55,7 @@ public class Callback {
                     userInfoCashUtils.clearUserInfoCash();
                     userInfoCashUtils.saveUserInfoCash(user);
                     userInfoCashUtils.setLogin();
-                    ToastUtils.showShort("登录成功");
-                    LoginActivity.isSuccess=true;
+                    LoginActivity.afterLogin();
                 } catch (IOException e) {
                     e.printStackTrace();
                 } catch (JSONException j) {

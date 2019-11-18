@@ -5,6 +5,7 @@ import android.util.Log;
 import android.view.MenuItem;
 import android.widget.FrameLayout;
 
+import com.blankj.utilcode.util.ToastUtils;
 import com.example.baoxiaojianapp.R;
 import com.example.baoxiaojianapp.baoxiaojianapp.fragment.AppraisalFragment;
 import com.example.baoxiaojianapp.baoxiaojianapp.fragment.PersonFragment;
@@ -42,6 +43,8 @@ public class MainActivity extends BaseActivity implements BottomNavigationView.O
     }
 
     private void bindView(){
+        if (getIntent().getExtras().getString("success")!=null)
+            ToastUtils.showShort(getIntent().getExtras().getString("success"));
         bottomNavigationView=findViewById(R.id.bottom_navigation);
     }
 
@@ -74,8 +77,6 @@ public class MainActivity extends BaseActivity implements BottomNavigationView.O
             fragmentTransaction.show(fragments.get(0)).commit();
         }
     }
-
-
 
 
 

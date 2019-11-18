@@ -119,7 +119,7 @@ public class GenuineFragment extends Fragment {
         recyclerView=view.findViewById(R.id.recycler_view);
         LinearLayoutManager linearLayoutManager=new LinearLayoutManager(getContext());
         recyclerView.setLayoutManager(linearLayoutManager);
-        //禁止滚动
+        //限制滚动
         setMaxFlingVelocity(recyclerView,3000);
 
         holderImage=view.findViewById(R.id.image_noresult_holder);
@@ -127,9 +127,6 @@ public class GenuineFragment extends Fragment {
         stringIntegerHashMap.put(RecyclerViewSpacesItemDecoration.TOP_DECORATION,7);//top间距
         stringIntegerHashMap.put(RecyclerViewSpacesItemDecoration.BOTTOM_DECORATION,7);//底部间距
         recyclerView.addItemDecoration(new RecyclerViewSpacesItemDecoration(stringIntegerHashMap));
-
-//        //限制recyclerview滑动速度
-//        ViewUtils.setMaxFlingVelocity(recyclerView,100);
 
         swipeRefreshLayout.setRefreshing(false);
         swipeRefreshLayout.setFooterView(createFooterView());
@@ -195,7 +192,10 @@ public class GenuineFragment extends Fragment {
     }
 
 
-
+    @Override
+    public void onResume() {
+        super.onResume();
+    }
 
 
 

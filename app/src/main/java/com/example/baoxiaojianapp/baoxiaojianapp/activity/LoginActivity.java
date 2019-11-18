@@ -10,10 +10,12 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 
+import com.blankj.utilcode.util.ActivityUtils;
 import com.blankj.utilcode.util.EncryptUtils;
 import com.blankj.utilcode.util.ToastUtils;
 import com.example.baoxiaojianapp.R;
 import com.example.baoxiaojianapp.baoxiaojianapp.Callback.Callback;
+import com.example.baoxiaojianapp.baoxiaojianapp.Utils.MyApplication;
 import com.example.baoxiaojianapp.baoxiaojianapp.Utils.NetInterface;
 import com.example.baoxiaojianapp.baoxiaojianapp.Utils.OkHttpUtils;
 import com.example.baoxiaojianapp.baoxiaojianapp.Utils.RegexUtils;
@@ -216,10 +218,18 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
         }
     }
 
+    public static void afterLogin(){
+        ActivityUtils.finishAllActivities();
+        Intent intent=new Intent(MyApplication.getContext(),MainActivity.class);
+        intent.putExtra("success","登录成功");
+        ActivityUtils.startActivity(intent);
+    }
+
 
 
     @Override
     public int getLayoutResId() {
+
         return R.layout.activity_login;
     }
 }
