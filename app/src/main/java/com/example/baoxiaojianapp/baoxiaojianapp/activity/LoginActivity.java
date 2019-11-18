@@ -46,6 +46,7 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
     EditText account_password_Edit;
     LinearLayout linearLayout_person;
     LinearLayout linearLayout_enterprise;
+    public static boolean isSuccess=false;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -214,6 +215,8 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
             okHttpUtils.post(NetInterface.TSloginRequest, requestBodyJson,Callback.LoginTestCallback);
         }
     }
+
+
 
     @Override
     public int getLayoutResId() {

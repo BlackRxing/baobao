@@ -23,4 +23,7 @@ public interface Constants {
 
 
 
+    //weixin
+    public static final String APP_ID="wx1470dc6b3fb406b6";
+
 }

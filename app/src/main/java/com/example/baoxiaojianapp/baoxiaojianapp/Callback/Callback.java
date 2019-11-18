@@ -1,5 +1,6 @@
 package com.example.baoxiaojianapp.baoxiaojianapp.Callback;
 
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.util.Log;
 import android.view.inspector.StaticInspectionCompanionProvider;
@@ -9,6 +10,7 @@ import com.example.baoxiaojianapp.baoxiaojianapp.Utils.MyApplication;
 import com.example.baoxiaojianapp.baoxiaojianapp.Utils.NetInterface;
 import com.example.baoxiaojianapp.baoxiaojianapp.Utils.OkHttpUtils;
 import com.example.baoxiaojianapp.baoxiaojianapp.Utils.UserInfoCashUtils;
+import com.example.baoxiaojianapp.baoxiaojianapp.activity.LoginActivity;
 import com.example.baoxiaojianapp.baoxiaojianapp.adapter.AppraisalItemAdapter;
 import com.example.baoxiaojianapp.baoxiaojianapp.classpakage.AppraisalResult;
 import com.example.baoxiaojianapp.baoxiaojianapp.classpakage.User;
@@ -53,6 +55,7 @@ public class Callback {
                     userInfoCashUtils.saveUserInfoCash(user);
                     userInfoCashUtils.setLogin();
                     ToastUtils.showShort("登录成功");
+                    LoginActivity.isSuccess=true;
                 } catch (IOException e) {
                     e.printStackTrace();
                 } catch (JSONException j) {

@@ -2,7 +2,10 @@ package com.example.baoxiaojianapp.baoxiaojianapp.activity;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
@@ -13,12 +16,15 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.blankj.utilcode.util.ConvertUtils;
 import com.blankj.utilcode.util.ToastUtils;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners;
 import com.bumptech.glide.request.RequestOptions;
+import com.bumptech.glide.util.Util;
 import com.example.baoxiaojianapp.R;
 import com.example.baoxiaojianapp.baoxiaojianapp.Utils.Constants;
+import com.example.baoxiaojianapp.baoxiaojianapp.Utils.PicProcessUtils;
 import com.example.baoxiaojianapp.baoxiaojianapp.Utils.ShareUtils;
 import com.example.baoxiaojianapp.baoxiaojianapp.fragment.PersonFragment;
 import com.google.android.material.bottomsheet.BottomSheetDialog;
@@ -32,6 +38,12 @@ import com.sina.weibo.sdk.constant.WBConstants;
 import com.sina.weibo.sdk.share.WbShareCallback;
 import com.sina.weibo.sdk.share.WbShareHandler;
 import com.sina.weibo.sdk.utils.Utility;
+import com.tencent.mm.opensdk.constants.ConstantsAPI;
+import com.tencent.mm.opensdk.modelmsg.SendMessageToWX;
+import com.tencent.mm.opensdk.modelmsg.WXMediaMessage;
+import com.tencent.mm.opensdk.modelmsg.WXWebpageObject;
+import com.tencent.mm.opensdk.openapi.IWXAPI;
+import com.tencent.mm.opensdk.openapi.WXAPIFactory;
 
 public class AboutActivity extends AppCompatActivity implements View.OnClickListener, WbShareCallback {
 
@@ -47,6 +59,12 @@ public class AboutActivity extends AppCompatActivity implements View.OnClickList
     private LinearLayout weixinLayout;
     private LinearLayout friendCircleLayout;
 
+    //weixin
+    private IWXAPI iwxapi;
+    private static final int WEIXIN=0;
+    private static final int TIMELINE=1;
+
+    //微博
     private WbShareHandler wbShareHandler;
 
     @Override
@@ -55,6 +73,18 @@ public class AboutActivity extends AppCompatActivity implements View.OnClickList
         setContentView(R.layout.activity_about);
         bindView();
         initBottomView();
+        regToWx();
+    }
+
+    private void regToWx(){
+        iwxapi= WXAPIFactory.createWXAPI(this,Constants.APP_ID,true);
+        iwxapi.registerApp(Constants.APP_ID);
+        registerReceiver(new BroadcastReceiver() {
+            @Override
+            public void onReceive(Context context, Intent intent) {
+                iwxapi.registerApp(Constants.APP_ID);
+            }
+        },new IntentFilter(ConstantsAPI.ACTION_REFRESH_WXAPP));
     }
     private void bindView(){
         rateLayout=findViewById(R.id.RateLayout);
@@ -111,7 +141,7 @@ public class AboutActivity extends AppCompatActivity implements View.OnClickList
                 startActivity(new Intent(this,PrivatePolicyActivity.class));
                 break;
             case R.id.weixin_button:
-                shareToWX();
+                shareToWX(WEIXIN);
                 bottomSheetDialog.dismiss();
                 break;
             case R.id.weibo_button:
@@ -119,14 +149,31 @@ public class AboutActivity extends AppCompatActivity implements View.OnClickList
                 bottomSheetDialog.dismiss();
                 break;
             case R.id.friendcircle_button:
-                ToastUtils.showShort("friend");
+                shareToWX(TIMELINE);
                 bottomSheetDialog.dismiss();
                 break;
 
         }
     }
-    private void shareToWX(){
+    private void shareToWX(int type){
+        WXWebpageObject webpageObject=new WXWebpageObject();
+        webpageObject.webpageUrl=Constants.shareLink;
 
+        WXMediaMessage wxMediaMessage=new WXMediaMessage(webpageObject);
+        wxMediaMessage.title="AI鉴定，秒知真假";
+        //wxMediaMessage.description=null;
+        Bitmap bitmap=BitmapFactory.decodeResource(getResources(),R.drawable.icon40);
+        wxMediaMessage.thumbData= PicProcessUtils.bmpToByteArray(bitmap,true);
+
+        SendMessageToWX.Req req=new SendMessageToWX.Req();
+        req.transaction=PicProcessUtils.buildTransaction("webpage");
+        req.message=wxMediaMessage;
+        if (type==WEIXIN){
+            req.scene=SendMessageToWX.Req.WXSceneSession;
+        }else {
+            req.scene=SendMessageToWX.Req.WXSceneTimeline;
+        }
+        iwxapi.sendReq(req);
     }
     private void shareToWB(){
         try {
