@@ -7,6 +7,7 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.blankj.utilcode.util.ToastUtils;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.target.SimpleTarget;
 import com.bumptech.glide.request.transition.Transition;
@@ -33,9 +34,9 @@ public class AppraisalItemAdapter extends RecyclerView.Adapter<AppraisalItemAdap
     @NonNull
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View view= LayoutInflater.from(MyApplication.getContext()).inflate(R.layout.appraisal_item,parent,false);
+        final View view= LayoutInflater.from(MyApplication.getContext()).inflate(R.layout.appraisal_item,parent,false);
         itemView=view;
-        ViewHolder holder=new ViewHolder(view);
+        final ViewHolder holder=new ViewHolder(view);
         return holder;
     }
 

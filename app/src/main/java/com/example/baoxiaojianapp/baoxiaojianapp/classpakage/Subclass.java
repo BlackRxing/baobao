@@ -17,6 +17,17 @@ public class Subclass {
         this.subclassImage = subclassImage;
     }
 
+
+    public String getKindKey() {
+        return kindKey;
+    }
+
+    public void setKindKey(String kindKey) {
+        this.kindKey = kindKey;
+    }
+
     private String subclassText;
     private String subclassImage;
+    private String kindKey;
+
 }

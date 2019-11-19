@@ -1,5 +1,6 @@
 package com.example.baoxiaojianapp.baoxiaojianapp.fragment;
 
+import android.content.Intent;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 
@@ -30,6 +31,7 @@ import com.bumptech.glide.request.transition.Transition;
 import com.example.baoxiaojianapp.R;
 import com.example.baoxiaojianapp.baoxiaojianapp.Utils.NetInterface;
 import com.example.baoxiaojianapp.baoxiaojianapp.Utils.OkHttpUtils;
+import com.example.baoxiaojianapp.baoxiaojianapp.activity.AppraisalNoticeActivity;
 import com.example.baoxiaojianapp.baoxiaojianapp.activity.MainActivity;
 import com.example.baoxiaojianapp.baoxiaojianapp.adapter.SubclassitemAdapter;
 import com.example.baoxiaojianapp.baoxiaojianapp.classpakage.Subclass;
@@ -101,20 +103,33 @@ public class AppraisalFragment extends Fragment implements View.OnClickListener 
         int subkind=jsonArray.length();
         String subclassImageUrl=null;
         String brandName="";
+        String kindKey="";
         for(int i=0;i<subkind;i++){
             try {
                 subclassImageUrl=jsonArray.getJSONObject(i).getString("imageUrl");
                 brandName=jsonArray.getJSONObject(i).getString("brandName");
+                kindKey=jsonArray.getJSONObject(i).getString("kindKey");
             }catch (JSONException j){
                 j.printStackTrace();
             }
             Subclass subclass=new Subclass();
             subclass.setSubclassImage(subclassImageUrl);
             subclass.setSubclassText(brandName);
+            subclass.setKindKey(kindKey);
             subclassList.add(subclass);
         }
-        recyclerView.setAdapter(new SubclassitemAdapter(subclassList));
-
+        SubclassitemAdapter subclassitemAdapter=new SubclassitemAdapter(subclassList);
+        subclassitemAdapter.setMyAdapterClick(new SubclassitemAdapter.MyAdapterClick() {
+            @Override
+            public void onItemClick(String brandName,String imageUrl,String kindKey) {
+                Intent intent=new Intent(getContext(), AppraisalNoticeActivity.class);
+                intent.putExtra("brandName",brandName);
+                intent.putExtra("imageUrl",imageUrl);
+                intent.putExtra("kindKey",kindKey);
+                startActivity(intent);
+            }
+        });
+        recyclerView.setAdapter(subclassitemAdapter);
         subclassLayout.setVisibility(View.VISIBLE);
         mainappraisalLayout.setVisibility(View.INVISIBLE);
 
@@ -208,15 +223,12 @@ public class AppraisalFragment extends Fragment implements View.OnClickListener 
                     j.printStackTrace();
                 }
             }
-
             @Override
             public void onFailure(Call call, IOException e) {
 
             }
         });
-
     }
-
     @Override
     public void onClick(View v) {
         switch (v.getId()){

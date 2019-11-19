@@ -6,11 +6,13 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.blankj.utilcode.util.ToastUtils;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners;
 import com.bumptech.glide.request.RequestOptions;
 import com.example.baoxiaojianapp.R;
 import com.example.baoxiaojianapp.baoxiaojianapp.Utils.MyApplication;
+import com.example.baoxiaojianapp.baoxiaojianapp.Utils.MyProvider;
 import com.example.baoxiaojianapp.baoxiaojianapp.classpakage.Subclass;
 
 import java.util.List;
@@ -21,6 +23,8 @@ import androidx.recyclerview.widget.RecyclerView;
 public class SubclassitemAdapter extends RecyclerView.Adapter<SubclassitemAdapter.ViewHolder> {
     private List<Subclass> subclassList;
     private View itemView;
+    public MyAdapterClick myAdapterClick;
+
 
     public SubclassitemAdapter(List<Subclass> subclassList){
         this.subclassList=subclassList;
@@ -36,12 +40,18 @@ public class SubclassitemAdapter extends RecyclerView.Adapter<SubclassitemAdapte
     }
 
     @Override
-    public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
-        Subclass subclass=subclassList.get(position);
+    public void onBindViewHolder(@NonNull ViewHolder holder, final int position) {
+        final Subclass subclass=subclassList.get(position);
 //        Glide.with(MyApplication.getContext()).load(subclass.getSubclassImage()).centerCrop().into(holder.subclassImage);
         holder.subclassText.setText(subclass.getSubclassText());
         RequestOptions options = new RequestOptions().bitmapTransform(new RoundedCorners(30));//图片圆角为30
         Glide.with(MyApplication.getContext()).load(subclass.getSubclassImage()).centerCrop().apply(options).into(holder.subclassImage);
+        holder.subclassText.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                myAdapterClick.onItemClick(subclassList.get(position).getSubclassText(),subclassList.get(position).getSubclassImage(),subclassList.get(position).getKindKey());
+            }
+        });
     }
 
 
@@ -58,5 +68,13 @@ public class SubclassitemAdapter extends RecyclerView.Adapter<SubclassitemAdapte
             subclassImage=view.findViewById(R.id.subclass_image);
             subclassText=view.findViewById(R.id.subclass_text);
         }
+    }
+
+    public interface MyAdapterClick{
+        void onItemClick(String brandName,String ImageUrl,String kindKey);
+    }
+
+    public void setMyAdapterClick(MyAdapterClick myAdapterClick){
+        this.myAdapterClick=myAdapterClick;
     }
 }
