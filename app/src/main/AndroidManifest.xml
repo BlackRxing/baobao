@@ -22,7 +22,8 @@
         android:usesCleartextTraffic="true"
         tools:ignore="GoogleAppIndexingWarning"
         tools:replace="android:allowBackup">
-        <activity android:name=".baoxiaojianapp.activity.PrivatePolicyActivity"></activity>
+        <activity android:name=".baoxiaojianapp.activity.AppraisalNoticeActivity"></activity>
+        <activity android:name=".baoxiaojianapp.activity.PrivatePolicyActivity" />
         <activity android:name=".baoxiaojianapp.activity.UserProtacalActivity" />
         <activity android:name=".baoxiaojianapp.activity.CorporationInfoActivity" />
         <activity android:name=".baoxiaojianapp.activity.AboutActivity" />
@@ -32,9 +33,9 @@
         <activity
             android:name=".baoxiaojianapp.activity.InfoSettingActivity"
             android:screenOrientation="portrait" />
-        <activity android:name=".baoxiaojianapp.activity.MainActivity"
-            android:launchMode="singleTask"
-         >
+        <activity
+            android:name=".baoxiaojianapp.activity.MainActivity"
+            android:launchMode="singleTask">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

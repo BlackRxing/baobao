@@ -25,7 +25,6 @@
             android:id="@+id/main_banner"
             android:layout_width="match_parent"
             android:layout_height="385dp"
-            android:src="@drawable/banner"
             android:layout_below="@+id/main_title"
             android:textSize="40sp"
             android:layout_marginTop="5dp"

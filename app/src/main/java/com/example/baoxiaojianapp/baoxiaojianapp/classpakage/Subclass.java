@@ -19,5 +19,4 @@ public class Subclass {
 
     private String subclassText;
     private String subclassImage;
-
 }

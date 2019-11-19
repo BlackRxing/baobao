@@ -19,6 +19,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -51,7 +52,7 @@ public class AppraisalFragment extends Fragment implements View.OnClickListener 
     private RelativeLayout mainappraisalLayout;
     private Button subclassButton;
     private TextView subclassText;
-
+    private ImageView bannerImage;
     private RecyclerView recyclerView;
 
     private static final String[] subClasscategory=new String[]{"bag","shoe","watch"};
@@ -78,7 +79,8 @@ public class AppraisalFragment extends Fragment implements View.OnClickListener 
                 try {
                     JSONObject jsonObject = new JSONObject(response.body().string());
                     JSONArray jsonArray=jsonObject.getJSONArray("appraisalKindList");
-                    showPic(jsonArray);
+                    String banner=jsonObject.getString("bannerList");
+                    showPic(jsonArray,banner);
                     //   Log.i("return info",jsonObject.toString());
                 } catch (IOException e) {
                     e.printStackTrace();
@@ -120,7 +122,7 @@ public class AppraisalFragment extends Fragment implements View.OnClickListener 
 
 
 
-    private void showPic(JSONArray jsonArray){
+    private void showPic(JSONArray jsonArray,String banner){
         try {
             String imageurl=jsonArray.getJSONObject(0).getString("imageUrl");
             Glide.with(getView()).load(imageurl).into(new SimpleTarget<Drawable>() {
@@ -143,6 +145,7 @@ public class AppraisalFragment extends Fragment implements View.OnClickListener 
                     watchCard.setBackground(resource);
                 }
             });
+            Glide.with(getView()).load(banner).centerCrop().into(bannerImage);
         }catch (JSONException j){
             j.printStackTrace();
         }
@@ -157,6 +160,7 @@ public class AppraisalFragment extends Fragment implements View.OnClickListener 
         watchCard=view.findViewById(R.id.watch_card);
         mainappraisalLayout=view.findViewById(R.id.mainappraisal_layout);
         subclassLayout=view.findViewById(R.id.mainappraisal_subclass_layout);
+        bannerImage=view.findViewById(R.id.main_banner);
 
         recyclerView=view.findViewById(R.id.recycler_view);
         GridLayoutManager gridLayoutManager=new GridLayoutManager(getContext(),2);
