@@ -51,4 +51,9 @@
     <string name="weixin">微信</string>
     <string name="friendcircle">朋友圈</string>
 
+    <string name="appraisalNotice">鉴定须知</string>
+    <string name="needappraisalPoint">鉴定所需鉴定点</string>
+    <string name="greenNotice">鉴定新手必看</string>
+    <string name="gotoAppraisal">去鉴定</string>
+
 </resources>
