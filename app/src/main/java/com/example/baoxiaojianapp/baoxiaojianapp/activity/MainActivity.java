@@ -22,7 +22,7 @@ import androidx.fragment.app.FragmentTransaction;
 public class MainActivity extends BaseActivity implements BottomNavigationView.OnNavigationItemSelectedListener{
 
     private FrameLayout mainframelayout;
-    private BottomNavigationView bottomNavigationView;
+    private static BottomNavigationView bottomNavigationView;
     private AppraisalFragment appraisalFragmentProvider;
     private PersonFragment personFragmentProvider;
     private List<Fragment> fragments;
@@ -31,6 +31,11 @@ public class MainActivity extends BaseActivity implements BottomNavigationView.O
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
+        if (savedInstanceState != null) {
+            // FRAGMENTS_TAG
+            savedInstanceState.remove("android:support:fragments");
+            savedInstanceState.remove("android:fragments");
+        }
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         bindView();
@@ -43,7 +48,7 @@ public class MainActivity extends BaseActivity implements BottomNavigationView.O
     }
 
     private void bindView(){
-        if (getIntent().getExtras().getString("success")!=null)
+        if (getIntent().getExtras()!=null&&getIntent().getExtras().getString("success")!=null)
             ToastUtils.showShort(getIntent().getExtras().getString("success"));
         bottomNavigationView=findViewById(R.id.bottom_navigation);
     }
@@ -56,7 +61,7 @@ public class MainActivity extends BaseActivity implements BottomNavigationView.O
         getSupportFragmentManager().beginTransaction().add(R.id.fragment_frame,fragments.get(0)).show(fragments.get(0)).commit();
     }
 
-    
+
 
 
     private void switchfragment(){
@@ -102,4 +107,5 @@ public class MainActivity extends BaseActivity implements BottomNavigationView.O
         }
         return false;
     }
+
 }

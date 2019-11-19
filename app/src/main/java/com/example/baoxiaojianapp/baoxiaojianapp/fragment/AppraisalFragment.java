@@ -7,6 +7,8 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.cardview.widget.CardView;
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.GridLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 import okhttp3.Call;
 import okhttp3.MediaType;
 import okhttp3.RequestBody;
@@ -27,12 +29,17 @@ import com.bumptech.glide.request.transition.Transition;
 import com.example.baoxiaojianapp.R;
 import com.example.baoxiaojianapp.baoxiaojianapp.Utils.NetInterface;
 import com.example.baoxiaojianapp.baoxiaojianapp.Utils.OkHttpUtils;
+import com.example.baoxiaojianapp.baoxiaojianapp.activity.MainActivity;
+import com.example.baoxiaojianapp.baoxiaojianapp.adapter.SubclassitemAdapter;
+import com.example.baoxiaojianapp.baoxiaojianapp.classpakage.Subclass;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 
 public class AppraisalFragment extends Fragment implements View.OnClickListener {
@@ -44,7 +51,9 @@ public class AppraisalFragment extends Fragment implements View.OnClickListener 
     private RelativeLayout mainappraisalLayout;
     private Button subclassButton;
     private TextView subclassText;
-    private RelativeLayout subclassCardViews;
+
+    private RecyclerView recyclerView;
+
     private static final String[] subClasscategory=new String[]{"bag","shoe","watch"};
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -70,7 +79,7 @@ public class AppraisalFragment extends Fragment implements View.OnClickListener 
                     JSONObject jsonObject = new JSONObject(response.body().string());
                     JSONArray jsonArray=jsonObject.getJSONArray("appraisalKindList");
                     showPic(jsonArray);
-                 //   Log.i("return info",jsonObject.toString());
+                    //   Log.i("return info",jsonObject.toString());
                 } catch (IOException e) {
                     e.printStackTrace();
                 } catch (JSONException j){
@@ -86,33 +95,26 @@ public class AppraisalFragment extends Fragment implements View.OnClickListener 
     }
 
     private void showSubclassPic(JSONArray jsonArray){
+        List<Subclass> subclassList=new ArrayList<>();
         int subkind=jsonArray.length();
         String subclassImageUrl=null;
         String brandName="";
-        int i;
-        Log.d("cardView",String.valueOf(subkind));
-        for(i=0;i<subkind;i++){
+        for(int i=0;i<subkind;i++){
             try {
                 subclassImageUrl=jsonArray.getJSONObject(i).getString("imageUrl");
                 brandName=jsonArray.getJSONObject(i).getString("brandName");
             }catch (JSONException j){
                 j.printStackTrace();
             }
-            final CardView cardView=(CardView)subclassCardViews.getChildAt(i);
-            cardView.setVisibility(View.VISIBLE);
-            TextView textView=(TextView) cardView.getChildAt(1);
-            textView.setText(brandName);
-            Glide.with(getView()).load(subclassImageUrl).into(new SimpleTarget<Drawable>() {
-                @Override
-                public void onResourceReady(@NonNull Drawable resource, @Nullable Transition<? super Drawable> transition) {
-                     cardView.getChildAt(0).setBackground(resource);
-                }
-            });
+            Subclass subclass=new Subclass();
+            subclass.setSubclassImage(subclassImageUrl);
+            subclass.setSubclassText(brandName);
+            subclassList.add(subclass);
         }
-        for (;i<6;i++){
-            subclassCardViews.getChildAt(i).setVisibility(View.INVISIBLE);
-        }
+        recyclerView.setAdapter(new SubclassitemAdapter(subclassList));
 
+        subclassLayout.setVisibility(View.VISIBLE);
+        mainappraisalLayout.setVisibility(View.INVISIBLE);
 
     }
 
@@ -155,9 +157,13 @@ public class AppraisalFragment extends Fragment implements View.OnClickListener 
         watchCard=view.findViewById(R.id.watch_card);
         mainappraisalLayout=view.findViewById(R.id.mainappraisal_layout);
         subclassLayout=view.findViewById(R.id.mainappraisal_subclass_layout);
+
+        recyclerView=view.findViewById(R.id.recycler_view);
+        GridLayoutManager gridLayoutManager=new GridLayoutManager(getContext(),2);
+        recyclerView.setLayoutManager(gridLayoutManager);
         subclassButton=view.findViewById(R.id.mainappraisal_subclass_button);
         subclassText=view.findViewById(R.id.subclass_text);
-        subclassCardViews=view.findViewById(R.id.subclass_cardviews);
+
         init();
         return view;
     }
@@ -174,8 +180,7 @@ public class AppraisalFragment extends Fragment implements View.OnClickListener 
                 subclassText.setText("表");
                 break;
         }
-        subclassLayout.setVisibility(View.VISIBLE);
-        mainappraisalLayout.setVisibility(View.INVISIBLE);
+
         JSONObject json = new JSONObject();
         try {
             json.put("type", subClasscategory[i]);
@@ -192,7 +197,7 @@ public class AppraisalFragment extends Fragment implements View.OnClickListener 
                     JSONObject jsonObject = new JSONObject(response.body().string());
                     JSONArray jsonArray=jsonObject.getJSONArray("appraisalBrand");
                     showSubclassPic(jsonArray);
-                //    Log.i("return info",jsonObject.toString());
+                    //    Log.i("return info",jsonObject.toString());
                 } catch (IOException e) {
                     e.printStackTrace();
                 } catch (JSONException j){

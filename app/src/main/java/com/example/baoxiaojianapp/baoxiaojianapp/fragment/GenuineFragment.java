@@ -120,7 +120,7 @@ public class GenuineFragment extends Fragment {
         LinearLayoutManager linearLayoutManager=new LinearLayoutManager(getContext());
         recyclerView.setLayoutManager(linearLayoutManager);
         //限制滚动
-        setMaxFlingVelocity(recyclerView,3000);
+        setMaxFlingVelocity(recyclerView,5000);
 
         holderImage=view.findViewById(R.id.image_noresult_holder);
         HashMap<String, Integer> stringIntegerHashMap = new HashMap<>();
@@ -186,7 +186,6 @@ public class GenuineFragment extends Fragment {
                 // TODO Auto-generated method stub
                 footerView.setVisibility(View.VISIBLE);
             }
-
         });
         return view;
     }
