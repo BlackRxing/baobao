@@ -22,7 +22,8 @@
         android:usesCleartextTraffic="true"
         tools:ignore="GoogleAppIndexingWarning"
         tools:replace="android:allowBackup">
-        <activity android:name=".baoxiaojianapp.activity.AppraisalNoticeActivity"></activity>
+        <activity android:name=".baoxiaojianapp.activity.GreenhandNoticeActivity"></activity>
+        <activity android:name=".baoxiaojianapp.activity.AppraisalNoticeActivity" />
         <activity android:name=".baoxiaojianapp.activity.PrivatePolicyActivity" />
         <activity android:name=".baoxiaojianapp.activity.UserProtacalActivity" />
         <activity android:name=".baoxiaojianapp.activity.CorporationInfoActivity" />

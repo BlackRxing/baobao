@@ -1,6 +1,7 @@
 package com.example.baoxiaojianapp.baoxiaojianapp.classpakage;
 
 public class AppraisalPointItem {
+
     public String getPointimageUrl() {
         return pointimageUrl;
     }
@@ -19,4 +20,14 @@ public class AppraisalPointItem {
 
     private String pointimageUrl;
     private String pointtext;
+
+    public String getPointcontent() {
+        return pointcontent;
+    }
+
+    public void setPointcontent(String pointcontent) {
+        this.pointcontent = pointcontent;
+    }
+
+    private String pointcontent;
 }

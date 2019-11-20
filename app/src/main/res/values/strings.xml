@@ -55,5 +55,6 @@
     <string name="needappraisalPoint">鉴定所需鉴定点</string>
     <string name="greenNotice">鉴定新手必看</string>
     <string name="gotoAppraisal">去鉴定</string>
+    <string name="greenhandnotice">新手必看</string>
 
 </resources>

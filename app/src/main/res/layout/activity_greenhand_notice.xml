@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context=".baoxiaojianapp.activity.AppraisalNoticeActivity">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="30dp"
+        android:layout_marginTop="32dp"
+        android:gravity="center_vertical">
+
+        <RelativeLayout
+            android:id="@+id/back_layout"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="18dp">
+
+            <Button
+                android:id="@+id/back_button"
+                android:layout_width="8dp"
+                android:layout_height="14dp"
+                android:layout_centerVertical="true"
+                android:background="@drawable/backarrow" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:layout_marginLeft="10dp"
+                android:layout_toRightOf="@+id/back_button"
+                android:gravity="center_vertical"
+                android:text="@string/back"
+                android:textColor="@color/black"
+                android:textSize="17sp" />
+        </RelativeLayout>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="24dp"
+            android:layout_centerInParent="true"
+            android:text="@string/greenhandnotice"
+            android:textColor="@color/black"
+            android:textSize="17sp" />
+    </RelativeLayout>
+
+
+    <TextView
+        android:id="@+id/greenhandtext"
+        android:layout_width="wrap_content"
+        android:layout_height="28dp"
+        android:layout_marginLeft="24dp"
+        android:layout_marginTop="44dp"
+        android:textColor="@color/black"
+        android:textSize="16sp" />
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/greenhand_recyclerView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="24dp"/>
+
+
+</LinearLayout>

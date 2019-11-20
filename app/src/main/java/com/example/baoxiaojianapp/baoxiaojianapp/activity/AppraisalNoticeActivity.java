@@ -14,6 +14,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
@@ -45,6 +46,8 @@ public class AppraisalNoticeActivity extends AppCompatActivity implements View.O
     private TextView classText;
     private RecyclerView recyclerView;
     private Button appraisalButton;
+    private LinearLayout greenhandlinearLayout;
+    private List<AppraisalPointItem> appraisalPointItemList;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -63,6 +66,8 @@ public class AppraisalNoticeActivity extends AppCompatActivity implements View.O
         recyclerView = findViewById(R.id.appraisal_point_recyclerView);
         appraisalButton = findViewById(R.id.appraisal_button);
         backLayout=findViewById(R.id.back_layout);
+        greenhandlinearLayout=findViewById(R.id.greenhand_layout);
+        greenhandlinearLayout.setOnClickListener(this);
         backLayout.setOnClickListener(this);
         appraisalButton.setOnClickListener(this);
     }
@@ -108,21 +113,24 @@ public class AppraisalNoticeActivity extends AppCompatActivity implements View.O
     }
 
     private void bindData(JSONArray jsonArray) {
-        List<AppraisalPointItem> appraisalPointItemList = new ArrayList<>();
+        appraisalPointItemList = new ArrayList<>();
         int points = jsonArray.length();
         Log.i("this",jsonArray.toString());
         String image_Url="";
         String title="";
+        String content="";
         for (int i=0;i < points; i++) {
             try {
                 image_Url=jsonArray.getJSONObject(i).getString("image_url");
                 title=jsonArray.getJSONObject(i).getString("title");
+                content=jsonArray.getJSONObject(i).getString("content");
             } catch (JSONException j) {
                 j.printStackTrace();
             }
             AppraisalPointItem appraisalPointItem=new AppraisalPointItem();
             appraisalPointItem.setPointtext(title);
             appraisalPointItem.setPointimageUrl(image_Url);
+            appraisalPointItem.setPointcontent(content);
             appraisalPointItemList.add(appraisalPointItem);
         }
 
@@ -141,6 +149,8 @@ public class AppraisalNoticeActivity extends AppCompatActivity implements View.O
                 break;
             case R.id.appraisal_button:
                 ToastUtils.showShort("goto appraisal");
+                break;
+            case R.id.greenhand_layout:
                 break;
         }
     }
