@@ -1,31 +1,41 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="327dp"
-    android:layout_height="121dp"
-    android:background="#FAFAFA">
-    <ImageView
-        android:id="@+id/pointImage"
-        android:layout_width="119dp"
-        android:layout_height="85dp"
-        android:layout_centerVertical="true"
-        android:layout_marginLeft="20dp"/>
-    <TextView
-        android:id="@+id/pointtitle"
-        android:layout_width="wrap_content"
-        android:layout_height="20dp"
-        android:textSize="14sp"
-        android:layout_toRightOf="@+id/pointImage"
-        android:layout_marginLeft="38dp"
-        android:layout_marginTop="26dp"
-        android:textColor="@color/black" />
-    <TextView
-        android:id="@+id/pointcontent"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textSize="12sp"
-        android:layout_toRightOf="@+id/pointImage"
-        android:layout_marginLeft="38dp"
-        android:layout_marginRight="28dp"
-        android:layout_marginTop="26dp"
-        android:textColor="@color/black" />
-</RelativeLayout>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="140dp">
+
+    <RelativeLayout
+        android:layout_width="327dp"
+        android:layout_height="121dp"
+        android:background="#F3F2F2"
+        android:layout_gravity="center">
+
+        <ImageView
+            android:id="@+id/pointImage"
+            android:layout_width="119dp"
+            android:layout_height="85dp"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="20dp" />
+
+        <TextView
+            android:id="@+id/pointtitle"
+            android:layout_width="wrap_content"
+            android:layout_height="20dp"
+            android:layout_marginLeft="38dp"
+            android:layout_marginTop="18dp"
+            android:layout_toRightOf="@+id/pointImage"
+            android:textColor="@color/black"
+            android:textSize="14sp" />
+
+        <TextView
+            android:id="@+id/pointcontent"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/pointtitle"
+            android:layout_marginLeft="38dp"
+            android:layout_marginTop="4dp"
+            android:layout_marginRight="10dp"
+            android:layout_toRightOf="@+id/pointImage"
+            android:textColor="@color/black"
+            android:textSize="12sp" />
+    </RelativeLayout>
+</FrameLayout>

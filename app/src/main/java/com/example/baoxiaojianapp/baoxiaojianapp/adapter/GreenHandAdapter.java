@@ -15,11 +15,16 @@ import com.example.baoxiaojianapp.baoxiaojianapp.classpakage.AppraisalPointItem;
 import java.util.List;
 
 import androidx.annotation.NonNull;
+import androidx.lifecycle.GeneratedAdapter;
 import androidx.recyclerview.widget.RecyclerView;
 
 public class GreenHandAdapter extends RecyclerView.Adapter<GreenHandAdapter.ViewHolder>{
     private List<AppraisalPointItem> appraisalPointItemList;
     private View itemView;
+
+    public GreenHandAdapter(List<AppraisalPointItem>  appraisalPointItemList){
+        this.appraisalPointItemList=appraisalPointItemList;
+    }
     @NonNull
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {

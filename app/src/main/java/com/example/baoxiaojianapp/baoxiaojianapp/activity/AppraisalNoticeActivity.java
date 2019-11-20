@@ -9,6 +9,7 @@ import okhttp3.MediaType;
 import okhttp3.RequestBody;
 import okhttp3.Response;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -35,6 +36,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.IOException;
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -48,6 +50,7 @@ public class AppraisalNoticeActivity extends AppCompatActivity implements View.O
     private Button appraisalButton;
     private LinearLayout greenhandlinearLayout;
     private List<AppraisalPointItem> appraisalPointItemList;
+    private String brandName;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -73,6 +76,7 @@ public class AppraisalNoticeActivity extends AppCompatActivity implements View.O
     }
 
     public void initView(String brandName, String imageUrl, String kindKey) {
+        this.brandName=brandName;
         Glide.with(this).load(imageUrl).centerCrop().into(brandImage);
         brandText.setText(brandName);
         switch (kindKey) {
@@ -140,6 +144,13 @@ public class AppraisalNoticeActivity extends AppCompatActivity implements View.O
         recyclerView.setAdapter(appraisalPointAdapter);
     }
 
+    private void gotoGreenHand(){
+        Intent intent=new Intent(this,GreenhandNoticeActivity.class);
+        intent.putExtra("brandName",brandName);
+        intent.putExtra("points",(Serializable)appraisalPointItemList);
+        startActivity(intent);
+    }
+
 
     @Override
     public void onClick(View v) {
@@ -151,6 +162,7 @@ public class AppraisalNoticeActivity extends AppCompatActivity implements View.O
                 ToastUtils.showShort("goto appraisal");
                 break;
             case R.id.greenhand_layout:
+                gotoGreenHand();
                 break;
         }
     }

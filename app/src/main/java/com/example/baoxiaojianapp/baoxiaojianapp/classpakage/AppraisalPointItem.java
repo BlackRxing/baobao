@@ -1,6 +1,8 @@
 package com.example.baoxiaojianapp.baoxiaojianapp.classpakage;
 
-public class AppraisalPointItem {
+import java.io.Serializable;
+
+public class AppraisalPointItem implements Serializable {
 
     public String getPointimageUrl() {
         return pointimageUrl;
