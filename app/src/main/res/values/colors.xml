@@ -151,4 +151,7 @@
     <color name="black">#000000</color><!--黑色 -->
     <color name="transparent_grey">#80CCCCCC</color><!--透明灰色 -->
     <color name="transparent">#00FFFFFF</color><!--透明 -->
+    <color name="transparent_black">#30000000</color><!--透明 -->
+
+
 </resources>
