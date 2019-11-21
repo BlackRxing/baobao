@@ -32,6 +32,7 @@ public class CameraSurfaceView extends SurfaceView implements SurfaceHolder.Call
     private CameraOrientationDetector mCameraOrientation;
 
 
+
     /**
      * 当前摄像头id
      */
@@ -339,7 +340,7 @@ public class CameraSurfaceView extends SurfaceView implements SurfaceHolder.Call
             }
             if (parameters.getMaxNumFocusAreas() > 0) {
                 List<Camera.Area> focusAreas = new ArrayList<Camera.Area>();
-                focusAreas.add(new Camera.Area(rect, 1000));
+                focusAreas.add(new Camera.Area(rect, 1000));//计算区域重要性，最大值为1000，聚焦多个区域时值越大作用越大。
                 parameters.setFocusAreas(focusAreas);
             }
             mCamera.cancelAutoFocus(); // 先要取消掉进程中所有的聚焦功能
@@ -355,6 +356,9 @@ public class CameraSurfaceView extends SurfaceView implements SurfaceHolder.Call
         int right = rect.right * 2000 / getWidth() - 1000;
         int bottom = rect.bottom * 2000 / getHeight() - 1000;
         // 如果超出了(-1000,1000)到(1000, 1000)的范围，则会导致相机崩溃
+        //解释一下为什么*2000，因为要把surfaceView的坐标转换为范围(-1000, -1000, 1000, 1000)，则SurfaceView的中心点
+        // 坐标会转化为（0,0），x/surfaceWidth ，得到当前x坐标占总宽度的比例，然后乘以2000就换算成了（0,0，2000,2000）的坐标范围内，
+        // 然后减去1000，就换算为了范围(-1000, -1000, 1000, 10
         left = left < -1000 ? -1000 : left;
         top = top < -1000 ? -1000 : top;
         right = right > 1000 ? 1000 : right;
