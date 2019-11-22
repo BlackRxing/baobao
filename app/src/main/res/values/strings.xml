@@ -57,4 +57,9 @@
     <string name="gotoAppraisal">去鉴定</string>
     <string name="greenhandnotice">新手必看</string>
 
+
+    <string name="lookupCase">查看案例</string>
+    <string name="usePhoto">调用相册</string>
+
+
 </resources>

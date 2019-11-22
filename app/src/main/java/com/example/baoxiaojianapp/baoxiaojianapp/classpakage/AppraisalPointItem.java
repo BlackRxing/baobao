@@ -27,9 +27,40 @@ public class AppraisalPointItem implements Serializable {
         return pointcontent;
     }
 
+    public String getStickFigureURL() {
+        return stickFigureURL;
+    }
+
+    public void setStickFigureURL(String stickFigureURL) {
+        this.stickFigureURL = stickFigureURL;
+    }
+
+    public String getBigStickFigureURL() {
+        return bigStickFigureURL;
+    }
+
+    public void setBigStickFigureURL(String bigStickFigureURL) {
+        this.bigStickFigureURL = bigStickFigureURL;
+    }
+
     public void setPointcontent(String pointcontent) {
         this.pointcontent = pointcontent;
     }
 
     private String pointcontent;
+
+
+
+    public void setType(int type) {
+        this.type = type;
+    }
+
+
+    public int getType() {
+        return type;
+    }
+
+    private int type;
+    private String stickFigureURL;
+    private String bigStickFigureURL;
 }

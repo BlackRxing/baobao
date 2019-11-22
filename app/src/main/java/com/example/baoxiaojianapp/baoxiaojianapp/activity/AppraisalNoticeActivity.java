@@ -95,7 +95,7 @@ public class AppraisalNoticeActivity extends AppCompatActivity implements View.O
         jsonObject.addProperty("brand", brandName);
         final RequestBody requestBody = RequestBody.create(MediaType.parse("application/json; charset=utf-8"), jsonObject.toString());
         OkHttpUtils okHttpUtils = OkHttpUtils.getInstance();
-        okHttpUtils.post(NetInterface.TSAppraisalProcessRequest, requestBody, new OkHttpUtils.RealCallback() {
+        okHttpUtils.post(NetInterface.TSAppraisalProcessV2Request, requestBody, new OkHttpUtils.RealCallback() {
             @Override
             public void onResponse(Call call, Response response) {
                 try {
@@ -123,11 +123,18 @@ public class AppraisalNoticeActivity extends AppCompatActivity implements View.O
         String image_Url="";
         String title="";
         String content="";
+        String stickFigure="";
+        String bigStickFigure="";
+        int type=0;
         for (int i=0;i < points; i++) {
             try {
                 image_Url=jsonArray.getJSONObject(i).getString("image_url");
                 title=jsonArray.getJSONObject(i).getString("title");
                 content=jsonArray.getJSONObject(i).getString("content");
+                stickFigure=jsonArray.getJSONObject(i).getString("stickFigureURL");
+                bigStickFigure=jsonArray.getJSONObject(i).getString("bigStickFigureURL");
+                type=jsonArray.getJSONObject(i).getInt("type");
+                Log.d("j",bigStickFigure);
             } catch (JSONException j) {
                 j.printStackTrace();
             }
@@ -135,6 +142,9 @@ public class AppraisalNoticeActivity extends AppCompatActivity implements View.O
             appraisalPointItem.setPointtext(title);
             appraisalPointItem.setPointimageUrl(image_Url);
             appraisalPointItem.setPointcontent(content);
+            appraisalPointItem.setStickFigureURL(stickFigure);
+            appraisalPointItem.setBigStickFigureURL(bigStickFigure);
+            appraisalPointItem.setType(type);
             appraisalPointItemList.add(appraisalPointItem);
         }
 
@@ -151,6 +161,14 @@ public class AppraisalNoticeActivity extends AppCompatActivity implements View.O
         startActivity(intent);
     }
 
+    private void gotoAppraisal(){
+        Intent intent=new Intent(this,AppraisalActivity.class);
+        intent.putExtra("brandName",brandName);
+        intent.putExtra("points",(Serializable)appraisalPointItemList);
+        startActivity(intent);
+    }
+
+
 
     @Override
     public void onClick(View v) {
@@ -159,7 +177,7 @@ public class AppraisalNoticeActivity extends AppCompatActivity implements View.O
                 finish();
                 break;
             case R.id.appraisal_button:
-                ToastUtils.showShort("goto appraisal");
+                gotoAppraisal();
                 break;
             case R.id.greenhand_layout:
                 gotoGreenHand();

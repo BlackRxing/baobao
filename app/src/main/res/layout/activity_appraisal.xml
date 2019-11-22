@@ -4,14 +4,124 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".baoxiaojianapp.activity.AppraisalActivity">
+
     <com.example.baoxiaojianapp.baoxiaojianapp.view.CameraSurfaceView
         android:id="@+id/cameraSurfaceView"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        />
+        android:layout_height="match_parent" />
+
     <com.example.baoxiaojianapp.baoxiaojianapp.view.CameraFocusView
         android:id="@+id/cameraFocusView"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        />
+        android:layout_height="match_parent" />
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="60dp"
+            android:gravity="center_vertical"
+            android:background="#6622242A">
+
+            <RelativeLayout
+                android:id="@+id/back_layout"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:layout_marginLeft="18dp">
+
+                <Button
+                    android:id="@+id/back_button"
+                    android:layout_width="8dp"
+                    android:layout_height="14dp"
+                    android:layout_centerVertical="true"
+                    android:background="@drawable/backarrow" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:layout_marginLeft="10dp"
+                    android:layout_toRightOf="@+id/back_button"
+                    android:gravity="center_vertical"
+                    android:text="@string/back"
+                    android:textColor="@color/black"
+                    android:textSize="17sp" />
+            </RelativeLayout>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
+                android:text="@string/app_name_CN"
+                android:textColor="@color/black"
+                android:textSize="17sp" />
+
+            <TextView
+                android:id="@+id/gotoAppraisal"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:layout_alignParentRight="true"
+                android:layout_marginRight="24dp"
+                android:text="@string/gotoAppraisal"
+                android:textColor="@color/royalblue"
+                android:textSize="17sp" />
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="200dp"
+            android:layout_alignParentBottom="true"
+            android:background="#6622242A">
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/point_recyclerview"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingLeft="5dp"
+                android:paddingRight="5dp"
+                android:layout_alignParentTop="true"
+                android:layout_marginTop="25dp"
+                />
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="57dp"
+                android:layout_alignParentBottom="true"
+                android:layout_marginBottom="25dp">
+
+                <Button
+                    android:id="@+id/seecase_button"
+                    android:layout_width="88dp"
+                    android:layout_height="30dp"
+                    android:layout_toLeftOf="@id/takephoto_button"
+                    android:layout_marginRight="47dp"
+                    android:layout_centerVertical="true"
+                    android:text="@string/lookupCase"
+                    android:textColor="@color/white"
+                    android:background="@drawable/whiteoval_button_background" />
+
+                <Button
+                    android:id="@+id/takephoto_button"
+                    android:layout_width="57dp"
+                    android:layout_height="57dp"
+                    android:layout_centerInParent="true"
+                    android:background="@drawable/camera" />
+
+                <Button
+                    android:id="@+id/usephoto_button"
+                    android:layout_width="88dp"
+                    android:layout_height="30dp"
+                    android:layout_toRightOf="@id/takephoto_button"
+                    android:layout_marginLeft="47dp"
+                    android:layout_centerVertical="true"
+                    android:textColor="@color/white"
+                    android:text="@string/usePhoto"
+                    android:background="@drawable/whiteoval_button_background" />
+            </RelativeLayout>
+        </RelativeLayout>
+    </RelativeLayout>
 </FrameLayout>

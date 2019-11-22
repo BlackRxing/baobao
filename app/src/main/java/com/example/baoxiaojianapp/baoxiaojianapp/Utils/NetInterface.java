@@ -9,6 +9,6 @@ public class NetInterface {
     public static final String TSPageBackwardRequest="https://dev2.turingsenseai.com/account/pageDown";
     public static final String TSSetUserInfoRequest="https://dev2.turingsenseai.com/account/setUserInfo";
     public static final String TSUserAdviceRequest="https://dev2.turingsenseai.com/account/userAdvice";
-    public static final String TSAppraisalProcessRequest="https://dev2.turingsenseai.com/appraisalProcess";
+    public static final String TSAppraisalProcessV2Request="https://dev2.turingsenseai.com/appraisalProcessV2";
 
 }
