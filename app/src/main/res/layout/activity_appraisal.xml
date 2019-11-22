@@ -15,6 +15,24 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
 
+    <ImageView
+        android:id="@+id/bigstickfigure_image"
+        android:layout_width="350dp"
+        android:layout_height="350dp"
+        android:layout_marginTop="150dp"
+        android:scaleType="fitCenter"
+        android:layout_gravity="center_horizontal"
+        />
+
+    <ImageView
+        android:id="@+id/point_image"
+        android:layout_width="110dp"
+        android:layout_height="110dp"
+        android:layout_marginTop="70dp"
+        android:layout_marginRight="10dp"
+        android:layout_gravity="right|top"
+        android:scaleType="fitCenter" />
+
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent">
@@ -22,8 +40,8 @@
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="60dp"
-            android:gravity="center_vertical"
-            android:background="#6622242A">
+            android:background="#6622242A"
+            android:gravity="center_vertical">
 
             <RelativeLayout
                 android:id="@+id/back_layout"
@@ -63,8 +81,8 @@
                 android:id="@+id/gotoAppraisal"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_centerVertical="true"
                 android:layout_alignParentRight="true"
+                android:layout_centerVertical="true"
                 android:layout_marginRight="24dp"
                 android:text="@string/gotoAppraisal"
                 android:textColor="@color/royalblue"
@@ -81,11 +99,10 @@
                 android:id="@+id/point_recyclerview"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:paddingLeft="5dp"
-                android:paddingRight="5dp"
                 android:layout_alignParentTop="true"
                 android:layout_marginTop="25dp"
-                />
+                android:paddingLeft="5dp"
+                android:paddingRight="5dp" />
 
             <RelativeLayout
                 android:layout_width="match_parent"
@@ -97,12 +114,12 @@
                     android:id="@+id/seecase_button"
                     android:layout_width="88dp"
                     android:layout_height="30dp"
-                    android:layout_toLeftOf="@id/takephoto_button"
-                    android:layout_marginRight="47dp"
                     android:layout_centerVertical="true"
+                    android:layout_marginRight="47dp"
+                    android:layout_toLeftOf="@id/takephoto_button"
+                    android:background="@drawable/whiteoval_button_background"
                     android:text="@string/lookupCase"
-                    android:textColor="@color/white"
-                    android:background="@drawable/whiteoval_button_background" />
+                    android:textColor="@color/white" />
 
                 <Button
                     android:id="@+id/takephoto_button"
@@ -115,12 +132,12 @@
                     android:id="@+id/usephoto_button"
                     android:layout_width="88dp"
                     android:layout_height="30dp"
-                    android:layout_toRightOf="@id/takephoto_button"
-                    android:layout_marginLeft="47dp"
                     android:layout_centerVertical="true"
-                    android:textColor="@color/white"
+                    android:layout_marginLeft="47dp"
+                    android:layout_toRightOf="@id/takephoto_button"
+                    android:background="@drawable/whiteoval_button_background"
                     android:text="@string/usePhoto"
-                    android:background="@drawable/whiteoval_button_background" />
+                    android:textColor="@color/white" />
             </RelativeLayout>
         </RelativeLayout>
     </RelativeLayout>

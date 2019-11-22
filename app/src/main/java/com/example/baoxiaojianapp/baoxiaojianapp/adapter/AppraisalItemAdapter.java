@@ -27,6 +27,7 @@ public class AppraisalItemAdapter extends RecyclerView.Adapter<AppraisalItemAdap
     private List<AppraisalResult> appraisalResults;
     private View itemView;
 
+
     public AppraisalItemAdapter(List<AppraisalResult> appraisalResults){
         this.appraisalResults=appraisalResults;
     }

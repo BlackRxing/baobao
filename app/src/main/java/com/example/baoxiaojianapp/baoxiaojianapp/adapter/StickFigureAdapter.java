@@ -22,6 +22,7 @@ public class StickFigureAdapter extends RecyclerView.Adapter<StickFigureAdapter.
     private List<AppraisalPointItem> appraisalPointItemList;
     private View itemView;
 
+    public StickFigureAdaterClick stickFigureAdaterClick;
     public StickFigureAdapter(List<AppraisalPointItem> appraisalPointItemList){
         this.appraisalPointItemList=appraisalPointItemList;
     }
@@ -36,7 +37,7 @@ public class StickFigureAdapter extends RecyclerView.Adapter<StickFigureAdapter.
     }
 
     @Override
-    public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
+    public void onBindViewHolder(@NonNull final ViewHolder holder, final int position) {
         final AppraisalPointItem appraisalPointItem=appraisalPointItemList.get(position);
         Glide.with(MyApplication.getContext()).load(appraisalPointItem.getStickFigureURL()).fitCenter().into(holder.stickFigure);
         if (appraisalPointItem.getType() == 0) {
@@ -45,6 +46,12 @@ public class StickFigureAdapter extends RecyclerView.Adapter<StickFigureAdapter.
             holder.typeImage.setVisibility(View.VISIBLE);
         }
         holder.pointName.setText(appraisalPointItem.getPointtext());
+        holder.itemView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                stickFigureAdaterClick.onItemClick(position,holder);
+            }
+        });
     }
 
     @Override
@@ -52,7 +59,7 @@ public class StickFigureAdapter extends RecyclerView.Adapter<StickFigureAdapter.
         return appraisalPointItemList.size();
     }
 
-    static class ViewHolder extends RecyclerView.ViewHolder{
+    public static class ViewHolder extends RecyclerView.ViewHolder{
         ImageView stickFigure;
         TextView pointName;
         ImageView typeImage;
@@ -62,5 +69,13 @@ public class StickFigureAdapter extends RecyclerView.Adapter<StickFigureAdapter.
             pointName=view.findViewById(R.id.pointName);
             typeImage=view.findViewById(R.id.vitalpoint);
         }
+    }
+
+    public interface StickFigureAdaterClick{
+        void onItemClick(int position,ViewHolder viewHolder);
+    }
+
+    public void setItemClick(StickFigureAdaterClick stickFigureAdaterClick){
+        this.stickFigureAdaterClick=stickFigureAdaterClick;
     }
 }
