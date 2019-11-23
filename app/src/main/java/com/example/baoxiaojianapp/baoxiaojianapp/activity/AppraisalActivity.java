@@ -3,17 +3,30 @@ package com.example.baoxiaojianapp.baoxiaojianapp.activity;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import okhttp3.Call;
+import okhttp3.Headers;
+import okhttp3.MediaType;
+import okhttp3.RequestBody;
+import okhttp3.Response;
+import rx.Observable;
+import rx.android.schedulers.AndroidSchedulers;
+import rx.functions.Action1;
+import rx.functions.Func1;
+import rx.schedulers.Schedulers;
 
 import android.app.Dialog;
+import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import android.graphics.PixelFormat;
 import android.hardware.Camera;
 import android.os.Bundle;
+import android.os.Handler;
 import android.util.Log;
 import android.view.Display;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 import android.view.View;
+import android.view.ViewTreeObserver;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.Button;
@@ -25,19 +38,31 @@ import android.widget.Toast;
 import com.blankj.utilcode.util.ToastUtils;
 import com.bumptech.glide.Glide;
 import com.example.baoxiaojianapp.R;
+import com.example.baoxiaojianapp.baoxiaojianapp.Callback.Callback;
+import com.example.baoxiaojianapp.baoxiaojianapp.Utils.CameraModel;
+import com.example.baoxiaojianapp.baoxiaojianapp.Utils.Constants;
+import com.example.baoxiaojianapp.baoxiaojianapp.Utils.FileUtil;
+import com.example.baoxiaojianapp.baoxiaojianapp.Utils.NetInterface;
+import com.example.baoxiaojianapp.baoxiaojianapp.Utils.OkHttpUtils;
+import com.example.baoxiaojianapp.baoxiaojianapp.Utils.PicProcessUtils;
 import com.example.baoxiaojianapp.baoxiaojianapp.adapter.StickFigureAdapter;
 import com.example.baoxiaojianapp.baoxiaojianapp.classpakage.AppraisalPointItem;
 import com.example.baoxiaojianapp.baoxiaojianapp.view.AppraisalPointDialog;
 import com.example.baoxiaojianapp.baoxiaojianapp.view.CameraFocusView;
 import com.example.baoxiaojianapp.baoxiaojianapp.view.CameraSurfaceView;
+import com.google.gson.JsonObject;
 import com.smarttop.library.utils.LogUtil;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.io.IOException;
 import java.util.List;
 
 import static java.util.Collections.sort;
 @SuppressWarnings("deprecation")
-public class AppraisalActivity extends AppCompatActivity implements CameraFocusView.IAutoFocus, View.OnClickListener,StickFigureAdapter.StickFigureAdaterClick{
+public class AppraisalActivity extends AppCompatActivity implements CameraFocusView.IAutoFocus, View.OnClickListener,StickFigureAdapter.StickFigureAdaterClick, ViewTreeObserver.OnGlobalLayoutListener {
 
     private CameraSurfaceView cameraSurfaceView;
     private CameraFocusView cameraFocusView;
@@ -48,11 +73,16 @@ public class AppraisalActivity extends AppCompatActivity implements CameraFocusV
     private RecyclerView pointsRecyclerView;
     private Button seeCaseButton;
     private Button usePhotoButton;
+    private Button takePhotoButton;
     private List<AppraisalPointItem> appraisalPointItemList;
     private String brandName;
     private ImageView bigStickFigureImage;
     private ImageView pointImage;
-    private int currentPoint;
+    private int currentPoint=-1;
+    private int lastPoint;
+    private byte[] photodata;
+    private CameraModel mCameraModel;
+    private int[] pointsstates;
 
 
     @Override
@@ -75,24 +105,31 @@ public class AppraisalActivity extends AppCompatActivity implements CameraFocusV
         usePhotoButton=findViewById(R.id.usephoto_button);
         bigStickFigureImage=findViewById(R.id.bigstickfigure_image);
         pointImage=findViewById(R.id.point_image);
+        takePhotoButton=findViewById(R.id.takephoto_button);
         LinearLayoutManager linearLayoutManager=new LinearLayoutManager(this);
         linearLayoutManager.setOrientation(LinearLayoutManager.HORIZONTAL);
         pointsRecyclerView.setLayoutManager(linearLayoutManager);
         cameraFocusView.setmIAutoFocus(this);
         backLayout.setOnClickListener(this);
         seeCaseButton.setOnClickListener(this);
+        takePhotoButton.setOnClickListener(this);
+
     }
     private void initView(){
 
     }
 
     private void bindData(){
+        mCameraModel=new CameraModel(this);
         Bundle bundle=getIntent().getExtras();
         brandName=bundle.getString("brandName");
         appraisalPointItemList=(List<AppraisalPointItem>) bundle.getSerializable("points");
+        pointsstates=new int[appraisalPointItemList.size()];
         StickFigureAdapter stickFigureAdapter=new StickFigureAdapter(appraisalPointItemList);
         stickFigureAdapter.setItemClick(this);
         pointsRecyclerView.setAdapter(stickFigureAdapter);
+        pointsRecyclerView.getViewTreeObserver().addOnGlobalLayoutListener(this);
+
     }
 
 
@@ -111,7 +148,67 @@ public class AppraisalActivity extends AppCompatActivity implements CameraFocusV
             case R.id.seecase_button:
                 seeCase();
                 break;
+            case R.id.takephoto_button:
+                savePhoto();
         }
+    }
+
+    private void singlepointAppraisal(final String path, final int threadpoint){
+        String base64= PicProcessUtils.convertIconToString(PicProcessUtils.getCompressBm(path));
+        JsonObject jsonObject = new JsonObject();
+        jsonObject.addProperty("point_key", appraisalPointItemList.get(currentPoint).getKey());
+        jsonObject.addProperty("img_base64", base64);
+        RequestBody requestBody = RequestBody.create(MediaType.parse("application/json; charset=utf-8"), jsonObject.toString());
+        Callback.MyOkhttp(requestBody, NetInterface.TSSingleAppraisalRequestV2, new Callback.OkhttpRun() {
+            @Override
+            public void run(JSONObject jsonObject) {
+                try{
+
+                    if (jsonObject.getJSONObject("err").getInt("code")==0){
+                        pointsstates[threadpoint]=Constants.SUCCESS;
+                    }else{
+                        pointsstates[threadpoint]=Constants.FAILURE;
+                    }
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            stateChange(threadpoint);
+                        }
+                    });
+                }catch (JSONException j){
+                    j.printStackTrace();
+                }
+            }
+        });
+
+    }
+
+    private void savePhoto(){
+        pointsstates[currentPoint]=Constants.DETECTING;
+        stateChange(currentPoint);
+        cameraSurfaceView.takePicture(new Camera.PictureCallback() {
+            @Override
+            public void onPictureTaken(byte[] data, Camera camera) {
+                camera.startPreview();
+                photodata=data;
+                Observable.just(data)
+                        .map(new Func1<byte[], String>() {
+                            @Override
+                            public String call(byte[] bytes) {
+                                String path = mCameraModel.handlePhoto(bytes, cameraSurfaceView.getCameraId());
+                                return path;
+                            }
+                        })
+                        .subscribeOn(Schedulers.io())
+                        .subscribeOn(AndroidSchedulers.mainThread())
+                        .subscribe(new Action1<String>() {
+                            @Override
+                            public void call(String path) {
+                                singlepointAppraisal(path,currentPoint);
+                            }
+                        });
+            }
+        });
     }
 
     private void seeCase(){
@@ -134,8 +231,42 @@ public class AppraisalActivity extends AppCompatActivity implements CameraFocusV
 
     @Override
     public void onItemClick(int position, StickFigureAdapter.ViewHolder viewHolder) {
+        lastPoint=currentPoint;
         currentPoint=position;
+        if (lastPoint>=0){
+            getRecyclerItemView(lastPoint,R.id.selectstate).setVisibility(View.INVISIBLE);
+        }
+        getRecyclerItemView(currentPoint,R.id.selectstate).setVisibility(View.VISIBLE);
         Glide.with(this).load(appraisalPointItemList.get(position).getBigStickFigureURL()).fitCenter().into(bigStickFigureImage);
         Glide.with(this).load(appraisalPointItemList.get(position).getPointimageUrl()).fitCenter().into(pointImage);
+        stateChange(currentPoint);
+    }
+
+    private void stateChange(int position){
+        getRecyclerItemView(position,R.id.stickFigure).setVisibility(View.INVISIBLE);
+        switch (pointsstates[position]){
+            case Constants.WAITING:
+                getRecyclerItemView(position,R.id.stickFigure).setVisibility(View.VISIBLE);
+                break;
+            case Constants.DETECTING:
+                Glide.with(this).load(R.drawable.waiting).fitCenter().into((ImageView) getRecyclerItemView(position,R.id.stateImage));
+                break;
+            case Constants.FAILURE:
+                Glide.with(this).load(R.drawable.refresh).fitCenter().into((ImageView) getRecyclerItemView(position,R.id.stateImage));
+                break;
+            case Constants.SUCCESS:
+                Glide.with(this).load(R.drawable.tick).fitCenter().into((ImageView) getRecyclerItemView(position,R.id.stateImage));
+                break;
+        }
+    }
+
+    private View getRecyclerItemView(int position,int id){
+        return pointsRecyclerView.getChildAt(position).findViewById(id);
+    }
+
+    @Override
+    public void onGlobalLayout() {
+        if(currentPoint==-1)
+        pointsRecyclerView.getChildAt(0).performClick();
     }
 }

@@ -44,7 +44,7 @@ import static com.example.baoxiaojianapp.baoxiaojianapp.fragment.GenuineFragment
 public class Callback {
     public static int itemlength;
     public static int fakeitemlength;
-    public static OkHttpUtils.RealCallback LoginTestCallback=new OkHttpUtils.RealCallback() {
+    public static OkHttpUtils.RealCallback LoginTestCallback = new OkHttpUtils.RealCallback() {
         @Override
         public void onResponse(Call call, Response response) {
             if (response.isSuccessful()) {
@@ -73,9 +73,9 @@ public class Callback {
     };
 
 
-    public static void FakeloadData(final FragmentActivity fragmentActivity){
-        SharedPreferences sharedPreferences1= MyApplication.getContext().getSharedPreferences("userinfo_cash",MODE_PRIVATE);
-        String token=sharedPreferences1.getString("turing_token","");
+    public static void FakeloadData(final FragmentActivity fragmentActivity) {
+        SharedPreferences sharedPreferences1 = MyApplication.getContext().getSharedPreferences("userinfo_cash", MODE_PRIVATE);
+        String token = sharedPreferences1.getString("turing_token", "");
         OkHttpClient client = new OkHttpClient.Builder()
                 .build();
         //第二步创建RequestBody
@@ -83,7 +83,7 @@ public class Callback {
         //第三步创建Rquest
         Request request = new Request.Builder()
                 .url(NetInterface.TSPersonCenterPageRequest)
-                .post(requestBody).addHeader("Authorization","Token "+token)
+                .post(requestBody).addHeader("Authorization", "Token " + token)
                 .build();
         //第四步创建call回调对象
         final Call call = client.newCall(request);
@@ -95,106 +95,124 @@ public class Callback {
                     Response response = call.execute();
                     String result = response.body().string();
                     Log.i("response", result);
-                    JSONObject jsonObject=new JSONObject(result);
-                    JSONArray jsonArray=jsonObject.getJSONArray("fakeList");
-                    for (int i=0;i<jsonArray.length();i++){
-                        AppraisalResult appraisalResult=new AppraisalResult();
-                        JSONObject jsonObject1=jsonArray.getJSONObject(i);
+                    JSONObject jsonObject = new JSONObject(result);
+                    JSONArray jsonArray = jsonObject.getJSONArray("fakeList");
+                    for (int i = 0; i < jsonArray.length(); i++) {
+                        AppraisalResult appraisalResult = new AppraisalResult();
+                        JSONObject jsonObject1 = jsonArray.getJSONObject(i);
                         appraisalResult.setAppraisalBrand(jsonObject1.getString("brandName"));
                         appraisalResult.setAppraisalData(jsonObject1.getString("timestamp"));
                         appraisalResult.setAppraisalId(jsonObject1.getString("modelNumber"));
                         appraisalResult.setAppraisalImage(jsonObject1.getString("imageUrl"));
                         FakeFragment.appraisalResults.add(appraisalResult);
                     }
-                    if (jsonArray.length()==0){
-                        FakeFragment.hasMoreData=false;
-                    }else {
-                        FakeFragment.hasMoreData=true;
+                    if (jsonArray.length() == 0) {
+                        FakeFragment.hasMoreData = false;
+                    } else {
+                        FakeFragment.hasMoreData = true;
                     }
                     FakeFragment.init();
                     fragmentActivity.runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
-                            FakeFragment.appraisalItemAdapter=new AppraisalItemAdapter(FakeFragment.appraisalResults);
+                            FakeFragment.appraisalItemAdapter = new AppraisalItemAdapter(FakeFragment.appraisalResults);
                             FakeFragment.recyclerView.setAdapter(FakeFragment.appraisalItemAdapter);
                         }
                     });
                 } catch (IOException e) {
                     e.printStackTrace();
-                }catch (JSONException j){
+                } catch (JSONException j) {
                     j.printStackTrace();
                 }
             }
         }).start();
     }
-    public static void loadData(final FragmentActivity fragmentActivity){
-        SharedPreferences sharedPreferences1= MyApplication.getContext().getSharedPreferences("userinfo_cash",MODE_PRIVATE);
-        String token=sharedPreferences1.getString("turing_token","");
-        OkHttpClient client = new OkHttpClient.Builder()
-                .build();
-        //第二步创建RequestBody
+
+    public static void loadData(final FragmentActivity fragmentActivity) {
+
         RequestBody requestBody = RequestBody.create(null, new byte[]{});
-        //第三步创建Rquest
-        Request request = new Request.Builder()
-                .url(NetInterface.TSPersonCenterPageRequest)
-                .post(requestBody).addHeader("Authorization","Token "+token)
-                .build();
-        //第四步创建call回调对象
-        final Call call = client.newCall(request);
-        //第五步发起请求
-        new Thread(new Runnable() {
+
+        MyOkhttp(requestBody, NetInterface.TSPersonCenterPageRequest, new OkhttpRun() {
             @Override
-            public void run() {
-                try {
-                    Response response = call.execute();
-                    String result = response.body().string();
-                    Log.i("response", result);
-                    JSONObject jsonObject=new JSONObject(result);
-                    JSONArray jsonArray=jsonObject.getJSONArray("realList");
-                    for (int i=0;i<jsonArray.length();i++){
-                        AppraisalResult appraisalResult=new AppraisalResult();
-                        JSONObject jsonObject1=jsonArray.getJSONObject(i);
+            public void run(JSONObject jsonObject) {
+                try{
+                    JSONArray jsonArray = jsonObject.getJSONArray("realList");
+                    for (int i = 0; i < jsonArray.length(); i++) {
+                        AppraisalResult appraisalResult = new AppraisalResult();
+                        JSONObject jsonObject1 = jsonArray.getJSONObject(i);
                         appraisalResult.setAppraisalBrand(jsonObject1.getString("brandName"));
                         appraisalResult.setAppraisalData(jsonObject1.getString("timestamp"));
                         appraisalResult.setAppraisalId(jsonObject1.getString("modelNumber"));
                         appraisalResult.setAppraisalImage(jsonObject1.getString("imageUrl"));
                         appraisalResults.add(appraisalResult);
                     }
-                    if (jsonArray.length()==0){
-                        GenuineFragment.hasMoreData=false;
-                    }else {
-                        hasMoreData=true;
+                    if (jsonArray.length() == 0) {
+                        GenuineFragment.hasMoreData = false;
+                    } else {
+                        hasMoreData = true;
                     }
                     GenuineFragment.init();
                     fragmentActivity.runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
-                            GenuineFragment.appraisalItemAdapter=new AppraisalItemAdapter(appraisalResults);
+                            GenuineFragment.appraisalItemAdapter = new AppraisalItemAdapter(appraisalResults);
                             GenuineFragment.recyclerView.setAdapter(appraisalItemAdapter);
                         }
                     });
-                } catch (IOException e) {
+                }  catch (JSONException j) {
+                    j.printStackTrace();
+                }
+            }
+        });
+    }
+
+    public static void MyOkhttp(RequestBody requestBody, String url, final OkhttpRun okhttpRun) {
+        SharedPreferences sharedPreferences1 = MyApplication.getContext().getSharedPreferences("userinfo_cash", MODE_PRIVATE);
+        String token = sharedPreferences1.getString("turing_token", "");
+        OkHttpClient client = new OkHttpClient.Builder()
+                .build();
+
+        Request request = new Request.Builder()
+                .url(url)
+                .post(requestBody).addHeader("Authorization", "Token " + token)
+                .build();
+        //第四步创建call回调对象
+        final Call call = client.newCall(request);
+        //第五步发起请求
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                try{
+                    Response response = call.execute();
+                    String responses=response.body().string();
+                    JSONObject jsonObject = new JSONObject(responses);
+                    okhttpRun.run(jsonObject);
+                }catch (IOException e) {
                     e.printStackTrace();
-                }catch (JSONException j){
+                } catch (JSONException j) {
                     j.printStackTrace();
                 }
             }
         }).start();
     }
 
-    public static void FakeloadMore(final FragmentActivity fragmentActivity,int currentPage){
-        SharedPreferences sharedPreferences1= MyApplication.getContext().getSharedPreferences("userinfo_cash",MODE_PRIVATE);
-        String token=sharedPreferences1.getString("turing_token","");
+    public interface OkhttpRun {
+        void run(JSONObject jsonObject);
+    }
+
+    public static void FakeloadMore(final FragmentActivity fragmentActivity, int currentPage) {
+        SharedPreferences sharedPreferences1 = MyApplication.getContext().getSharedPreferences("userinfo_cash", MODE_PRIVATE);
+        String token = sharedPreferences1.getString("turing_token", "");
         OkHttpClient client = new OkHttpClient.Builder()
                 .build();
-        JsonObject jsonObject=new JsonObject();
-        jsonObject.addProperty("key","personcenter_fake_key");
-        jsonObject.addProperty("page",String.valueOf(currentPage));
-        RequestBody requestBody = RequestBody.create(MediaType.parse("application/json; charset=utf-8"),jsonObject.toString());
+        JsonObject jsonObject = new JsonObject();
+        jsonObject.addProperty("key", "personcenter_fake_key");
+        jsonObject.addProperty("page", String.valueOf(currentPage));
+        RequestBody requestBody = RequestBody.create(MediaType.parse("application/json; charset=utf-8"), jsonObject.toString());
 
         Request request = new Request.Builder()
                 .url(NetInterface.TSPageBackwardRequest)
-                .post(requestBody).addHeader("Authorization","Token "+token)
+                .post(requestBody).addHeader("Authorization", "Token " + token)
                 .build();
         //第四步创建call回调对象
         final Call call = client.newCall(request);
@@ -206,24 +224,24 @@ public class Callback {
                     Response response = call.execute();
                     String result = response.body().string();
 //                    Log.i("userresponse", result);
-                    JSONObject jsonObject=new JSONObject(result);
-                    JSONArray jsonArray=jsonObject.getJSONArray("list");
-                    for (int i=0;i<jsonArray.length();i++){
-                        AppraisalResult appraisalResult=new AppraisalResult();
-                        JSONObject jsonObject1=jsonArray.getJSONObject(i);
+                    JSONObject jsonObject = new JSONObject(result);
+                    JSONArray jsonArray = jsonObject.getJSONArray("list");
+                    for (int i = 0; i < jsonArray.length(); i++) {
+                        AppraisalResult appraisalResult = new AppraisalResult();
+                        JSONObject jsonObject1 = jsonArray.getJSONObject(i);
                         appraisalResult.setAppraisalBrand(jsonObject1.getString("brandName"));
                         appraisalResult.setAppraisalData(jsonObject1.getString("timestamp"));
                         appraisalResult.setAppraisalId(jsonObject1.getString("modelNumber"));
                         appraisalResult.setAppraisalImage(jsonObject1.getString("imageUrl"));
                         FakeFragment.appraisalResults.add(appraisalResult);
-                        fakeitemlength=jsonArray.length();
+                        fakeitemlength = jsonArray.length();
                     }
-                    if(jsonArray.length()<10){
-                        FakeFragment.hasMoreData=false;
+                    if (jsonArray.length() < 10) {
+                        FakeFragment.hasMoreData = false;
                     }
                 } catch (IOException e) {
                     e.printStackTrace();
-                }catch (JSONException j){
+                } catch (JSONException j) {
                     j.printStackTrace();
                 }
             }
@@ -231,19 +249,19 @@ public class Callback {
     }
 
 
-    public static void loadMore(final FragmentActivity fragmentActivity,int currentPage){
-        SharedPreferences sharedPreferences1= MyApplication.getContext().getSharedPreferences("userinfo_cash",MODE_PRIVATE);
-        String token=sharedPreferences1.getString("turing_token","");
+    public static void loadMore(final FragmentActivity fragmentActivity, int currentPage) {
+        SharedPreferences sharedPreferences1 = MyApplication.getContext().getSharedPreferences("userinfo_cash", MODE_PRIVATE);
+        String token = sharedPreferences1.getString("turing_token", "");
         OkHttpClient client = new OkHttpClient.Builder()
                 .build();
-        JsonObject jsonObject=new JsonObject();
-        jsonObject.addProperty("key","personcenter_real_key");
-        jsonObject.addProperty("page",String.valueOf(currentPage));
-        RequestBody requestBody = RequestBody.create(MediaType.parse("application/json; charset=utf-8"),jsonObject.toString());
+        JsonObject jsonObject = new JsonObject();
+        jsonObject.addProperty("key", "personcenter_real_key");
+        jsonObject.addProperty("page", String.valueOf(currentPage));
+        RequestBody requestBody = RequestBody.create(MediaType.parse("application/json; charset=utf-8"), jsonObject.toString());
 
         Request request = new Request.Builder()
                 .url(NetInterface.TSPageBackwardRequest)
-                .post(requestBody).addHeader("Authorization","Token "+token)
+                .post(requestBody).addHeader("Authorization", "Token " + token)
                 .build();
         //第四步创建call回调对象
         final Call call = client.newCall(request);
@@ -255,30 +273,29 @@ public class Callback {
                     Response response = call.execute();
                     String result = response.body().string();
 //                    Log.i("userresponse", result);
-                    JSONObject jsonObject=new JSONObject(result);
-                    JSONArray jsonArray=jsonObject.getJSONArray("list");
-                    for (int i=0;i<jsonArray.length();i++){
-                        AppraisalResult appraisalResult=new AppraisalResult();
-                        JSONObject jsonObject1=jsonArray.getJSONObject(i);
+                    JSONObject jsonObject = new JSONObject(result);
+                    JSONArray jsonArray = jsonObject.getJSONArray("list");
+                    for (int i = 0; i < jsonArray.length(); i++) {
+                        AppraisalResult appraisalResult = new AppraisalResult();
+                        JSONObject jsonObject1 = jsonArray.getJSONObject(i);
                         appraisalResult.setAppraisalBrand(jsonObject1.getString("brandName"));
                         appraisalResult.setAppraisalData(jsonObject1.getString("timestamp"));
                         appraisalResult.setAppraisalId(jsonObject1.getString("modelNumber"));
                         appraisalResult.setAppraisalImage(jsonObject1.getString("imageUrl"));
                         appraisalResults.add(appraisalResult);
-                        itemlength=jsonArray.length();
+                        itemlength = jsonArray.length();
                     }
-                    if(jsonArray.length()<10){
-                        hasMoreData=false;
+                    if (jsonArray.length() < 10) {
+                        hasMoreData = false;
                     }
                 } catch (IOException e) {
                     e.printStackTrace();
-                }catch (JSONException j){
+                } catch (JSONException j) {
                     j.printStackTrace();
                 }
             }
         }).start();
     }
-
 
 
 }

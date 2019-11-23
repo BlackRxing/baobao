@@ -127,7 +127,6 @@ public class GenuineFragment extends Fragment {
         stringIntegerHashMap.put(RecyclerViewSpacesItemDecoration.TOP_DECORATION,7);//top间距
         stringIntegerHashMap.put(RecyclerViewSpacesItemDecoration.BOTTOM_DECORATION,7);//底部间距
         recyclerView.addItemDecoration(new RecyclerViewSpacesItemDecoration(stringIntegerHashMap));
-
         swipeRefreshLayout.setRefreshing(false);
         swipeRefreshLayout.setFooterView(createFooterView());
         swipeRefreshLayout.setTargetScrollWithLayout(true);

@@ -125,6 +125,7 @@ public class AppraisalNoticeActivity extends AppCompatActivity implements View.O
         String content="";
         String stickFigure="";
         String bigStickFigure="";
+        String key="";
         int type=0;
         for (int i=0;i < points; i++) {
             try {
@@ -134,6 +135,7 @@ public class AppraisalNoticeActivity extends AppCompatActivity implements View.O
                 stickFigure=jsonArray.getJSONObject(i).getString("stickFigureURL");
                 bigStickFigure=jsonArray.getJSONObject(i).getString("bigStickFigureURL");
                 type=jsonArray.getJSONObject(i).getInt("type");
+                key=jsonArray.getJSONObject(i).getString("key");
                 Log.d("j",bigStickFigure);
             } catch (JSONException j) {
                 j.printStackTrace();
@@ -145,6 +147,7 @@ public class AppraisalNoticeActivity extends AppCompatActivity implements View.O
             appraisalPointItem.setStickFigureURL(stickFigure);
             appraisalPointItem.setBigStickFigureURL(bigStickFigure);
             appraisalPointItem.setType(type);
+            appraisalPointItem.setKey(key);
             appraisalPointItemList.add(appraisalPointItem);
         }
 

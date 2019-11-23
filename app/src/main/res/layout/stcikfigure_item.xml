@@ -32,6 +32,12 @@
             android:layout_alignParentRight="true"
             android:scaleType="centerCrop"
             android:src="@drawable/vitalpoint" />
+        <ImageView
+            android:id="@+id/stateImage"
+            android:layout_width="25dp"
+            android:layout_height="25dp"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="12dp"/>
 
         <TextView
             android:id="@+id/pointName"

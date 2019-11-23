@@ -216,7 +216,6 @@ public class AppraisalFragment extends Fragment implements View.OnClickListener 
                     JSONObject jsonObject = new JSONObject(response.body().string());
                     JSONArray jsonArray=jsonObject.getJSONArray("appraisalBrand");
                     showSubclassPic(jsonArray);
-                    //    Log.i("return info",jsonObject.toString());
                 } catch (IOException e) {
                     e.printStackTrace();
                 } catch (JSONException j){

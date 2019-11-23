@@ -63,4 +63,15 @@ public class AppraisalPointItem implements Serializable {
     private int type;
     private String stickFigureURL;
     private String bigStickFigureURL;
+
+    public String getKey() {
+        return key;
+    }
+
+    public void setKey(String key) {
+        this.key = key;
+    }
+
+    private String key;
+
 }
