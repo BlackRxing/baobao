@@ -62,5 +62,9 @@
     <string name="usePhoto">调用相册</string>
     <string name="confirm">确认</string>
 
+    <string name="isdetecting">鉴定正在检测中</string>
+    <string name="pointinvalid">您拍摄的图片不满足拍摄条件或不在鉴定范围</string>
+    <string name="pointsuccess">鉴定点拍摄成功</string>
+
 
 </resources>

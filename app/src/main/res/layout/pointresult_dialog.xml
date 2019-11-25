@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="207dp"
+    android:layout_height="136dp"
+    android:background="@drawable/pointresult_dialog_background">
+    <ImageView
+        android:id="@+id/resultimage"
+        android:layout_width="31dp"
+        android:layout_height="31dp"
+        android:layout_marginTop="26dp"
+        android:src="@drawable/pointresultimage"
+        android:layout_centerHorizontal="true" />
+    <TextView
+        android:id="@+id/resulttext"
+        android:layout_marginTop="16dp"
+        android:layout_width="168dp"
+        android:layout_height="wrap_content"
+        android:textSize="14sp"
+        android:textColor="@color/white"
+        android:layout_centerHorizontal="true"
+        android:layout_below="@+id/resultimage"
+        android:gravity="center_horizontal"
+        />
+</RelativeLayout>
