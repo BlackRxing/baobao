@@ -90,6 +90,7 @@ public class PersonFragment extends Fragment implements View.OnClickListener {
         offlineTop.setVisibility(View.GONE);
         tabLayout.setVisibility(View.VISIBLE);
         viewPager.setVisibility(View.VISIBLE);
+
     }
     private void setOfflineTop(){
         onlineTop.setVisibility(View.GONE);
@@ -163,6 +164,7 @@ public class PersonFragment extends Fragment implements View.OnClickListener {
     @Override
     public void onResume() {
         viewTopinit();
+        showUserInfo();
         super.onResume();
     }
 

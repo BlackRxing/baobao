@@ -132,6 +132,55 @@ public class CameraModel {
         return null;
     }
 
+    public  String fixRotation(String filePath){
+        if (!TextUtils.isEmpty(filePath)) {
+            int degree = BitmapUtil.getPhotoDegree(filePath);
+            Log.i(TAG, degree + "");
+            Bitmap bitmap = BitmapFactory.decodeFile(filePath);
+            Bitmap tBitmap = null;
+            try {
+                Log.i(TAG, "保存图片大小："+"width = " + bitmap.getWidth() + "   ------ height = " + bitmap.getHeight());
+                    switch (degree) {
+                        case 0:
+                            tBitmap = BitmapUtil.rotateBitmap(bitmap, 90);
+                            filePath = BitmapUtil.saveBitmap(tBitmap == null ? bitmap : tBitmap, filePath);
+                            break;
+                        case 90:
+                            tBitmap = BitmapUtil.rotateBitmap(bitmap, 180);
+                            filePath = BitmapUtil.saveBitmap(tBitmap == null ? bitmap : tBitmap, filePath);
+                            break;
+                        case 180:
+                            tBitmap = BitmapUtil.rotateBitmap(bitmap, 270);
+                            filePath = BitmapUtil.saveBitmap(tBitmap == null ? bitmap : tBitmap, filePath);
+                            break;
+                        case 270:
+                            tBitmap = BitmapUtil.rotateBitmap(bitmap, 360);
+                            filePath = BitmapUtil.saveBitmap(tBitmap == null ? bitmap : tBitmap, filePath);
+                            break;
+                    }
+
+
+            } catch (Exception e) {
+                e.printStackTrace();
+                // 重新拍照
+                return "";
+            } finally {
+                if (bitmap != null) {
+                    bitmap.recycle();
+                    bitmap = null;
+                }
+                if (tBitmap != null) {
+                    tBitmap.recycle();
+                    tBitmap = null;
+                }
+                ScannerByReceiver(mContext, filePath);//图库扫描
+            }
+
+            return filePath;
+        }
+        return null;
+    }
+
     /**
      * Receiver扫描更新图库图片
      **/

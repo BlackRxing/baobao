@@ -66,5 +66,9 @@
     <string name="pointinvalid">您拍摄的图片不满足拍摄条件或不在鉴定范围</string>
     <string name="pointsuccess">鉴定点拍摄成功</string>
 
+    <string name="appraisalerrorcase_1">有必选鉴定点未鉴定，请先拍摄</string>
+    <string name="appraisalerrorcase_2">有鉴定点正在鉴定，请等待鉴定完成</string>
+    <string name="appraisalerrorcase_3">有必选鉴定点鉴定失败，请重新拍摄</string>
+
 
 </resources>

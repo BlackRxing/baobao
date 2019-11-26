@@ -1,5 +1,4 @@
 
-
 package com.example.baoxiaojianapp.baoxiaojianapp.activity;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -17,14 +16,25 @@ import rx.functions.Func1;
 import rx.schedulers.Schedulers;
 
 import android.app.Dialog;
+import android.content.ContentUris;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.Configuration;
+import android.database.Cursor;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.graphics.PixelFormat;
 import android.graphics.drawable.BitmapDrawable;
 import android.hardware.Camera;
+import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
+import android.provider.ContactsContract;
+import android.provider.DocumentsContract;
+import android.provider.MediaStore;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.Display;
 import android.view.SurfaceHolder;
@@ -49,27 +59,37 @@ import com.example.baoxiaojianapp.baoxiaojianapp.Utils.Constants;
 import com.example.baoxiaojianapp.baoxiaojianapp.Utils.FileUtil;
 import com.example.baoxiaojianapp.baoxiaojianapp.Utils.NetInterface;
 import com.example.baoxiaojianapp.baoxiaojianapp.Utils.OkHttpUtils;
+import com.example.baoxiaojianapp.baoxiaojianapp.Utils.PathUtils;
 import com.example.baoxiaojianapp.baoxiaojianapp.Utils.PicProcessUtils;
 import com.example.baoxiaojianapp.baoxiaojianapp.adapter.StickFigureAdapter;
 import com.example.baoxiaojianapp.baoxiaojianapp.classpakage.AppraisalPointItem;
 import com.example.baoxiaojianapp.baoxiaojianapp.view.AppraisalPointDialog;
 import com.example.baoxiaojianapp.baoxiaojianapp.view.CameraFocusView;
 import com.example.baoxiaojianapp.baoxiaojianapp.view.CameraSurfaceView;
+import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
+import com.jph.takephoto.app.TakePhoto;
+import com.jph.takephoto.app.TakePhotoActivity;
+import com.jph.takephoto.compress.CompressConfig;
+import com.jph.takephoto.model.CropOptions;
+import com.jph.takephoto.model.TResult;
 import com.smarttop.library.utils.LogUtil;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.File;
 import java.io.IOException;
+import java.sql.Time;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import static java.util.Collections.sort;
 
 @SuppressWarnings("deprecation")
-public class AppraisalActivity extends AppCompatActivity implements CameraFocusView.IAutoFocus, View.OnClickListener, StickFigureAdapter.StickFigureAdaterClick, ViewTreeObserver.OnGlobalLayoutListener {
+public class AppraisalActivity extends TakePhotoActivity implements CameraFocusView.IAutoFocus, View.OnClickListener, StickFigureAdapter.StickFigureAdaterClick, ViewTreeObserver.OnGlobalLayoutListener {
 
     private CameraSurfaceView cameraSurfaceView;
     private CameraFocusView cameraFocusView;
@@ -94,6 +114,8 @@ public class AppraisalActivity extends AppCompatActivity implements CameraFocusV
     private Button clicktorestartButton;
     private TextView resultText;
     private String[] imagePaths;
+    private ImageView staticImage;
+    private String[] uuids;
 
 
     @Override
@@ -117,6 +139,7 @@ public class AppraisalActivity extends AppCompatActivity implements CameraFocusV
         usePhotoButton = findViewById(R.id.usephoto_button);
         bigStickFigureImage = findViewById(R.id.bigstickfigure_image);
         pointImage = findViewById(R.id.point_image);
+        staticImage = findViewById(R.id.staticImage);
         takePhotoButton = findViewById(R.id.takephoto_button);
         clicktorestartButton = findViewById(R.id.restart_button);
         pointResultDialog = findViewById(R.id.result_dialog);
@@ -130,6 +153,7 @@ public class AppraisalActivity extends AppCompatActivity implements CameraFocusV
         takePhotoButton.setOnClickListener(this);
         clicktorestartButton.setOnClickListener(this);
         usePhotoButton.setOnClickListener(this);
+        gotoAppraisalText.setOnClickListener(this);
     }
 
     private void initView() {
@@ -143,17 +167,17 @@ public class AppraisalActivity extends AppCompatActivity implements CameraFocusV
         appraisalPointItemList = (List<AppraisalPointItem>) bundle.getSerializable("points");
         pointsstates = new int[appraisalPointItemList.size()];
         imagePaths = new String[appraisalPointItemList.size()];
+        uuids = new String[appraisalPointItemList.size()];
         StickFigureAdapter stickFigureAdapter = new StickFigureAdapter(appraisalPointItemList);
         stickFigureAdapter.setItemClick(this);
         pointsRecyclerView.setAdapter(stickFigureAdapter);
         pointsRecyclerView.getViewTreeObserver().addOnGlobalLayoutListener(this);
-
     }
 
 
     @Override
     public void autoFocus(float x, float y) {
-        if(pointsstates[currentPoint]==Constants.WAITING){
+        if (pointsstates[currentPoint] == Constants.WAITING) {
             cameraSurfaceView.setAutoFocus((int) x, (int) y);
         }
     }
@@ -175,37 +199,187 @@ public class AppraisalActivity extends AppCompatActivity implements CameraFocusV
                 restartPoint();
                 break;
             case R.id.usephoto_button:
-                ToastUtils.showShort("yes");
+                choosePhotoFormGallary();
+                break;
+            case R.id.gotoAppraisal:
+                gotoAppraisal();
                 break;
         }
     }
+
+    private void gotoAppraisal() {
+        int i = 0;
+        JsonArray jsonArray = new JsonArray();
+        for (int state : pointsstates) {
+            if (state == Constants.DETECTING) {
+                ToastUtils.showShort(getText(R.string.appraisalerrorcase_2));
+                return;
+            }
+
+            if (appraisalPointItemList.get(i).getType() == 1 && state == Constants.FAILURE) {
+                ToastUtils.showShort(getText(R.string.appraisalerrorcase_3));
+                return;
+            }
+            if (appraisalPointItemList.get(i).getType() == 1 && state != Constants.SUCCESS) {
+                ToastUtils.showShort(getText(R.string.appraisalerrorcase_1));
+                return;
+            }
+            if (state == Constants.SUCCESS) {
+                JsonObject jsonObject = new JsonObject();
+                jsonObject.addProperty("appraisalUUID", uuids[i]);
+                jsonObject.addProperty("pointKey", appraisalPointItemList.get(i).getKey());
+                jsonArray.add(jsonObject);
+            }
+            i++;
+        }
+        AppraisalAll(jsonArray);
+    }
+
+    private void AppraisalAll(JsonArray jsonArray) {
+        JsonObject jsonObject = new JsonObject();
+        jsonObject.add("points", jsonArray);
+        RequestBody requestBody = RequestBody.create(MediaType.parse("application/json; charset=utf-8"), jsonObject.toString());
+        Callback.MyOkhttp(requestBody, NetInterface.TSAppraisalResultV4Request, new Callback.OkhttpRun() {
+            @Override
+            public void run(JSONObject jsonObject) {
+                try {
+                    final int result = jsonObject.getJSONObject("result").getInt("type");
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            ToastUtils.showShort(result + "");
+                        }
+                    });
+                } catch (JSONException j) {
+                    j.printStackTrace();
+                }
+            }
+        });
+    }
+
+    private void choosePhotoFormGallary() {
+        TakePhoto takePhoto = getTakePhoto();
+        File file = new File(PathUtils.getFilePath(this, "appraisal"), System.currentTimeMillis() + "_gallary" + ".jpg");
+        configCompress(takePhoto);
+        takePhoto.onPickFromGalleryWithCrop(Uri.fromFile(file), new CropOptions.Builder().setAspectX(1).setAspectY(1).setWithOwnCrop(true).create());
+    }
+
+    private void configCompress(TakePhoto takePhoto) {//压缩配置
+        int maxSize = Integer.parseInt("800000");//最大 压缩B
+        int width = Integer.parseInt("500");//宽
+        int height = Integer.parseInt("500");//高
+        CompressConfig config;
+        config = new CompressConfig.Builder().setMaxSize(maxSize)
+                .setMaxPixel(width >= height ? width : height)
+                .create();
+        takePhoto.onEnableCompress(config, false);//是否显示进度
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == 2){
+            //判断安卓版本
+            if (resultCode == RESULT_OK&&data!=null){
+                if (Build.VERSION.SDK_INT>=19)
+                    handImage(data);
+            }
+        }
+
+    }
+
+    private void handImage(Intent data){
+        String path =null;
+        Uri uri = data.getData();
+        //根据不同的uri进行不同的解析
+        if (DocumentsContract.isDocumentUri(this,uri)){
+            String docId = DocumentsContract.getDocumentId(uri);
+            if ("com.android.providers.media.documents".equals(uri.getAuthority())){
+                String id = docId.split(":")[1];
+                String selection = MediaStore.Images.Media._ID+"="+id;
+                path = getImagePath(MediaStore.Images.Media.EXTERNAL_CONTENT_URI,selection);
+            }else if("com.android.providers.downloads.documents".equals(uri.getAuthority())){
+                Uri contentUri = ContentUris.withAppendedId(Uri.parse("content://downloads/public_downloads"),Long.valueOf(docId));
+                path = getImagePath(contentUri,null);
+            }
+        }else if ("content".equalsIgnoreCase(uri.getScheme())){
+            path = getImagePath(uri,null);
+        }else if ("file".equalsIgnoreCase(uri.getScheme())){
+            path = uri.getPath();
+        }
+        //展示图片
+        pointsstates[currentPoint] = Constants.DETECTING;
+        stateChange(currentPoint);
+        String filePath = path;
+       // filePath = BitmapUtil.myrotate(filePath);  //修正个别（小米三星）系统竖排图片旋转
+        imagePaths[currentPoint] = filePath;
+        staticImage.setImageDrawable(new BitmapDrawable(BitmapUtil.getBitmap(imagePaths[currentPoint])));
+        final int threadpoint = currentPoint;
+        singlepointAppraisal(imagePaths[currentPoint], threadpoint);
+    }
+
+    //content类型的uri获取图片路径的方法
+    private String getImagePath(Uri uri,String selection) {
+        String path = null;
+        Cursor cursor = getContentResolver().query(uri,null,selection,null,null);
+        if (cursor!=null){
+            if (cursor.moveToFirst()){
+                path = cursor.getString(cursor.getColumnIndex(MediaStore.Images.Media.DATA));
+            }
+            cursor.close();
+        }
+        return path;
+    }
+
+
 
     private void restartPoint() {
         pointsstates[currentPoint] = Constants.WAITING;
         stateChange(currentPoint);
     }
 
+    @Override
+    public void takeSuccess(TResult result) {
+        super.takeSuccess(result);
+        pointsstates[currentPoint] = Constants.DETECTING;
+        stateChange(currentPoint);
+        String filePath = result.getImage().getCompressPath();
+        filePath = BitmapUtil.myrotate(filePath);  //修正个别（小米三星）系统竖排图片旋转
+        imagePaths[currentPoint] = filePath;
+        staticImage.setImageDrawable(new BitmapDrawable(BitmapUtil.getBitmap(filePath)));
+        final int threadpoint = currentPoint;
+        singlepointAppraisal(imagePaths[currentPoint], threadpoint);
+        return;
+    }
+
     private void singlepointAppraisal(final String path, final int threadpoint) {
+        final long starttime = System.currentTimeMillis();
         String base64 = PicProcessUtils.convertIconToString(PicProcessUtils.getCompressBm(path));
         JsonObject jsonObject = new JsonObject();
         jsonObject.addProperty("point_key", appraisalPointItemList.get(currentPoint).getKey());
         jsonObject.addProperty("img_base64", base64);
         RequestBody requestBody = RequestBody.create(MediaType.parse("application/json; charset=utf-8"), jsonObject.toString());
+        long one = System.currentTimeMillis();
+//        ToastUtils.showShort("one" + (one - starttime) + "ms");
         Callback.MyOkhttp(requestBody, NetInterface.TSSingleAppraisalRequestV2, new Callback.OkhttpRun() {
             @Override
             public void run(JSONObject jsonObject) {
                 try {
+                    ToastUtils.showShort("three");
                     if (jsonObject.getJSONObject("err").getInt("code") == 0) {
                         pointsstates[threadpoint] = Constants.SUCCESS;
+                        uuids[threadpoint] = jsonObject.getString("uuid");
                     } else {
                         pointsstates[threadpoint] = Constants.FAILURE;
                     }
                     if (currentPoint == threadpoint) {
-                        ToastUtils.showShort("current" + currentPoint + "threadpoint" + threadpoint);
+//                        ToastUtils.showShort("current" + currentPoint + "threadpoint" + threadpoint);
                         runOnUiThread(new Runnable() {
                             @Override
                             public void run() {
                                 stateChange(threadpoint);
+//                                long sed = System.currentTimeMillis() - starttime;
+//                                ToastUtils.showShort("sed" + sed);
                             }
                         });
                     } else {
@@ -213,6 +387,8 @@ public class AppraisalActivity extends AppCompatActivity implements CameraFocusV
                             @Override
                             public void run() {
                                 changeOnlystate(threadpoint);
+                                long sed = System.currentTimeMillis() - starttime;
+                                ToastUtils.showShort("sed" + sed);
                             }
                         });
                     }
@@ -252,7 +428,7 @@ public class AppraisalActivity extends AppCompatActivity implements CameraFocusV
                                     runOnUiThread(new Runnable() {
                                         @Override
                                         public void run() {
-                                            cameraFocusView.setBackground(new BitmapDrawable(BitmapUtil.getBitmap(imagePaths[threadpoint])));
+                                            staticImage.setImageDrawable(new BitmapDrawable(BitmapUtil.getBitmap(imagePaths[threadpoint])));
                                         }
                                     });
 
@@ -301,7 +477,7 @@ public class AppraisalActivity extends AppCompatActivity implements CameraFocusV
     private void stateChange(int position) {
         getRecyclerItemView(position, R.id.stickFigure).setVisibility(View.INVISIBLE);
         getRecyclerItemView(position, R.id.stateImage).setVisibility(View.VISIBLE);
-        cameraFocusView.setBackground(new BitmapDrawable(BitmapUtil.getBitmap(imagePaths[position])));
+        staticImage.setImageDrawable(new BitmapDrawable(BitmapUtil.getBitmap(imagePaths[position])));
         setButtonUnclickable();
         switch (pointsstates[position]) {
             case Constants.WAITING:
@@ -310,7 +486,7 @@ public class AppraisalActivity extends AppCompatActivity implements CameraFocusV
                 getRecyclerItemView(position, R.id.stickFigure).setVisibility(View.VISIBLE);
                 getRecyclerItemView(position, R.id.stateImage).setVisibility(View.INVISIBLE);
                 setButtonClickable();
-                cameraFocusView.setBackground(null);
+                staticImage.setImageDrawable(null);
                 break;
             case Constants.DETECTING:
                 pointResultDialog.setVisibility(View.VISIBLE);
@@ -344,11 +520,12 @@ public class AppraisalActivity extends AppCompatActivity implements CameraFocusV
         }
     }
 
-    private void setButtonUnclickable(){
+    private void setButtonUnclickable() {
         usePhotoButton.setTextColor(getColor(R.color.grey));
         usePhotoButton.setClickable(false);
     }
-    private void setButtonClickable(){
+
+    private void setButtonClickable() {
         usePhotoButton.setTextColor(getColor(R.color.white));
         usePhotoButton.setClickable(true);
     }

@@ -179,10 +179,11 @@ public class Callback {
         //第四步创建call回调对象
         final Call call = client.newCall(request);
         //第五步发起请求
+        ToastUtils.showShort("one");
         new Thread(new Runnable() {
             @Override
             public void run() {
-                try{
+                try{ToastUtils.showShort("two");
                     Response response = call.execute();
                     String responses=response.body().string();
                     JSONObject jsonObject = new JSONObject(responses);

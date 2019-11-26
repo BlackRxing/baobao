@@ -11,5 +11,5 @@ public class NetInterface {
     public static final String TSUserAdviceRequest="https://dev2.turingsenseai.com/account/userAdvice";
     public static final String TSAppraisalProcessV2Request="https://dev2.turingsenseai.com/appraisalProcessV2";
     public static final String TSSingleAppraisalRequestV2="https://dev2.turingsenseai.com/appraisal/appraisalSerial";
-
+    public static final String TSAppraisalResultV4Request="https://dev2.turingsenseai.com/appraisal/genAppraisalResultV3";
 }

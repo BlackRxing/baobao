@@ -11,6 +11,7 @@ import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Handler;
 import android.provider.MediaStore;
 import android.util.Log;
 import android.view.View;
@@ -24,6 +25,7 @@ import com.bumptech.glide.request.target.SimpleTarget;
 import com.bumptech.glide.request.transition.Transition;
 import com.example.baoxiaojianapp.R;
 import com.example.baoxiaojianapp.baoxiaojianapp.Callback.NetResquest;
+import com.example.baoxiaojianapp.baoxiaojianapp.Utils.BitmapUtil;
 import com.example.baoxiaojianapp.baoxiaojianapp.Utils.MyApplication;
 import com.example.baoxiaojianapp.baoxiaojianapp.Utils.PathUtils;
 
@@ -33,9 +35,13 @@ import com.example.baoxiaojianapp.baoxiaojianapp.Utils.UserInfoCashUtils;
 import com.jph.takephoto.app.TakePhoto;
 import com.jph.takephoto.app.TakePhotoActivity;
 import com.jph.takephoto.compress.CompressConfig;
+import com.jph.takephoto.compress.CompressImage;
+import com.jph.takephoto.compress.CompressImageImpl;
+import com.jph.takephoto.compress.CompressImageUtil;
 import com.jph.takephoto.model.CropOptions;
 
 import com.jph.takephoto.model.TException;
+import com.jph.takephoto.model.TImage;
 import com.jph.takephoto.model.TResult;
 import com.jph.takephoto.model.TakePhotoOptions;
 import com.smarttop.library.bean.City;
@@ -47,9 +53,10 @@ import com.smarttop.library.widget.BottomDialog;
 import com.smarttop.library.widget.OnAddressSelectedListener;
 
 import java.io.File;
+import java.util.ArrayList;
 
 
-public class InfoSettingActivity extends TakePhotoActivity implements View.OnClickListener,OnAddressSelectedListener,AddressSelector.OnDialogCloseListener {
+public class InfoSettingActivity extends TakePhotoActivity implements View.OnClickListener, OnAddressSelectedListener, AddressSelector.OnDialogCloseListener {
 
     private RelativeLayout backLayout;
     private RelativeLayout profileImageLayout;
@@ -67,8 +74,7 @@ public class InfoSettingActivity extends TakePhotoActivity implements View.OnCli
     private Uri photoOutputUri;
     private File file;
     private Uri corpedimage;
-    private Boolean takePhotostate=false;
-
+    private Boolean takePhotostate = false;
     public static final int TAKE_PHOTO = 1;
 
 
@@ -76,20 +82,19 @@ public class InfoSettingActivity extends TakePhotoActivity implements View.OnCli
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_info_setting);
-        mContent=findViewById(R.id.container_layout);
+        mContent = findViewById(R.id.container_layout);
         bindView();
         initData();
     }
 
 
-
-    private void initData(){
-        String nickname=UserInfoCashUtils.getUserInfo("nick_name");
-        String location=UserInfoCashUtils.getUserInfo("location");
-        String sex=UserInfoCashUtils.getUserInfo("sex");
+    private void initData() {
+        String nickname = UserInfoCashUtils.getUserInfo("nick_name");
+        String location = UserInfoCashUtils.getUserInfo("location");
+        String sex = UserInfoCashUtils.getUserInfo("sex");
         nicknameText.setText(nickname);
-        Log.i("locaiton",location);
-        if(!location.equals("null"))
+        Log.i("locaiton", location);
+        if (!location.equals("null"))
             regionText.setText(location);
         if ((sex.equals("m"))) {
             sexText.setText("男");
@@ -104,16 +109,16 @@ public class InfoSettingActivity extends TakePhotoActivity implements View.OnCli
         });
     }
 
-    private void bindView(){
-        backLayout=findViewById(R.id.back_layout);
-        profileImageLayout=findViewById(R.id.profile_image_layout);
-        nickNameLayout=findViewById(R.id.nickname_layout);
-        regionLayout=findViewById(R.id.region_layout);
-        sexLayout=findViewById(R.id.sex_layout);
-        profileImage=findViewById(R.id.profile_image);
-        nicknameText=findViewById(R.id.nickname_textview);
-        regionText=findViewById(R.id.region_textview);
-        sexText=findViewById(R.id.sex_textview);
+    private void bindView() {
+        backLayout = findViewById(R.id.back_layout);
+        profileImageLayout = findViewById(R.id.profile_image_layout);
+        nickNameLayout = findViewById(R.id.nickname_layout);
+        regionLayout = findViewById(R.id.region_layout);
+        sexLayout = findViewById(R.id.sex_layout);
+        profileImage = findViewById(R.id.profile_image);
+        nicknameText = findViewById(R.id.nickname_textview);
+        regionText = findViewById(R.id.region_textview);
+        sexText = findViewById(R.id.sex_textview);
         backLayout.setOnClickListener(this);
         nickNameLayout.setOnClickListener(this);
         profileImageLayout.setOnClickListener(this);
@@ -122,15 +127,14 @@ public class InfoSettingActivity extends TakePhotoActivity implements View.OnCli
     }
 
 
-
     @Override
     public void onClick(View v) {
-        switch (v.getId()){
+        switch (v.getId()) {
 //            case R.id.profile_image_layout:
 //                chooseProfileImage();
 //                break;
             case R.id.nickname_layout:
-                startActivity(new Intent(this,EditNickNameActivity.class));
+                startActivity(new Intent(this, EditNickNameActivity.class));
                 break;
             case R.id.region_layout:
                 selectRegion();
@@ -148,13 +152,8 @@ public class InfoSettingActivity extends TakePhotoActivity implements View.OnCli
     }
 
 
-
-
-
-
-
-    private void selectRegion(){
-        bottomDialog= new BottomDialog(this);
+    private void selectRegion() {
+        bottomDialog = new BottomDialog(this);
         bottomDialog.setOnAddressSelectedListener(this);
         bottomDialog.setDialogDismisListener(this);
         bottomDialog.setTextSelectedColor(R.color.black);
@@ -162,12 +161,12 @@ public class InfoSettingActivity extends TakePhotoActivity implements View.OnCli
         bottomDialog.show();
     }
 
-    private void chooseProfileImage(){
-        profileImageActionSheetDialog = new ActionSheetDialog.ActionSheetBuilder(this,R.style.ActionSheetDialogBase_SampleStyle)
-                .setItems(new CharSequence[]{"从相册选取","拍照"}, new DialogInterface.OnClickListener() {
+    private void chooseProfileImage() {
+        profileImageActionSheetDialog = new ActionSheetDialog.ActionSheetBuilder(this, R.style.ActionSheetDialogBase_SampleStyle)
+                .setItems(new CharSequence[]{"从相册选取", "拍照"}, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        switch (which){
+                        switch (which) {
                             case 0:
                                 FromGallery(getTakePhoto());
                                 profileImageActionSheetDialog.dismiss();
@@ -187,55 +186,58 @@ public class InfoSettingActivity extends TakePhotoActivity implements View.OnCli
     @Override
     public void takeSuccess(TResult result) {
         super.takeSuccess(result);
-        if (takePhotostate){
-            Glide.with(MyApplication.getContext()).load(corpedimage).into(new SimpleTarget<Drawable>() {
-                @Override
-                public void onResourceReady(@NonNull Drawable resource, @Nullable Transition<? super Drawable> transition) {
-                    profileImage.setImageDrawable(resource);
-                }
-            });
-            upLoadAvatar(corpedimage.getPath());
-            takePhotostate=false;
-        }else{
-            Glide.with(MyApplication.getContext()).load(result.getImage().getCompressPath()).into(new SimpleTarget<Drawable>() {
-                @Override
-                public void onResourceReady(@NonNull Drawable resource, @Nullable Transition<? super Drawable> transition) {
-                    profileImage.setImageDrawable(resource);
-                }
-            });
-            upLoadAvatar(result.getImage().getCompressPath());
-        }
+       updateProfileImage(result.getImage().getCompressPath());
     }
 
-    private void upLoadAvatar(String avatar_path){
-        String avtar_base64=PicProcessUtils.convertIconToString(PicProcessUtils.getCompressBm(avatar_path));
-        NetResquest.RevisePersonInfo("avatar",avtar_base64);
+
+    private void updateProfileImage(String gallaryPhoto) {
+        //无论从相册选还是拍照都要旋转
+        String gallaryphoto = BitmapUtil.myrotate(gallaryPhoto);
+
+        Glide.with(MyApplication.getContext()).load(gallaryphoto).into(new SimpleTarget<Drawable>() {
+            @Override
+            public void onResourceReady(@NonNull Drawable resource, @Nullable Transition<? super Drawable> transition) {
+                profileImage.setImageDrawable(resource);
+            }
+        });
+        upLoadAvatar(gallaryphoto);
+        UserInfoCashUtils.setUserInfo("avatar_url", gallaryphoto);
+        if (takePhotostate == true) {
+            takePhotostate = false;
+        }
+
+
+    }
+
+    private void upLoadAvatar(String avatar_path) {
+        String avtar_base64 = PicProcessUtils.convertIconToString(PicProcessUtils.getCompressBm(avatar_path));
+        NetResquest.RevisePersonInfo("avatar", avtar_base64);
     }
 
     @Override
     public void onAddressSelected(Province province, City city, County county, Street street) {
         String region = (province == null ? "" : province.name) + (city == null ? "" : city.name) + (county == null ? "" : county.name) +
                 (street == null ? "" : street.name);
-        if (bottomDialog!=null){
+        if (bottomDialog != null) {
             bottomDialog.dismiss();
         }
-        NetResquest.RevisePersonInfo("location",region);
+        NetResquest.RevisePersonInfo("location", region);
     }
 
     @Override
     public void dialogclose() {
-        if(bottomDialog!=null){
+        if (bottomDialog != null) {
             bottomDialog.dismiss();
         }
     }
 
-    private void sexChoose(){
-        sexActionSheetDialog=new ActionSheetDialog.ActionSheetBuilder(this,R.style.ActionSheetDialogBase_SampleStyle)
-                .setItems(new CharSequence[]{"男","女"}, new DialogInterface.OnClickListener() {
+    private void sexChoose() {
+        sexActionSheetDialog = new ActionSheetDialog.ActionSheetBuilder(this, R.style.ActionSheetDialogBase_SampleStyle)
+                .setItems(new CharSequence[]{"男", "女"}, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        String sexvalue=(which==0?"m":"f");
-                        NetResquest.RevisePersonInfo(NetResquest.SEX,sexvalue);
+                        String sexvalue = (which == 0 ? "m" : "f");
+                        NetResquest.RevisePersonInfo(NetResquest.SEX, sexvalue);
                         sexActionSheetDialog.dismiss();
                     }
                 })
@@ -245,11 +247,11 @@ public class InfoSettingActivity extends TakePhotoActivity implements View.OnCli
 
     }
 
-    public void FromCamera(TakePhoto takePhoto){
-        file = new File(PathUtils.getFilePath(this,"temp"), System.currentTimeMillis() + ".jpg");
+    public void FromCamera(TakePhoto takePhoto) {
+        file = new File(PathUtils.getFilePath(this, "temp"), System.currentTimeMillis() + ".jpg");
         if (Build.VERSION.SDK_INT >= 24) {
-            Log.i("path",file.toString());
-            photoOutputUri = FileProvider.getUriForFile(this,"com.example.baoxiaojianapp.filesProvider",file);
+            Log.i("path", file.toString());
+            photoOutputUri = FileProvider.getUriForFile(this, "com.example.baoxiaojianapp.filesProvider", file);
         } else {
             //将File对象转换成URI对象，这个URI对象标识着output_image.jpg这张图片的本地真是路径
             photoOutputUri = Uri.fromFile(file);
@@ -261,12 +263,12 @@ public class InfoSettingActivity extends TakePhotoActivity implements View.OnCli
 
     public void FromGallery(TakePhoto takePhoto) {
         configCompress(takePhoto);
-        File file = new File(PathUtils.getFilePath(this,"temp"), System.currentTimeMillis() + ".jpg");
-        takePhoto.onPickFromGalleryWithCrop(Uri.fromFile(file),new CropOptions.Builder().setAspectX(1).setAspectY(1).setWithOwnCrop(true).create());
+        File file = new File(PathUtils.getFilePath(this, "temp"), System.currentTimeMillis() + ".jpg");
+        takePhoto.onPickFromGalleryWithCrop(Uri.fromFile(file), new CropOptions.Builder().setAspectX(1).setAspectY(1).setWithOwnCrop(true).create());
     }
 
     private void configCompress(TakePhoto takePhoto) {//压缩配置
-        int maxSize = Integer.parseInt("11409600");//最大 压缩B
+        int maxSize = Integer.parseInt("100000");//最大 压缩B
         int width = Integer.parseInt("500");//宽
         int height = Integer.parseInt("500");//高
         CompressConfig config;
@@ -276,13 +278,14 @@ public class InfoSettingActivity extends TakePhotoActivity implements View.OnCli
         takePhoto.onEnableCompress(config, false);//是否显示进度
     }
 
-    private void cropAndCompressCameraPhoto(){
-        TakePhoto takePhoto=getTakePhoto();
-        corpedimage=Uri.fromFile(new File(PathUtils.getFilePath(this,"temp"),System.currentTimeMillis() + ".jpg"));
-        try{
-            takePhoto.onCrop(Uri.fromFile(file),corpedimage,new CropOptions.Builder().setAspectX(1).setAspectY(1).setWithOwnCrop(true).create());
-            takePhotostate=true;
-        }catch (TException t){
+    private void cropAndCompressCameraPhoto() {
+        TakePhoto takePhoto = getTakePhoto();
+        corpedimage = Uri.fromFile(new File(PathUtils.getFilePath(this, "temp"), System.currentTimeMillis() + ".jpg"));
+        try {
+            configCompress(takePhoto);
+            takePhoto.onCrop(Uri.fromFile(file), corpedimage, new CropOptions.Builder().setAspectX(1).setAspectY(1).setWithOwnCrop(true).create());
+            takePhotostate = true;
+        } catch (TException t) {
             t.printStackTrace();
         }
     }
@@ -299,18 +302,21 @@ public class InfoSettingActivity extends TakePhotoActivity implements View.OnCli
         }
     }
 
-    public static void changeUI(String key){
-        switch (key){
+    public static void changeUI(String key) {
+        switch (key) {
             case NetResquest.NICK_NAME:
                 nicknameText.setText(UserInfoCashUtils.getUserInfo("nick_name"));
                 break;
             case NetResquest.SEX:
-                sexText.setText(UserInfoCashUtils.getUserInfo("sex")=="m"?"男":"女");
+                sexText.setText(UserInfoCashUtils.getUserInfo("sex") == "m" ? "男" : "女");
                 break;
             case NetResquest.LOCATION:
                 regionText.setText(UserInfoCashUtils.getUserInfo("location"));
                 break;
             case NetResquest.AVATAR:
+                break;
+            default:
+
                 break;
         }
     }
