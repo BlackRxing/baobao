@@ -57,6 +57,7 @@ import com.example.baoxiaojianapp.baoxiaojianapp.Utils.BitmapUtil;
 import com.example.baoxiaojianapp.baoxiaojianapp.Utils.CameraModel;
 import com.example.baoxiaojianapp.baoxiaojianapp.Utils.Constants;
 import com.example.baoxiaojianapp.baoxiaojianapp.Utils.FileUtil;
+import com.example.baoxiaojianapp.baoxiaojianapp.Utils.MyApplication;
 import com.example.baoxiaojianapp.baoxiaojianapp.Utils.NetInterface;
 import com.example.baoxiaojianapp.baoxiaojianapp.Utils.OkHttpUtils;
 import com.example.baoxiaojianapp.baoxiaojianapp.Utils.PathUtils;
@@ -204,6 +205,7 @@ public class AppraisalActivity extends TakePhotoActivity implements CameraFocusV
             case R.id.gotoAppraisal:
                 gotoAppraisal();
                 break;
+
         }
     }
 
@@ -235,7 +237,7 @@ public class AppraisalActivity extends TakePhotoActivity implements CameraFocusV
         AppraisalAll(jsonArray);
     }
 
-    private void AppraisalAll(JsonArray jsonArray) {
+    private void AppraisalAll(final JsonArray jsonArray) {
         JsonObject jsonObject = new JsonObject();
         jsonObject.add("points", jsonArray);
         RequestBody requestBody = RequestBody.create(MediaType.parse("application/json; charset=utf-8"), jsonObject.toString());
@@ -243,13 +245,22 @@ public class AppraisalActivity extends TakePhotoActivity implements CameraFocusV
             @Override
             public void run(JSONObject jsonObject) {
                 try {
-                    final int result = jsonObject.getJSONObject("result").getInt("type");
-                    runOnUiThread(new Runnable() {
-                        @Override
-                        public void run() {
-                            ToastUtils.showShort(result + "");
-                        }
-                    });
+                    JSONObject jsonObject1= jsonObject.getJSONObject("result");
+                    Log.d("here",jsonObject.toString());
+                    Intent intent=new Intent(MyApplication.getContext(),AppraisalResultActivity.class);
+                    intent.putExtra("imageUrl",jsonObject1.getString("imageUrl"));
+                    intent.putExtra("brandName",jsonObject1.getString("brandName"));
+                    intent.putExtra("modelNumber",jsonObject1.getString("modelNumber"));
+                    intent.putExtra("timestamp",jsonObject1.getString("timestamp"));
+                    intent.putExtra("type",jsonObject1.getInt("type"));
+                    intent.putExtra("detailModels",jsonObject1.getJSONArray("detailModels").toString());
+                    startActivity(intent);
+//                    runOnUiThread(new Runnable() {
+//                        @Override
+//                        public void run() {
+//                            ToastUtils.showShort(result + "");
+//                        }
+//                    });
                 } catch (JSONException j) {
                     j.printStackTrace();
                 }

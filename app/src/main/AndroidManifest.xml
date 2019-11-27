@@ -23,10 +23,10 @@
         android:usesCleartextTraffic="true"
         tools:ignore="GoogleAppIndexingWarning"
         tools:replace="android:allowBackup">
-        <activity android:name=".baoxiaojianapp.activity.AppraisalActivity"
-            android:screenOrientation="portrait">
-
-        </activity>
+        <activity android:name=".baoxiaojianapp.activity.AppraisalResultActivity"></activity>
+        <activity
+            android:name=".baoxiaojianapp.activity.AppraisalActivity"
+            android:screenOrientation="portrait"></activity>
         <activity android:name=".baoxiaojianapp.activity.GreenhandNoticeActivity" />
         <activity android:name=".baoxiaojianapp.activity.AppraisalNoticeActivity" />
         <activity android:name=".baoxiaojianapp.activity.PrivatePolicyActivity" />

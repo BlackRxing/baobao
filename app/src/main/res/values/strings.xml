@@ -70,5 +70,11 @@
     <string name="appraisalerrorcase_2">有鉴定点正在鉴定，请等待鉴定完成</string>
     <string name="appraisalerrorcase_3">有必选鉴定点鉴定失败，请重新拍摄</string>
 
+    <string name="appraisal_result">鉴定结果</string>
+    <string name="singnal_point_credit">单项鉴定分数</string>
+    <string name="generate_report">生成鉴定报告</string>
+    <string name="appraisal_number">鉴定号</string>
+    <string name="brand">品牌</string>
+    <string name="savetogallary">保存到相册</string>
 
 </resources>
