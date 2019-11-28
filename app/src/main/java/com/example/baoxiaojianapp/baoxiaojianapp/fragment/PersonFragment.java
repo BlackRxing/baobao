@@ -106,8 +106,7 @@ public class PersonFragment extends Fragment implements View.OnClickListener {
     }
 
     private void initCredit(){
-        Callback.refreshUserinfo();
-        if (UserInfoCashUtils.getUserInfoBoolean("is_enterprese")== Constants.ENTERPRISE){
+        if (UserInfoCashUtils.getUserInfoInt("is_enterprise")== Constants.ENTERPRISE){
             personcreditLayout.setVisibility(View.GONE);
             enterpriseLayout.setVisibility(View.VISIBLE);
         }else{
@@ -153,6 +152,8 @@ public class PersonFragment extends Fragment implements View.OnClickListener {
         offlineTop.setVisibility(View.GONE);
         tabLayout.setVisibility(View.VISIBLE);
         viewPager.setVisibility(View.VISIBLE);
+        Callback.refreshUserinfo();
+        showUserInfo();
         initCredit();
     }
     private void setOfflineTop(){
@@ -171,7 +172,6 @@ public class PersonFragment extends Fragment implements View.OnClickListener {
         tabLayout.setTabMode(TabLayout.MODE_FIXED);
         tabLayout.addTab(tabLayout.newTab().setText(titleList.get(0)));
         tabLayout.addTab(tabLayout.newTab().setText(titleList.get(1)));
-        showUserInfo();
         viewPager.setAdapter(new FragmentPagerAdapter(getFragmentManager()) {
             @NonNull
             @Override
@@ -210,7 +210,6 @@ public class PersonFragment extends Fragment implements View.OnClickListener {
     @Override
     public void onResume() {
         viewTopinit();
-        showUserInfo();
         super.onResume();
     }
 
@@ -227,9 +226,10 @@ public class PersonFragment extends Fragment implements View.OnClickListener {
             @Override
             public void run(JSONObject jsonObject) {
                 try{
+                    Log.d("signin",jsonObject.getInt("code")+"");
                     if (jsonObject.getInt("code")==Constants.CODE_SUCCESS){
                         ToastUtils.showShort("签到成功");
-                        initCredit();
+                        viewTopinit();
                     }
                 }catch (Exception e){
                     e.printStackTrace();

@@ -25,6 +25,11 @@ public class UserInfoCashUtils {
         editor.putString(key,value);
         editor.apply();
     }
+    public static void setUserInfo(String key,long value){
+        SharedPreferences.Editor editor=MyApplication.getContext().getSharedPreferences("userinfo_cash", Context.MODE_PRIVATE).edit();
+        editor.putLong(key,value);
+        editor.apply();
+    }
     public static void setLogin(){
         SharedPreferences.Editor editor=MyApplication.getContext().getSharedPreferences("userinfo_cash", Context.MODE_PRIVATE).edit();
         editor.putBoolean("login_state",true);
@@ -41,13 +46,14 @@ public class UserInfoCashUtils {
         editor.putString("sex",user.getSex());
         editor.putString("location",user.getLocation());
         editor.putInt("point",user.getPoint());
-        editor.putBoolean("is_enterprise",user.getIs_enterprise());
+        editor.putInt("is_enterprise",user.getIs_enterprise());
         editor.putInt("third_party_type",user.getThird_party_type());
         editor.putString("turing_token",user.getTuring_token());
         editor.putString("weibo_token",user.getWeibo_token());
         editor.putString("weixin_token",user.getWeixin_token());
         editor.putString("open_id",user.getOpen_id());
         editor.putInt("hasPunch",user.getHasPunch());
+        editor.putLong("tokentime",System.currentTimeMillis());
         editor.apply();
     }
 

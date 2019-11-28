@@ -7,6 +7,7 @@ import android.view.inspector.StaticInspectionCompanionProvider;
 
 import com.blankj.utilcode.util.ActivityUtils;
 import com.blankj.utilcode.util.ToastUtils;
+import com.example.baoxiaojianapp.baoxiaojianapp.Utils.Constants;
 import com.example.baoxiaojianapp.baoxiaojianapp.Utils.MyApplication;
 import com.example.baoxiaojianapp.baoxiaojianapp.Utils.NetInterface;
 import com.example.baoxiaojianapp.baoxiaojianapp.Utils.OkHttpUtils;
@@ -44,6 +45,46 @@ import static com.example.baoxiaojianapp.baoxiaojianapp.fragment.GenuineFragment
 public class Callback {
     public static int itemlength;
     public static int fakeitemlength;
+
+    //toke续期
+    public static void tokenRequest(){
+        SharedPreferences sharedPreferences1 = MyApplication.getContext().getSharedPreferences("userinfo_cash", MODE_PRIVATE);
+         if (System.currentTimeMillis()-sharedPreferences1.getLong("tokentime",0)>=7200000){
+             OkHttpClient client = new OkHttpClient.Builder()
+                     .build();
+             JsonObject jsonObject = new JsonObject();
+             jsonObject.addProperty("id", UserInfoCashUtils.getUserInfoInt("id"));
+             RequestBody requestBody = RequestBody.create(MediaType.parse("application/json; charset=utf-8"), jsonObject.toString());
+             Request request = new Request.Builder()
+                     .url(NetInterface.TSRenewalTokenRequest)
+                     .post(requestBody)
+                     .build();
+             //第四步创建call回调对象
+             final Call call = client.newCall(request);
+             //第五步发起请求
+             new Thread(new Runnable() {
+                 @Override
+                 public void run() {
+                     try{
+                         Response response = call.execute();
+                         String responses=response.body().string();
+                         JSONObject jsonObject = new JSONObject(responses);
+                         if (jsonObject.getInt("code")== Constants.CODE_SUCCESS){
+                             UserInfoCashUtils.setUserInfo("turing_token",jsonObject.getString("newToken"));
+                             UserInfoCashUtils.setUserInfo("tokentime",System.currentTimeMillis());
+                         }
+                     }catch (IOException e) {
+                         e.printStackTrace();
+                     } catch (JSONException j) {
+                         j.printStackTrace();
+                     }
+                 }
+             }).start();
+         }
+
+
+
+    }
     public static OkHttpUtils.RealCallback LoginTestCallback = new OkHttpUtils.RealCallback() {
         @Override
         public void onResponse(Call call, Response response) {
@@ -52,7 +93,6 @@ public class Callback {
                     JSONObject jsonObject = new JSONObject(response.body().string());
                     User user = new Gson().fromJson(jsonObject.getJSONObject("user").toString(), User.class);
                     UserInfoCashUtils userInfoCashUtils = UserInfoCashUtils.getInstance();
-                    userInfoCashUtils.clearUserInfoCash();
                     userInfoCashUtils.saveUserInfoCash(user);
                     userInfoCashUtils.setLogin();
                     LoginActivity.afterLogin();
@@ -74,6 +114,7 @@ public class Callback {
 
 
     public static void FakeloadData(final FragmentActivity fragmentActivity) {
+        tokenRequest();
         SharedPreferences sharedPreferences1 = MyApplication.getContext().getSharedPreferences("userinfo_cash", MODE_PRIVATE);
         String token = sharedPreferences1.getString("turing_token", "");
         OkHttpClient client = new OkHttpClient.Builder()
@@ -190,6 +231,7 @@ public class Callback {
 
 
     public static void MyOkhttp(RequestBody requestBody, String url, final OkhttpRun okhttpRun) {
+        tokenRequest();
         SharedPreferences sharedPreferences1 = MyApplication.getContext().getSharedPreferences("userinfo_cash", MODE_PRIVATE);
         String token = sharedPreferences1.getString("turing_token", "");
         OkHttpClient client = new OkHttpClient.Builder()
@@ -224,6 +266,7 @@ public class Callback {
     }
 
     public static void FakeloadMore(final FragmentActivity fragmentActivity, int currentPage) {
+        tokenRequest();
         SharedPreferences sharedPreferences1 = MyApplication.getContext().getSharedPreferences("userinfo_cash", MODE_PRIVATE);
         String token = sharedPreferences1.getString("turing_token", "");
         OkHttpClient client = new OkHttpClient.Builder()
@@ -273,6 +316,7 @@ public class Callback {
 
 
     public static void loadMore(final FragmentActivity fragmentActivity, int currentPage) {
+        tokenRequest();
         SharedPreferences sharedPreferences1 = MyApplication.getContext().getSharedPreferences("userinfo_cash", MODE_PRIVATE);
         String token = sharedPreferences1.getString("turing_token", "");
         OkHttpClient client = new OkHttpClient.Builder()
