@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
+<RelativeLayout
         xmlns:android="http://schemas.android.com/apk/res/android"
         android:id="@+id/linearlayout_person"
-        android:layout_width="match_parent"
+        android:layout_width="327dp"
         android:layout_height="wrap_content"
         android:layout_below="@+id/login_first_edit"
         android:layout_marginTop="14dp"
-        android:orientation="horizontal"
+        android:layout_centerHorizontal="true"
         >
         <EditText
             android:id="@+id/vertify_edit"
@@ -16,11 +16,12 @@
             android:hint="@string/vertify_code"
             android:textColorHint="@color/white"
             android:textSize="14sp"
+            android:paddingStart="26dp"
             android:background="@drawable/login_textview_background"
-            android:paddingStart="28dp"
-            android:layout_marginStart="32dp"
+            android:layout_gravity="left"
             android:maxLines="1"
-            android:inputType="number"/>
+            android:inputType="number"
+            android:layout_alignParentLeft="true"/>
         <Button
             android:id="@+id/vertify_code"
             android:layout_width="100dp"
@@ -28,6 +29,6 @@
             android:textColor="@color/white"
             android:background="@drawable/vertifycode_button_background"
             android:text="@string/get_vertifycode"
-            android:layout_marginLeft="15dp"
+            android:layout_alignParentRight="true"
             />
-</LinearLayout>
+</RelativeLayout>

@@ -76,5 +76,9 @@
     <string name="appraisal_number">鉴定号</string>
     <string name="brand">品牌</string>
     <string name="savetogallary">保存到相册</string>
+    <string name="current_credit">当前积分</string>
+    <string name="daily_signin">每日签到</string>
+    <string name="enterprise_user">企业用户</string>
+    <string name="hassignin">已签到</string>
 
 </resources>

@@ -1,6 +1,7 @@
 package com.example.baoxiaojianapp.baoxiaojianapp.Utils;
 
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 
 import com.example.baoxiaojianapp.baoxiaojianapp.classpakage.User;
@@ -46,8 +47,19 @@ public class UserInfoCashUtils {
         editor.putString("weibo_token",user.getWeibo_token());
         editor.putString("weixin_token",user.getWeixin_token());
         editor.putString("open_id",user.getOpen_id());
+        editor.putInt("hasPunch",user.getHasPunch());
         editor.apply();
     }
+
+    public static boolean getUserInfoBoolean(String key){
+        SharedPreferences sharedPreferences=MyApplication.getContext().getSharedPreferences("userinfo_cash",Context.MODE_PRIVATE);
+        return sharedPreferences.getBoolean(key,false);
+    }
+    public static int getUserInfoInt(String key){
+        SharedPreferences sharedPreferences=MyApplication.getContext().getSharedPreferences("userinfo_cash",Context.MODE_PRIVATE);
+        return sharedPreferences.getInt(key,-1);
+    }
+
     public static String getUserInfo(String key){
         SharedPreferences sharedPreferences=MyApplication.getContext().getSharedPreferences("userinfo_cash",Context.MODE_PRIVATE);
         return sharedPreferences.getString(key,"");

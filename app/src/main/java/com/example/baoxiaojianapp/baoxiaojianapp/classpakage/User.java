@@ -3,7 +3,7 @@ package com.example.baoxiaojianapp.baoxiaojianapp.classpakage;
 public class User {
     private static User user;
     private int id;
-    private boolean is_enterprise;
+    private Boolean is_enterprise;
     private String username;
     private String avatar_url;
     private String phone_num;
@@ -61,7 +61,7 @@ public class User {
         this.id = id;
     }
 
-    public void setIs_enterprise(boolean is_enterprise) {
+    public void setIs_enterprise(Boolean is_enterprise) {
         this.is_enterprise = is_enterprise;
     }
 
@@ -106,7 +106,7 @@ public class User {
     }
 
 
-    public boolean getIs_enterprise() {
+    public Boolean getIs_enterprise() {
         return is_enterprise;
     }
 

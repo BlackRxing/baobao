@@ -42,6 +42,7 @@
                 android:layout_marginLeft="18dp"
                 android:layout_marginTop="8dp"
                 android:textSize="18sp"
+                android:singleLine="true"
                 android:textColor="@color/black"
                 android:gravity="center_vertical"
                 android:lines="1"
@@ -50,9 +51,71 @@
                 android:id="@+id/editinfo_layout"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_toRightOf="@+id/username_text"
+                android:layout_alignParentRight="true"
                 android:layout_marginTop="8dp"
-                android:layout_marginLeft="30dp"/>
+                android:layout_marginRight="20dp"/>
+            <RelativeLayout
+                android:id="@+id/personcredit_layout"
+                android:layout_width="match_parent"
+                android:layout_height="24dp"
+                android:orientation="horizontal"
+                android:layout_below="@+id/username_text"
+                android:layout_toRightOf="@+id/profile_image"
+                android:layout_marginLeft="18dp"
+                android:layout_marginTop="20dp">
+                <TextView
+                    android:id="@+id/credit_text"
+                    android:layout_width="wrap_content"
+                    android:layout_height="24dp"
+                    android:text="@string/current_credit"
+                    android:textSize="11sp"
+                    android:gravity="center_vertical"
+                    android:textColor="#778BD9 "
+                    android:background="@drawable/credit_background"
+                    android:paddingLeft="10dp"/>
+                <TextView
+                    android:id="@+id/credit"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="60dp"
+                    android:textSize="11sp"
+                    android:layout_centerVertical="true"
+                    android:textColor="#FF9722"/>
+                <Button
+                    android:id="@+id/signin_button"
+                    android:layout_width="78dp"
+                    android:layout_height="24dp"
+                    android:background="@drawable/login_button_background"
+                    android:layout_toRightOf="@id/credit_text"
+                    android:layout_marginLeft="25dp"
+                    android:text="@string/daily_signin"
+                    android:textSize="11sp"
+                    android:textColor="@color/white"
+                    android:visibility="invisible"/>
+                <Button
+                    android:id="@+id/hassignin_button"
+                    android:layout_width="78dp"
+                    android:layout_height="24dp"
+                    android:background="@drawable/login_textview_background"
+                    android:layout_toRightOf="@id/credit_text"
+                    android:layout_marginLeft="25dp"
+                    android:text="@string/hassignin"
+                    android:textSize="11sp"
+                    android:textColor="@color/white"/>
+            </RelativeLayout>
+            <TextView
+                android:id="@+id/enterprise_layout"
+                android:layout_width="70dp"
+                android:layout_height="24dp"
+                android:background="@drawable/credit_background"
+                android:text="@string/enterprise_user"
+                android:textSize="11sp"
+                android:textColor="#778BD9"
+                android:gravity="center"
+                android:layout_below="@+id/username_text"
+                android:layout_toRightOf="@+id/profile_image"
+                android:layout_marginLeft="18dp"
+                android:layout_marginTop="20dp"/>
         </RelativeLayout>
         <include android:id="@+id/offline_top"
             layout="@layout/offline_personfragment_top"

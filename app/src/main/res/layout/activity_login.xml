@@ -24,12 +24,12 @@
             />
         <LinearLayout
             android:id="@+id/login_choose"
-           android:layout_width="match_parent"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
             android:layout_below="@id/app_name"
             android:layout_marginTop="42dp"
-            android:paddingStart="85dp"
+            android:gravity="center"
             >
             <Button
                 android:id="@+id/person_login"
@@ -43,7 +43,7 @@
                 android:id="@+id/enterprise"
                 android:layout_width="98dp"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="61dp"
+                android:layout_marginLeft="40dp"
                 android:text="@string/enterprise_login"
                 android:textSize="14sp"
                 android:textColor="@color/white"
@@ -89,8 +89,8 @@
             android:textStyle="bold"
             android:layout_marginTop="280dp"
             />
-        <LinearLayout
-            android:layout_width="match_parent"
+        <RelativeLayout
+            android:layout_width="130dp"
             android:layout_height="40dp"
             android:layout_marginBottom="20dp"
             android:orientation="horizontal"
@@ -102,15 +102,16 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:src="@drawable/weixin_icon"
-                android:layout_marginLeft="140dp"
+                android:layout_alignParentLeft="true"
                 />
             <ImageView
                 android:id="@+id/weibo_button"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:src="@drawable/weibo_icon"
-                android:layout_marginLeft="15dp"/>
-        </LinearLayout>
+                android:layout_alignParentRight="true"
+                />
+        </RelativeLayout>
     </RelativeLayout>
 
 </FrameLayout>

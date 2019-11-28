@@ -52,10 +52,11 @@ public class AppraisalFragment extends Fragment implements View.OnClickListener 
     private CardView watchCard;
     private LinearLayout subclassLayout;
     private RelativeLayout mainappraisalLayout;
-    private Button subclassButton;
+    private RelativeLayout subclassButton;
     private TextView subclassText;
     private ImageView bannerImage;
     private RecyclerView recyclerView;
+
 
     private static final String[] subClasscategory=new String[]{"bag","shoe","watch"};
     @Override
@@ -132,7 +133,6 @@ public class AppraisalFragment extends Fragment implements View.OnClickListener 
         recyclerView.setAdapter(subclassitemAdapter);
         subclassLayout.setVisibility(View.VISIBLE);
         mainappraisalLayout.setVisibility(View.INVISIBLE);
-
     }
 
 

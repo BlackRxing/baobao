@@ -31,4 +31,10 @@ public interface Constants {
     public static final int FAILURE=2;
     public static final int SUCCESS=3;
 
+    public static final boolean ENTERPRISE=true;
+    public static final boolean PERSON=false;
+    public static final int hasPunch=1;
+    public static final int noPunch=0;
+    public static final int CODE_SUCCESS=0;
+
 }

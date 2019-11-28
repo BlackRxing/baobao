@@ -12,9 +12,11 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentPagerAdapter;
+import androidx.recyclerview.widget.RecyclerView;
 import androidx.viewpager.widget.ViewPager;
 import de.hdodenhof.circleimageview.CircleImageView;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -28,6 +30,8 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.target.SimpleTarget;
 import com.bumptech.glide.request.transition.Transition;
 import com.example.baoxiaojianapp.R;
+import com.example.baoxiaojianapp.baoxiaojianapp.Callback.Callback;
+import com.example.baoxiaojianapp.baoxiaojianapp.Utils.Constants;
 import com.example.baoxiaojianapp.baoxiaojianapp.Utils.MyApplication;
 import com.example.baoxiaojianapp.baoxiaojianapp.Utils.UserInfoCashUtils;
 import com.example.baoxiaojianapp.baoxiaojianapp.activity.InfoSettingActivity;
@@ -37,6 +41,8 @@ import com.google.android.material.tabs.TabLayout;
 import com.ogaclejapan.smarttablayout.SmartTabLayout;
 import com.ogaclejapan.smarttablayout.utils.v4.FragmentPagerItemAdapter;
 import com.ogaclejapan.smarttablayout.utils.v4.FragmentPagerItems;
+
+import org.json.JSONObject;
 
 import java.util.ArrayList;
 
@@ -63,14 +69,69 @@ public class PersonFragment extends Fragment implements View.OnClickListener {
     private RelativeLayout offlineTop;
     private Button loginButton;
 
+    private RelativeLayout personcreditLayout;
+    private TextView creditText;
+    private Button signinButton;
+    private Button hasSigninButton;
+    private TextView enterpriseLayout;
 
+
+
+
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        // Inflate the layout for this fragment
+        View view=inflater.inflate(R.layout.fragment_person, container, false);
+        tabLayout=view.findViewById(R.id.person_tablayout);
+        viewPager=view.findViewById(R.id.person_viewpager);
+        settingButton=view.findViewById(R.id.setting_button);
+        profileImage=view.findViewById(R.id.profile_image);
+        usernameText=view.findViewById(R.id.username_text);
+        editLinearLayout=view.findViewById(R.id.editinfo_layout);
+        onlineTop=view.findViewById(R.id.online_top);
+        offlineTop=view.findViewById(R.id.offline_top);
+        loginButton=view.findViewById(R.id.login_button);
+
+        personcreditLayout=view.findViewById(R.id.personcredit_layout);
+        enterpriseLayout=view.findViewById(R.id.enterprise_layout);
+        creditText=view.findViewById(R.id.credit);
+        signinButton=view.findViewById(R.id.signin_button);
+        hasSigninButton=view.findViewById(R.id.hassignin_button);
+
+        editLinearLayout.setOnClickListener(this);
+        settingButton.setOnClickListener(this);
+        loginButton.setOnClickListener(this);
+        signinButton.setOnClickListener(this);
+        return view;
+    }
+
+    private void initCredit(){
+        Callback.refreshUserinfo();
+        if (UserInfoCashUtils.getUserInfoBoolean("is_enterprese")== Constants.ENTERPRISE){
+            personcreditLayout.setVisibility(View.GONE);
+            enterpriseLayout.setVisibility(View.VISIBLE);
+        }else{
+            personcreditLayout.setVisibility(View.VISIBLE);
+            enterpriseLayout.setVisibility(View.GONE);
+            creditText.setText(UserInfoCashUtils.getUserInfoInt("point")+"");
+            if (UserInfoCashUtils.getUserInfoInt("hasPunch")==Constants.hasPunch){
+                hasSigninButton.setVisibility(View.VISIBLE);
+                signinButton.setVisibility(View.GONE);
+            }else{
+                hasSigninButton.setVisibility(View.GONE);
+                signinButton.setVisibility(View.VISIBLE);
+            }
+        }
+    }
 
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
     }
+    {
 
+    }
 
 
 
@@ -85,12 +146,14 @@ public class PersonFragment extends Fragment implements View.OnClickListener {
         usernameText.setText(sharedPreferences.getString("nick_name",""));
     }
 
+
+
     private void initTop(){
         onlineTop.setVisibility(View.VISIBLE);
         offlineTop.setVisibility(View.GONE);
         tabLayout.setVisibility(View.VISIBLE);
         viewPager.setVisibility(View.VISIBLE);
-
+        initCredit();
     }
     private void setOfflineTop(){
         onlineTop.setVisibility(View.GONE);
@@ -130,24 +193,7 @@ public class PersonFragment extends Fragment implements View.OnClickListener {
         tabLayout.setupWithViewPager(viewPager);
     }
 
-    @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
-        View view=inflater.inflate(R.layout.fragment_person, container, false);
-        tabLayout=view.findViewById(R.id.person_tablayout);
-        viewPager=view.findViewById(R.id.person_viewpager);
-        settingButton=view.findViewById(R.id.setting_button);
-        profileImage=view.findViewById(R.id.profile_image);
-        usernameText=view.findViewById(R.id.username_text);
-        editLinearLayout=view.findViewById(R.id.editinfo_layout);
-        onlineTop=view.findViewById(R.id.online_top);
-        offlineTop=view.findViewById(R.id.offline_top);
-        loginButton=view.findViewById(R.id.login_button);
-        editLinearLayout.setOnClickListener(this);
-        settingButton.setOnClickListener(this);
-        loginButton.setOnClickListener(this);
-        return view;
-    }
+
 
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
@@ -176,6 +222,23 @@ public class PersonFragment extends Fragment implements View.OnClickListener {
         }
     }
 
+    private void signin(){
+        Callback.signin(new Callback.OkhttpRun() {
+            @Override
+            public void run(JSONObject jsonObject) {
+                try{
+                    if (jsonObject.getInt("code")==Constants.CODE_SUCCESS){
+                        ToastUtils.showShort("签到成功");
+                        initCredit();
+                    }
+                }catch (Exception e){
+                    e.printStackTrace();
+                    ToastUtils.showShort("签到失败");
+                }
+            }
+        });
+    }
+
 
     @Override
     public void onClick(View v) {
@@ -188,6 +251,9 @@ public class PersonFragment extends Fragment implements View.OnClickListener {
                 break;
             case R.id.login_button:
                 startActivity(new Intent(getContext(), LoginActivity.class));
+                break;
+            case R.id.signin_button:
+                signin();
                 break;
         }
     }

@@ -64,20 +64,23 @@
 
         <TextView
             android:id="@+id/brandName"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="26dp"
-            android:layout_marginLeft="42dp"
+            android:layout_marginLeft="30dp"
             android:layout_marginTop="24dp"
+            android:layout_marginRight="15dp"
             android:layout_toRightOf="@id/brandImage"
             android:textColor="@color/black"
             android:textSize="19sp"
-            android:textStyle="bold"/>
+            android:ellipsize="end"
+            android:textStyle="bold"
+            android:singleLine="true"/>
 
         <TextView
             android:id="@+id/className"
             android:layout_width="wrap_content"
             android:layout_height="22dp"
-            android:layout_marginLeft="42dp"
+            android:layout_marginLeft="30dp"
             android:layout_marginTop="58dp"
             android:layout_toRightOf="@id/brandImage"
             android:textColor="@color/black"

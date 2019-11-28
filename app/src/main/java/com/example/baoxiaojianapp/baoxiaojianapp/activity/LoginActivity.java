@@ -9,6 +9,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 
 import com.blankj.utilcode.util.ActivityUtils;
 import com.blankj.utilcode.util.EncryptUtils;
@@ -46,7 +47,7 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
     EditText firstEdit;
     EditText vertify_code_Edit;
     EditText account_password_Edit;
-    LinearLayout linearLayout_person;
+    RelativeLayout linearLayout_person;
     LinearLayout linearLayout_enterprise;
     public static boolean isSuccess=false;
 

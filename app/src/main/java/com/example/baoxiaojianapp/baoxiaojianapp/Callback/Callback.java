@@ -166,6 +166,29 @@ public class Callback {
         });
     }
 
+    public static void refreshUserinfo(){
+        RequestBody requestBody=RequestBody.create(null,new byte[]{});
+        MyOkhttp(requestBody, NetInterface.TSPersonCenterPageRequest, new OkhttpRun() {
+            @Override
+            public void run(JSONObject jsonObject) {
+                try{
+                    User user = new Gson().fromJson(jsonObject.getJSONObject("user").toString(), User.class);
+                    UserInfoCashUtils userInfoCashUtils = UserInfoCashUtils.getInstance();
+                    userInfoCashUtils.saveUserInfoCash(user);
+                }catch (Exception e){
+                    e.printStackTrace();
+
+                }
+            }
+        });
+    }
+
+    public static void signin(OkhttpRun okhttpRun){
+        RequestBody requestBody=RequestBody.create(null,new byte[]{});
+        MyOkhttp(requestBody, NetInterface.TSDailyPunchRequest,okhttpRun);
+    }
+
+
     public static void MyOkhttp(RequestBody requestBody, String url, final OkhttpRun okhttpRun) {
         SharedPreferences sharedPreferences1 = MyApplication.getContext().getSharedPreferences("userinfo_cash", MODE_PRIVATE);
         String token = sharedPreferences1.getString("turing_token", "");
@@ -179,11 +202,10 @@ public class Callback {
         //第四步创建call回调对象
         final Call call = client.newCall(request);
         //第五步发起请求
-        ToastUtils.showShort("one");
         new Thread(new Runnable() {
             @Override
             public void run() {
-                try{ToastUtils.showShort("two");
+                try{
                     Response response = call.execute();
                     String responses=response.body().string();
                     JSONObject jsonObject = new JSONObject(responses);
