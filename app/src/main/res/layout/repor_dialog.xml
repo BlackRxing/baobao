@@ -4,6 +4,7 @@
     android:layout_height="480dp"
     android:orientation="vertical"
     android:id="@+id/report_layout"
+    android:background="@drawable/whiteradiusconer_background"
     >
 
     <ImageView

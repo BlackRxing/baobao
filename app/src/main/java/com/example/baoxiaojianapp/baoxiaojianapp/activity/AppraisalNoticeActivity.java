@@ -9,6 +9,9 @@ import okhttp3.MediaType;
 import okhttp3.RequestBody;
 import okhttp3.Response;
 
+import android.app.AlertDialog;
+import android.app.Dialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
@@ -24,6 +27,7 @@ import com.bumptech.glide.Glide;
 import com.example.baoxiaojianapp.R;
 import com.example.baoxiaojianapp.baoxiaojianapp.Utils.NetInterface;
 import com.example.baoxiaojianapp.baoxiaojianapp.Utils.OkHttpUtils;
+import com.example.baoxiaojianapp.baoxiaojianapp.Utils.UserInfoCashUtils;
 import com.example.baoxiaojianapp.baoxiaojianapp.adapter.AppraisalPointAdapter;
 import com.example.baoxiaojianapp.baoxiaojianapp.classpakage.AppraisalPointItem;
 import com.example.baoxiaojianapp.baoxiaojianapp.classpakage.LoginRequest;
@@ -59,6 +63,21 @@ public class AppraisalNoticeActivity extends AppCompatActivity implements View.O
         bindView();
         Bundle bundle = getIntent().getExtras();
         initView(bundle.getString("brandName"), bundle.getString("imageUrl"), bundle.getString("kindKey"));
+        pointcheck();
+    }
+
+    private void pointcheck(){
+        if(UserInfoCashUtils.getUserInfoInt("point")<10){
+            final AlertDialog.Builder builder=new AlertDialog.Builder(this);
+            builder.setMessage(getText(R.string.pointwarning));
+            builder.setPositiveButton("确定", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    finish();
+                }
+            });
+            builder.show();
+        }
     }
 
     private void bindView() {

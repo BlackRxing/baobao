@@ -111,6 +111,7 @@ public class AppraisalResultActivity extends AppCompatActivity implements View.O
 
     private void generateReport(){
         final AppraisalReportDialog appraisalReportDialog=new AppraisalReportDialog(this);
+        appraisalReportDialog.getWindow().setBackgroundDrawableResource(R.color.transparent);
         Glide.with(this).load(imageUrl).centerCrop().into((ImageView) appraisalReportDialog.findViewById(R.id.dialogbrand_image));
         ((TextView)appraisalReportDialog.findViewById(R.id.dialogid_text)).setText("鉴定号: "+modelNumber);
         ((TextView)appraisalReportDialog.findViewById(R.id.dialogdata_text)).setText("鉴定日期: "+timestamp);

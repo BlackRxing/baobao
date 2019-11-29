@@ -61,6 +61,7 @@
                 android:orientation="horizontal"
                 android:layout_below="@+id/username_text"
                 android:layout_toRightOf="@+id/profile_image"
+                android:visibility="invisible"
                 android:layout_marginLeft="18dp"
                 android:layout_marginTop="20dp">
                 <TextView
@@ -107,6 +108,7 @@
                 android:id="@+id/enterprise_layout"
                 android:layout_width="70dp"
                 android:layout_height="24dp"
+                android:visibility="invisible"
                 android:background="@drawable/credit_background"
                 android:text="@string/enterprise_user"
                 android:textSize="11sp"

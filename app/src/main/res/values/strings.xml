@@ -84,5 +84,8 @@
     <string name="signinstring1">恭喜获得10积分</string>
     <string name="signinad">如果您想成为商家充值积分或遇到问题请联系微信18351922280</string>
 
+    <string name="pointwarning">每次鉴定需要消耗10积分，您可以在个人中心页进行每日签到，签到一次可获取10积分~</string>
+
+
 
 </resources>
