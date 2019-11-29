@@ -38,6 +38,7 @@ import com.example.baoxiaojianapp.baoxiaojianapp.activity.InfoSettingActivity;
 import com.example.baoxiaojianapp.baoxiaojianapp.activity.LoginActivity;
 import com.example.baoxiaojianapp.baoxiaojianapp.activity.SettingActivity;
 import com.example.baoxiaojianapp.baoxiaojianapp.classpakage.User;
+import com.example.baoxiaojianapp.baoxiaojianapp.view.SigninDialog;
 import com.google.android.material.tabs.TabLayout;
 import com.google.gson.Gson;
 import com.ogaclejapan.smarttablayout.SmartTabLayout;
@@ -250,7 +251,16 @@ public class PersonFragment extends Fragment implements View.OnClickListener {
                         getActivity().runOnUiThread(new Runnable() {
                             @Override
                             public void run() {
-                                ToastUtils.showShort("签到成功");
+                                final SigninDialog signinDialog=new SigninDialog(getContext());
+                                signinDialog.getWindow().setBackgroundDrawableResource(R.color.transparent);
+                                signinDialog.findViewById(R.id.dismiss_button).setOnClickListener(new View.OnClickListener() {
+                                    @Override
+                                    public void onClick(View v) {
+                                        signinDialog.dismiss();
+                                    }
+                                });
+                                signinDialog.show();
+                                ((TextView)signinDialog.findViewById(R.id.signintext)).setText(getText(R.string.signinstring1));
                                 viewTopinit();
                             }
                         });

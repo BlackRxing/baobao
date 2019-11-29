@@ -80,5 +80,9 @@
     <string name="daily_signin">每日签到</string>
     <string name="enterprise_user">企业用户</string>
     <string name="hassignin">已签到</string>
+    <string name="successsignin">签到成功</string>
+    <string name="signinstring1">恭喜获得10积分</string>
+    <string name="signinad">如果您想成为商家充值积分或遇到问题请联系微信18351922280</string>
+
 
 </resources>
