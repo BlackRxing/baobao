@@ -13,6 +13,8 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.resource.bitmap.RoundedCorners;
+import com.bumptech.glide.request.RequestOptions;
 import com.example.baoxiaojianapp.R;
 import com.example.baoxiaojianapp.baoxiaojianapp.adapter.ModelDetailAdapter;
 import com.example.baoxiaojianapp.baoxiaojianapp.classpakage.DetailModels;
@@ -69,7 +71,8 @@ public class AppraisalResultActivity extends AppCompatActivity implements View.O
         brand_name.setText("鉴定号:" + brandName);
         appraisal_number.setText("品牌:" + modelNumber);
 
-        Glide.with(this).load(imageUrl).centerCrop().into(appearanceImage);
+
+        Glide.with(this).load(imageUrl).into(appearanceImage);
         if (type == 0) {
             sealImage.setImageDrawable(getDrawable(R.drawable.appraisalreal));
         } else {

@@ -54,7 +54,6 @@ public class EditNickNameActivity extends AppCompatActivity implements View.OnCl
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_edit_nick_name);
         bindView();
-         LoginTest();
     }
 
     private void bindView(){

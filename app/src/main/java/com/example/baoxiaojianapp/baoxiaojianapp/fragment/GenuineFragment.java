@@ -1,6 +1,7 @@
 package com.example.baoxiaojianapp.baoxiaojianapp.fragment;
 
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Bundle;
@@ -36,6 +37,7 @@ import com.example.baoxiaojianapp.baoxiaojianapp.Utils.OkHttpUtils;
 import com.example.baoxiaojianapp.baoxiaojianapp.Utils.RecyclerViewSpacesItemDecoration;
 import com.example.baoxiaojianapp.baoxiaojianapp.Utils.UserInfoCashUtils;
 import com.example.baoxiaojianapp.baoxiaojianapp.Utils.ViewUtils;
+import com.example.baoxiaojianapp.baoxiaojianapp.activity.AppraisalResultActivity;
 import com.example.baoxiaojianapp.baoxiaojianapp.adapter.AppraisalItemAdapter;
 import com.example.baoxiaojianapp.baoxiaojianapp.classpakage.AppraisalResult;
 import com.example.baoxiaojianapp.baoxiaojianapp.classpakage.LoginRequest;
@@ -66,9 +68,8 @@ public class GenuineFragment extends Fragment {
     public static AppraisalItemAdapter appraisalItemAdapter;
     public static boolean hasMoreData;
     private static ImageView holderImage;
-
-
     public static List<AppraisalResult> appraisalResults=new ArrayList<>();
+    public static Context mContext;
 
     // Footer View
     private ProgressBar footerProgressBar;
@@ -82,6 +83,7 @@ public class GenuineFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        mContext=getActivity();
         Callback.loadData(getActivity());
     }
     public static void init(){
@@ -110,8 +112,10 @@ public class GenuineFragment extends Fragment {
     }
 
 
+
+
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+    public View onCreateView(final LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view=inflater.inflate(R.layout.fragment_genuine, container, false);
@@ -123,10 +127,13 @@ public class GenuineFragment extends Fragment {
         setMaxFlingVelocity(recyclerView,5000);
 
         holderImage=view.findViewById(R.id.image_noresult_holder);
+
         HashMap<String, Integer> stringIntegerHashMap = new HashMap<>();
         stringIntegerHashMap.put(RecyclerViewSpacesItemDecoration.TOP_DECORATION,7);//top间距
         stringIntegerHashMap.put(RecyclerViewSpacesItemDecoration.BOTTOM_DECORATION,7);//底部间距
         recyclerView.addItemDecoration(new RecyclerViewSpacesItemDecoration(stringIntegerHashMap));
+        appraisalItemAdapter=new AppraisalItemAdapter(appraisalResults);
+
         swipeRefreshLayout.setRefreshing(false);
         swipeRefreshLayout.setFooterView(createFooterView());
         swipeRefreshLayout.setTargetScrollWithLayout(true);

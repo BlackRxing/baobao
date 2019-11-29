@@ -4,12 +4,10 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".baoxiaojianapp.activity.SplashActivity">
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Hello World!"
-        android:textColor="@color/colorPrimary"
-        android:textStyle="bold"
-         />
+    tools:context=".baoxiaojianapp.activity.SplashActivity"
+    android:background="@drawable/launchpic">
+    <ImageView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:scaleType="centerCrop"/>
 </LinearLayout>

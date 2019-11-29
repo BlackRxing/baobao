@@ -145,6 +145,9 @@ public class Callback {
                         appraisalResult.setAppraisalData(jsonObject1.getString("timestamp"));
                         appraisalResult.setAppraisalId(jsonObject1.getString("modelNumber"));
                         appraisalResult.setAppraisalImage(jsonObject1.getString("imageUrl"));
+                        appraisalResult.setType(jsonObject1.getInt("type"));
+                        appraisalResult.setDetailModels(jsonObject1.getString("detailModels"));
+                        appraisalResults.add(appraisalResult);
                         FakeFragment.appraisalResults.add(appraisalResult);
                     }
                     if (jsonArray.length() == 0) {
@@ -185,6 +188,8 @@ public class Callback {
                         appraisalResult.setAppraisalData(jsonObject1.getString("timestamp"));
                         appraisalResult.setAppraisalId(jsonObject1.getString("modelNumber"));
                         appraisalResult.setAppraisalImage(jsonObject1.getString("imageUrl"));
+                        appraisalResult.setType(jsonObject1.getInt("type"));
+                        appraisalResult.setDetailModels(jsonObject1.getString("detailModels"));
                         appraisalResults.add(appraisalResult);
                     }
                     if (jsonArray.length() == 0) {
@@ -196,7 +201,7 @@ public class Callback {
                     fragmentActivity.runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
-                            GenuineFragment.appraisalItemAdapter = new AppraisalItemAdapter(appraisalResults);
+//                            GenuineFragment.appraisalItemAdapter = new AppraisalItemAdapter(appraisalResults);
                             GenuineFragment.recyclerView.setAdapter(appraisalItemAdapter);
                         }
                     });
@@ -207,21 +212,9 @@ public class Callback {
         });
     }
 
-    public static void refreshUserinfo(){
+    public static void refreshUserinfo(OkhttpRun okhttpRun){
         RequestBody requestBody=RequestBody.create(null,new byte[]{});
-        MyOkhttp(requestBody, NetInterface.TSPersonCenterPageRequest, new OkhttpRun() {
-            @Override
-            public void run(JSONObject jsonObject) {
-                try{
-                    User user = new Gson().fromJson(jsonObject.getJSONObject("user").toString(), User.class);
-                    UserInfoCashUtils userInfoCashUtils = UserInfoCashUtils.getInstance();
-                    userInfoCashUtils.saveUserInfoCash(user);
-                }catch (Exception e){
-                    e.printStackTrace();
-
-                }
-            }
-        });
+        MyOkhttp(requestBody, NetInterface.TSPersonCenterPageRequest,okhttpRun);
     }
 
     public static void signin(OkhttpRun okhttpRun){
@@ -261,9 +254,11 @@ public class Callback {
         }).start();
     }
 
+
     public interface OkhttpRun {
         void run(JSONObject jsonObject);
     }
+
 
     public static void FakeloadMore(final FragmentActivity fragmentActivity, int currentPage) {
         tokenRequest();
@@ -299,7 +294,9 @@ public class Callback {
                         appraisalResult.setAppraisalData(jsonObject1.getString("timestamp"));
                         appraisalResult.setAppraisalId(jsonObject1.getString("modelNumber"));
                         appraisalResult.setAppraisalImage(jsonObject1.getString("imageUrl"));
-                        FakeFragment.appraisalResults.add(appraisalResult);
+                        appraisalResult.setType(jsonObject1.getInt("type"));
+                        appraisalResult.setDetailModels(jsonObject1.getString("detailModels"));
+                        appraisalResults.add(appraisalResult);
                         fakeitemlength = jsonArray.length();
                     }
                     if (jsonArray.length() < 10) {
@@ -349,6 +346,8 @@ public class Callback {
                         appraisalResult.setAppraisalData(jsonObject1.getString("timestamp"));
                         appraisalResult.setAppraisalId(jsonObject1.getString("modelNumber"));
                         appraisalResult.setAppraisalImage(jsonObject1.getString("imageUrl"));
+                        appraisalResult.setType(jsonObject1.getInt("type"));
+                        appraisalResult.setDetailModels(jsonObject1.getString("detailModels"));
                         appraisalResults.add(appraisalResult);
                         itemlength = jsonArray.length();
                     }

@@ -103,6 +103,7 @@
             android:layout_gravity="center_vertical"
             android:singleLine="true"
             android:ellipsize="end"
+            android:gravity="right"
             />
         <Button
             style="@style/indicatorStyle"/>

@@ -37,7 +37,9 @@ import com.example.baoxiaojianapp.baoxiaojianapp.Utils.UserInfoCashUtils;
 import com.example.baoxiaojianapp.baoxiaojianapp.activity.InfoSettingActivity;
 import com.example.baoxiaojianapp.baoxiaojianapp.activity.LoginActivity;
 import com.example.baoxiaojianapp.baoxiaojianapp.activity.SettingActivity;
+import com.example.baoxiaojianapp.baoxiaojianapp.classpakage.User;
 import com.google.android.material.tabs.TabLayout;
+import com.google.gson.Gson;
 import com.ogaclejapan.smarttablayout.SmartTabLayout;
 import com.ogaclejapan.smarttablayout.utils.v4.FragmentPagerItemAdapter;
 import com.ogaclejapan.smarttablayout.utils.v4.FragmentPagerItems;
@@ -152,9 +154,26 @@ public class PersonFragment extends Fragment implements View.OnClickListener {
         offlineTop.setVisibility(View.GONE);
         tabLayout.setVisibility(View.VISIBLE);
         viewPager.setVisibility(View.VISIBLE);
-        Callback.refreshUserinfo();
-        showUserInfo();
-        initCredit();
+        Callback.refreshUserinfo(new Callback.OkhttpRun() {
+            @Override
+            public void run(JSONObject jsonObject) {
+                try {
+                    User user = new Gson().fromJson(jsonObject.getJSONObject("user").toString(), User.class);
+                    UserInfoCashUtils userInfoCashUtils = UserInfoCashUtils.getInstance();
+                    userInfoCashUtils.saveUserInfoCash(user);
+                    getActivity().runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            showUserInfo();
+                            initCredit();
+                        }
+                    });
+                }catch (Exception e){
+                    e.printStackTrace();
+                }
+            }
+        });
+
     }
     private void setOfflineTop(){
         onlineTop.setVisibility(View.GONE);
@@ -228,8 +247,14 @@ public class PersonFragment extends Fragment implements View.OnClickListener {
                 try{
                     Log.d("signin",jsonObject.getInt("code")+"");
                     if (jsonObject.getInt("code")==Constants.CODE_SUCCESS){
-                        ToastUtils.showShort("签到成功");
-                        viewTopinit();
+                        getActivity().runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                ToastUtils.showShort("签到成功");
+                                viewTopinit();
+                            }
+                        });
+
                     }
                 }catch (Exception e){
                     e.printStackTrace();

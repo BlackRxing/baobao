@@ -7,6 +7,9 @@ public class AppraisalResult {
     private String appraisalData;
     private String appraisalId;
     private String appraisalImage;
+    private int type;
+    private String detailModels;
+
 
     public String getAppraisalBrand() {
         return appraisalBrand;
@@ -30,6 +33,22 @@ public class AppraisalResult {
 
     public void setAppraisalId(String appraisalId) {
         this.appraisalId = appraisalId;
+    }
+
+    public int getType() {
+        return type;
+    }
+
+    public void setType(int type) {
+        this.type = type;
+    }
+
+    public String getDetailModels() {
+        return detailModels;
+    }
+
+    public void setDetailModels(String detailModels) {
+        this.detailModels = detailModels;
     }
 
     public String getAppraisalImage() {
