@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="300dp"
+    android:layout_height="480dp"
+    android:orientation="vertical"
+    android:id="@+id/report_layout"
+    >
+
+    <ImageView
+        android:layout_width="170dp"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="35dp"
+        android:scaleType="fitCenter"
+        android:src="@drawable/decorate_line" />
+
+    <TextView
+        android:id="@+id/baobaotext"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="28dp"
+        android:text="@string/app_name_CN"
+        android:textColor="@color/black"
+        android:textSize="16sp" />
+
+    <ImageView
+        android:id="@+id/dialogbrand_image"
+        android:layout_width="150dp"
+        android:layout_height="150dp"
+        android:layout_below="@+id/baobaotext"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="35dp" />
+
+    <TextView
+        android:id="@+id/dialogid_text"
+        android:layout_width="98dp"
+        android:layout_height="26dp"
+        android:layout_below="@id/dialogbrand_image"
+        android:layout_marginLeft="39dp"
+        android:layout_marginTop="24dp"
+        android:gravity="center"
+        android:background="@drawable/pink_rectangle_background"
+        android:textColor="#FA3B55"
+        android:textSize="12sp" />
+    <TextView
+        android:id="@+id/dialogtype_text"
+        android:layout_width="98dp"
+        android:layout_height="26dp"
+        android:layout_below="@id/dialogbrand_image"
+        android:layout_alignParentRight="true"
+        android:layout_marginRight="39dp"
+        android:layout_marginTop="24dp"
+        android:gravity="center"
+        android:background="@drawable/pink_rectangle_background"
+        android:textColor="#FA3B55"
+        android:textSize="12sp" />
+    <TextView
+        android:id="@+id/dialogbrandname_text"
+        android:layout_width="wrap_content"
+        android:layout_height="26dp"
+        android:layout_below="@id/dialogid_text"
+        android:layout_marginLeft="39dp"
+        android:layout_marginTop="20dp"
+        android:textColor="@color/black"
+        android:textSize="12sp" />
+    <TextView
+        android:id="@+id/dialogdata_text"
+        android:layout_width="wrap_content"
+        android:layout_height="26dp"
+        android:layout_below="@id/dialogbrandname_text"
+        android:layout_marginTop="15dp"
+        android:layout_marginLeft="39dp"
+        android:textColor="@color/black"
+        android:textSize="12sp" />
+
+    <Button
+        android:id="@+id/savetoGallary"
+        android:layout_width="200dp"
+        android:layout_height="44dp"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="40dp"
+        android:layout_below="@+id/dialogdata_text"
+        android:layout_marginTop="20dp"
+        android:background="@drawable/login_button_background"
+        android:text="@string/savetogallary"
+        android:textColor="@color/white"
+        android:textSize="15sp" />
+</RelativeLayout>

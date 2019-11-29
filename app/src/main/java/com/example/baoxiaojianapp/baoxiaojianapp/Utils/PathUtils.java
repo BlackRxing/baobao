@@ -20,9 +20,6 @@ public class PathUtils {
             directoryPath=context.getFilesDir()+File.separator+dir;
         }
         File file = new File(directoryPath);
-        if(!file.exists()){//判断文件目录是否存在
-            file.mkdirs();
-        }
         return directoryPath;
     }
 }
