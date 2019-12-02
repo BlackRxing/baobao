@@ -61,6 +61,7 @@
             android:id="@+id/nickname_edit"
             android:layout_width="300dp"
             android:maxLines="1"
+            android:maxLength="20"
             android:layout_height="match_parent"
             android:layout_centerVertical="true"
             android:gravity="center_vertical"

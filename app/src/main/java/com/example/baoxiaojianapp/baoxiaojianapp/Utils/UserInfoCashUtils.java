@@ -71,8 +71,12 @@ public class UserInfoCashUtils {
         return sharedPreferences.getString(key,"");
     }
     public static boolean getUserLoginState(){
-        SharedPreferences sharedPreferences=MyApplication.getContext().getSharedPreferences("userinfo_cash",Context.MODE_PRIVATE);
-        return sharedPreferences.getBoolean("login_state",false);
+        try{
+            SharedPreferences sharedPreferences=MyApplication.getContext().getSharedPreferences("userinfo_cash",Context.MODE_PRIVATE);
+            return sharedPreferences.getBoolean("login_state",false);
+        }catch (Exception e){
+            return false;
+        }
     }
     public static int getUserLoginState(String key){
         SharedPreferences sharedPreferences=MyApplication.getContext().getSharedPreferences("userinfo_cash",Context.MODE_PRIVATE);

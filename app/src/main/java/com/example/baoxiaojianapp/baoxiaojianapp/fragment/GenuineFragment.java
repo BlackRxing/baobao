@@ -1,3 +1,5 @@
+
+
 package com.example.baoxiaojianapp.baoxiaojianapp.fragment;
 
 import android.content.Context;
@@ -68,7 +70,7 @@ public class GenuineFragment extends Fragment {
     public static AppraisalItemAdapter appraisalItemAdapter;
     public static boolean hasMoreData;
     private static ImageView holderImage;
-    public static List<AppraisalResult> appraisalResults=new ArrayList<>();
+    public static List<AppraisalResult> appraisalResults = new ArrayList<>();
     public static Context mContext;
 
     // Footer View
@@ -77,20 +79,21 @@ public class GenuineFragment extends Fragment {
     private ImageView footerImageView;
     private View footerView;
     private static GenuineFragment genuineFragment;
-    private int currentPage=1;
+    private int currentPage = 1;
 
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        mContext=getActivity();
-        Callback.loadData(getActivity());
+        mContext = getActivity();
+
     }
-    public static void init(){
-        if(hasMoreData){
+
+    public static void init() {
+        if (hasMoreData) {
             holderImage.setVisibility(View.INVISIBLE);
             swipeRefreshLayout.setVisibility(View.VISIBLE);
-        }else{
+        } else {
             holderImage.setVisibility(View.VISIBLE);
             swipeRefreshLayout.setVisibility(View.INVISIBLE);
         }
@@ -98,41 +101,40 @@ public class GenuineFragment extends Fragment {
 
     /**
      * 改变Recycler的滑动速度
+     *
      * @param recyclerView
-     * @param velocity      //滑动速度默认是8000dp
+     * @param velocity     //滑动速度默认是8000dp
      */
-    public static void setMaxFlingVelocity(RecyclerView recyclerView, int velocity){
-        try{
+    public static void setMaxFlingVelocity(RecyclerView recyclerView, int velocity) {
+        try {
             Field field = recyclerView.getClass().getDeclaredField("mMaxFlingVelocity");
             field.setAccessible(true);
             field.set(recyclerView, velocity);
-        }catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }
-
-
 
 
     @Override
     public View onCreateView(final LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        View view=inflater.inflate(R.layout.fragment_genuine, container, false);
-        swipeRefreshLayout=view.findViewById(R.id.swipe_refresh);
-        recyclerView=view.findViewById(R.id.recycler_view);
-        LinearLayoutManager linearLayoutManager=new LinearLayoutManager(getContext());
+        View view = inflater.inflate(R.layout.fragment_genuine, container, false);
+        swipeRefreshLayout = view.findViewById(R.id.swipe_refresh);
+        recyclerView = view.findViewById(R.id.recycler_view);
+        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getContext());
         recyclerView.setLayoutManager(linearLayoutManager);
         //限制滚动
-        setMaxFlingVelocity(recyclerView,5000);
+        setMaxFlingVelocity(recyclerView, 5000);
 
-        holderImage=view.findViewById(R.id.image_noresult_holder);
+        holderImage = view.findViewById(R.id.image_noresult_holder);
 
         HashMap<String, Integer> stringIntegerHashMap = new HashMap<>();
-        stringIntegerHashMap.put(RecyclerViewSpacesItemDecoration.TOP_DECORATION,7);//top间距
-        stringIntegerHashMap.put(RecyclerViewSpacesItemDecoration.BOTTOM_DECORATION,7);//底部间距
+        stringIntegerHashMap.put(RecyclerViewSpacesItemDecoration.TOP_DECORATION, 7);//top间距
+        stringIntegerHashMap.put(RecyclerViewSpacesItemDecoration.BOTTOM_DECORATION, 7);//底部间距
         recyclerView.addItemDecoration(new RecyclerViewSpacesItemDecoration(stringIntegerHashMap));
-        appraisalItemAdapter=new AppraisalItemAdapter(appraisalResults);
+        appraisalItemAdapter = new AppraisalItemAdapter(appraisalResults);
 
         swipeRefreshLayout.setRefreshing(false);
         swipeRefreshLayout.setFooterView(createFooterView());
@@ -153,12 +155,12 @@ public class GenuineFragment extends Fragment {
 
             }
         });
-        swipeRefreshLayout.setOnPushLoadMoreListener(new SuperSwipeRefreshLayout.OnPushLoadMoreListener(){
+        swipeRefreshLayout.setOnPushLoadMoreListener(new SuperSwipeRefreshLayout.OnPushLoadMoreListener() {
             @Override
             public void onLoadMore() {
-                if (hasMoreData){
+                if (hasMoreData) {
                     currentPage++;
-                    Callback.loadMore(getActivity(),currentPage);
+                    Callback.loadMore(getActivity(), currentPage);
                     footerTextView.setText("正在加载...");
                     footerImageView.setVisibility(View.GONE);
                     footerProgressBar.setVisibility(View.VISIBLE);
@@ -167,10 +169,10 @@ public class GenuineFragment extends Fragment {
                         public void run() {
                             footerView.setVisibility(View.GONE);
                             swipeRefreshLayout.setLoadMore(false);
-                            appraisalItemAdapter.notifyItemRangeInserted(appraisalItemAdapter.getItemCount(),Callback.itemlength);
+                            appraisalItemAdapter.notifyItemRangeInserted(appraisalItemAdapter.getItemCount(), Callback.itemlength);
                         }
                     }, 3000);
-                }else {
+                } else {
                     ToastUtils.showShort("没有更多数据");
                     footerView.setVisibility(View.GONE);
                     swipeRefreshLayout.setLoadMore(false);
@@ -199,9 +201,10 @@ public class GenuineFragment extends Fragment {
 
     @Override
     public void onResume() {
+        appraisalResults.clear();
+        Callback.loadData(getActivity());
         super.onResume();
     }
-
 
 
     private View createFooterView() {

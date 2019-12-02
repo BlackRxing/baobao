@@ -59,8 +59,6 @@ public class FakeFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-   //     LoginTest();
-        Callback.FakeloadData(getActivity());
     }
     public static void init(){
         if(hasMoreData){
@@ -165,6 +163,13 @@ public class FakeFragment extends Fragment {
         OkHttpUtils okHttpUtils = OkHttpUtils.getInstance();
         final RequestBody requestBodyJson = RequestBody.create(MediaType.parse("application/json; charset=utf-8"), json);
         okHttpUtils.post(NetInterface.TSloginRequest, requestBodyJson,Callback.LoginTestCallback);
+    }
+
+    @Override
+    public void onResume() {
+        appraisalResults.clear();
+        Callback.FakeloadData(getActivity());
+        super.onResume();
     }
 
     private View createFooterView() {

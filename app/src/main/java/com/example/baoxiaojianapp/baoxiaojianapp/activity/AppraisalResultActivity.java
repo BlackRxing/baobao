@@ -80,8 +80,8 @@ public class AppraisalResultActivity extends AppCompatActivity implements View.O
         timestamp = bundle.getString("timestamp");
         type = bundle.getInt("type");
         imageUrl = bundle.getString("imageUrl");
-        brand_name.setText("鉴定号:" + brandName);
-        appraisal_number.setText("品牌:" + modelNumber);
+        brand_name.setText("品牌:" + brandName);
+        appraisal_number.setText("鉴定号:" + modelNumber);
 
 
         Glide.with(this).load(imageUrl).into(appearanceImage);
@@ -120,6 +120,7 @@ public class AppraisalResultActivity extends AppCompatActivity implements View.O
         appraisalReportDialog.findViewById(R.id.savetoGallary).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                appraisalReportDialog.findViewById(R.id.savetoGallary).setVisibility(View.INVISIBLE);
                 View view=appraisalReportDialog.findViewById(R.id.report_layout);
                 Bitmap bitmap=ConvertUtils.view2Bitmap(view);
                 PicProcessUtils.saveBmp2Gallery(mcontext,bitmap,modelNumber+timestamp);

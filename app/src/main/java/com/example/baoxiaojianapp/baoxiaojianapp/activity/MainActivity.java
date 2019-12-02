@@ -22,7 +22,7 @@ import androidx.fragment.app.FragmentTransaction;
 public class MainActivity extends BaseActivity implements BottomNavigationView.OnNavigationItemSelectedListener{
 
     private FrameLayout mainframelayout;
-    private static BottomNavigationView bottomNavigationView;
+    public static BottomNavigationView bottomNavigationView;
     private AppraisalFragment appraisalFragmentProvider;
     private PersonFragment personFragmentProvider;
     private List<Fragment> fragments;

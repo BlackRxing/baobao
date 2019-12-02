@@ -114,9 +114,9 @@ public class EditNickNameActivity extends AppCompatActivity implements View.OnCl
     public void onTextChanged(CharSequence s, int start, int before, int count) {
         nicknameText.setText("昵称"+s.length()+"/20");
         if(s.length()>=20){
-            nicknameedit.setFocusable(false);
-            nicknameedit.setFocusableInTouchMode(false );
-            KeyboardUtils.hideSoftInput(this);  //取消焦点后收起键盘，没有焦点就无法出发键盘，就无法输入
+////            nicknameedit.setFocusable(false);
+////            nicknameedit.setFocusableInTouchMode(false );
+//            KeyboardUtils.hideSoftInput(this);  //取消焦点后收起键盘，没有焦点就无法出发键盘，就无法输入
         }
         if(s.length()<20){
             nicknameedit.setFocusable(true);
@@ -127,16 +127,5 @@ public class EditNickNameActivity extends AppCompatActivity implements View.OnCl
     @Override
     public void afterTextChanged(Editable s) {
 
-    }
-    public void LoginTest(){
-        LoginRequest loginRequest = new LoginRequest();
-        loginRequest.setLoginType(1);
-        loginRequest.setSms("1116");
-        loginRequest.setPhoneNum("18051982306");
-        Gson gson = new Gson();
-        String json = gson.toJson(loginRequest);
-        OkHttpUtils okHttpUtils = OkHttpUtils.getInstance();
-        final RequestBody requestBodyJson = RequestBody.create(MediaType.parse("application/json; charset=utf-8"), json);
-        okHttpUtils.post(NetInterface.TSloginRequest, requestBodyJson, Callback.LoginTestCallback);
     }
 }

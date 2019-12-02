@@ -38,6 +38,7 @@ public class PicProcessUtils {
 
     /**
      * 将图片base64数据转化为bitmap
+     *
      * @param imgBase64
      */
     public Bitmap base64ToPicture(String imgBase64) {
@@ -48,13 +49,12 @@ public class PicProcessUtils {
 
 
     /**
-     *
      * 获取指定路径指定大小的图片（500*500）
      *
      * @param filePath
      * @return Bitmap
-     * @since 从类的哪一个版本，此方法被添加进来。（可选）
      * @deprecated该方法从类的那一个版本后，已经被其它方法替换。（可选）
+     * @since 从类的哪一个版本，此方法被添加进来。（可选）
      */
     public static Bitmap getCompressBm(String filePath) {
         Bitmap bm = null;
@@ -68,12 +68,12 @@ public class PicProcessUtils {
         bm = BitmapFactory.decodeFile(filePath, options);
         return bm;
     }
+
     /**
-     *
      * 获取照片旋转角度
      *
-     * @since 从类的哪一个版本，此方法被添加进来。（可选）
      * @deprecated该方法从类的那一个版本后，已经被其它方法替换。（可选）
+     * @since 从类的哪一个版本，此方法被添加进来。（可选）
      */
     public static int getCameraPhotoOrientation(String imagePath) {
         int rotate = 0;
@@ -104,14 +104,12 @@ public class PicProcessUtils {
     }
 
     /**
-     *
      * 旋转图片
      *
-     * @param bitmap
-     *            rotate
+     * @param bitmap rotate
      * @return 返回类型
-     * @since 从类的哪一个版本，此方法被添加进来。（可选）
      * @deprecated该方法从类的那一个版本后，已经被其它方法替换。（可选）
+     * @since 从类的哪一个版本，此方法被添加进来。（可选）
      */
     public static Bitmap rotateBitmap(Bitmap bitmap, int rotate) {
         if (bitmap == null)
@@ -127,12 +125,10 @@ public class PicProcessUtils {
     }
 
     /**
-     * @Description 保存图片到指定路径
-     * @param bitmap
-     *            要保存的图片
-     * @param filePath
-     *            目标路径
+     * @param bitmap   要保存的图片
+     * @param filePath 目标路径
      * @return 是否成功
+     * @Description 保存图片到指定路径
      */
     @SuppressWarnings("finally")
     public static boolean saveBmpToPath(final Bitmap bitmap, final String filePath) {
@@ -174,10 +170,12 @@ public class PicProcessUtils {
         }
         return result;
     }
+
     public static String buildTransaction(final String type) {
         return (type == null) ? String.valueOf(System.currentTimeMillis())
                 : type + System.currentTimeMillis();
     }
+
 
     public static void saveBmp2Gallery(Context context, Bitmap bmp, String picName) {
 //        saveImageToGallery(bmp,picName);
@@ -192,7 +190,10 @@ public class PicProcessUtils {
         // 声明输出流
         FileOutputStream outStream = null;
         try {
-
+           File filename=new File(galleryPath);
+           if (!filename.exists()){
+               filename.mkdir();
+           }
             // 如果有目标文件，直接获得文件对象，否则创建一个以filename为名称的文件
             file = new File(galleryPath, picName + ".jpg");
             // 获得文件相对路径
@@ -202,7 +203,7 @@ public class PicProcessUtils {
             if (null != outStream) {
                 bmp.compress(Bitmap.CompressFormat.JPEG, 90, outStream);
             }
-        }catch (Exception e) {
+        } catch (Exception e) {
             e.getStackTrace();
         } finally {
             try {
@@ -214,7 +215,7 @@ public class PicProcessUtils {
             }
         }
         //该行代码可以额将图片保存到系统指定的dcim/picture中
-       // MediaStore.Images.Media.insertImage(context.getContentResolver(),bmp,fileName,null);
+        // MediaStore.Images.Media.insertImage(context.getContentResolver(),bmp,fileName,null);
         Intent intent = new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE);
         Uri uri = Uri.fromFile(file);
         intent.setData(uri);

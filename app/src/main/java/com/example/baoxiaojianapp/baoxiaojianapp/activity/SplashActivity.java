@@ -14,7 +14,9 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 
+import com.blankj.utilcode.util.NetworkUtils;
 import com.blankj.utilcode.util.PermissionUtils;
+import com.blankj.utilcode.util.ToastUtils;
 import com.example.baoxiaojianapp.R;
 import com.example.baoxiaojianapp.baoxiaojianapp.Utils.MyApplication;
 import com.example.baoxiaojianapp.baoxiaojianapp.Utils.UserInfoCashUtils;
@@ -44,25 +46,37 @@ public class SplashActivity extends AppCompatActivity {
         }
     }
     private void process(){
-        if(UserInfoCashUtils.getUserLoginState()){
-            new Handler().postDelayed(new Runnable() {
-                @Override
-                public void run() {
-                    Intent intent=new Intent(mcontext,MainActivity.class);
-                    startActivity(intent);
-                    finish();
-                }
-            }, 1000);
+        if(NetworkUtils.isConnected()){
+            if(UserInfoCashUtils.getUserLoginState()){
+                new Handler().postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        Intent intent=new Intent(mcontext,MainActivity.class);
+                        startActivity(intent);
+                        finish();
+                    }
+                }, 1000);
+            }else{
+                new Handler().postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        Intent intent=new Intent(mcontext,LoginActivity.class);
+                        startActivity(intent);
+                        finish();
+                    }
+                }, 1000);
+            }
         }else{
+            ToastUtils.showShort("请连接到可用网络");
             new Handler().postDelayed(new Runnable() {
                 @Override
                 public void run() {
-                    Intent intent=new Intent(mcontext,LoginActivity.class);
-                    startActivity(intent);
-                    finish();
+                    System.exit(0);
                 }
-            }, 1000);
+            }, 3000);
         }
+
+
 
     }
 

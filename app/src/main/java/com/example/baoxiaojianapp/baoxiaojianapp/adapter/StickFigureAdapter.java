@@ -13,6 +13,7 @@ import com.example.baoxiaojianapp.baoxiaojianapp.Utils.MyApplication;
 import com.example.baoxiaojianapp.baoxiaojianapp.activity.AppraisalActivity;
 import com.example.baoxiaojianapp.baoxiaojianapp.classpakage.AppraisalPointItem;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import androidx.annotation.NonNull;
@@ -20,7 +21,9 @@ import androidx.recyclerview.widget.RecyclerView;
 
 public class StickFigureAdapter extends RecyclerView.Adapter<StickFigureAdapter.ViewHolder>{
     private List<AppraisalPointItem> appraisalPointItemList;
-    private View itemView;
+
+    public  List<StickFigureAdapter.ViewHolder> holders=new ArrayList<>();
+
 
     public StickFigureAdaterClick stickFigureAdaterClick;
     public StickFigureAdapter(List<AppraisalPointItem> appraisalPointItemList){
@@ -31,7 +34,6 @@ public class StickFigureAdapter extends RecyclerView.Adapter<StickFigureAdapter.
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         final View view= LayoutInflater.from(MyApplication.getContext()).inflate(R.layout.stcikfigure_item,parent,false);
-        itemView=view;
         final ViewHolder holder=new ViewHolder(view);
         return holder;
     }
@@ -52,6 +54,7 @@ public class StickFigureAdapter extends RecyclerView.Adapter<StickFigureAdapter.
                 stickFigureAdaterClick.onItemClick(position,holder);
             }
         });
+        holders.add(holder);
     }
 
     @Override

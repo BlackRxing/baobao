@@ -152,7 +152,6 @@ public class AboutActivity extends AppCompatActivity implements View.OnClickList
                 shareToWX(TIMELINE);
                 bottomSheetDialog.dismiss();
                 break;
-
         }
     }
     private void shareToWX(int type){

@@ -1,9 +1,12 @@
 package com.example.baoxiaojianapp.baoxiaojianapp.activity;
 
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.CountDownTimer;
+import android.os.Handler;
+import android.text.InputType;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -31,6 +34,7 @@ import org.json.JSONObject;
 import java.io.IOException;
 import java.util.List;
 
+import androidx.appcompat.app.AppCompatActivity;
 import okhttp3.Call;
 import okhttp3.Headers;
 import okhttp3.MediaType;
@@ -38,18 +42,23 @@ import okhttp3.OkHttpClient;
 import okhttp3.RequestBody;
 import okhttp3.Response;
 
-public class LoginActivity extends BaseActivity implements View.OnClickListener {
+public class LoginActivity extends AppCompatActivity implements View.OnClickListener {
 
     Button person_login_button;
     Button enterprise_button;
     Button get_verfitycode_button;
     Button loginButton;
+    Button skipButton;
     EditText firstEdit;
     EditText vertify_code_Edit;
     EditText account_password_Edit;
     RelativeLayout linearLayout_person;
     LinearLayout linearLayout_enterprise;
     public static boolean isSuccess=false;
+
+    private long mLastClickTime=0;
+    public static final long TIME_INTERVAL = 1000L;
+
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -65,7 +74,7 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
         person_login_button.setOnClickListener(this);
         get_verfitycode_button.setOnClickListener(this);
         loginButton.setOnClickListener(this);
-
+        skipButton.setOnClickListener(this);
 
     }
 
@@ -77,9 +86,11 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
         linearLayout_person = findViewById(R.id.linearlayout_person);
         get_verfitycode_button = findViewById(R.id.vertify_code);
         vertify_code_Edit = findViewById(R.id.vertify_edit);
+        skipButton=findViewById(R.id.skip_button);
         account_password_Edit = findViewById(R.id.enterprise_password_edit);
         loginButton = findViewById(R.id.login_button);
     }
+
 
     @Override
     public void onClick(View v) {
@@ -94,9 +105,23 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
                 requestVertifyCode();
                 break;
             case R.id.login_button:
-                login();
+                long nowTime=System.currentTimeMillis();
+                if(nowTime-mLastClickTime>TIME_INTERVAL){
+                    login();
+                    mLastClickTime=nowTime;
+                }else{
+                    mLastClickTime=nowTime;
+                }
+                break;
+            case R.id.skip_button:
+                skip();
                 break;
         }
+    }
+
+    private void skip(){
+        startActivity(new Intent(this,MainActivity.class));
+        finish();
     }
 
     public boolean checkPhoneNumber() {
@@ -158,6 +183,7 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
         person_login_button.setBackground(getResources().getDrawable(R.drawable.login_selector_selected));
         firstEdit.setHint(R.string.enter_phonenumber);
         firstEdit.setText("");
+        firstEdit.setInputType(InputType.TYPE_CLASS_NUMBER);
         linearLayout_person.setVisibility(View.VISIBLE);
         linearLayout_enterprise.setVisibility(View.INVISIBLE);
     }
@@ -165,6 +191,7 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
     public void enterpriseLogin() {
         person_login_button.setBackgroundColor(getResources().getColor(R.color.transparent));
         enterprise_button.setBackground(getResources().getDrawable(R.drawable.login_selector_selected));
+        firstEdit.setInputType(InputType.TYPE_CLASS_TEXT);
         firstEdit.setHint(R.string.enterprise_login_new);
         firstEdit.setText("");
         linearLayout_person.setVisibility(View.INVISIBLE);
@@ -220,17 +247,20 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
     }
 
     public static void afterLogin(){
-        ActivityUtils.finishAllActivities();
-        Intent intent=new Intent(MyApplication.getContext(),MainActivity.class);
-        intent.putExtra("success","登录成功");
-        ActivityUtils.startActivity(intent);
+        ActivityUtils.finishOtherActivities(LoginActivity.class);
+        new Handler().postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                Intent intent=new Intent(MyApplication.getContext(),MainActivity.class);
+                intent.putExtra("success","登录成功");
+                ActivityUtils.startActivity(intent);
+                ActivityUtils.finishActivity(LoginActivity.class);
+            }
+        },500);
     }
 
 
 
-    @Override
-    public int getLayoutResId() {
 
-        return R.layout.activity_login;
-    }
+
 }

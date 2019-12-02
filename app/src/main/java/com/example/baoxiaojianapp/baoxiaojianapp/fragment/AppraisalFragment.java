@@ -1,11 +1,13 @@
 package com.example.baoxiaojianapp.baoxiaojianapp.fragment;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.AlertDialog;
 import androidx.cardview.widget.CardView;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.GridLayoutManager;
@@ -31,7 +33,9 @@ import com.bumptech.glide.request.transition.Transition;
 import com.example.baoxiaojianapp.R;
 import com.example.baoxiaojianapp.baoxiaojianapp.Utils.NetInterface;
 import com.example.baoxiaojianapp.baoxiaojianapp.Utils.OkHttpUtils;
+import com.example.baoxiaojianapp.baoxiaojianapp.Utils.UserInfoCashUtils;
 import com.example.baoxiaojianapp.baoxiaojianapp.activity.AppraisalNoticeActivity;
+import com.example.baoxiaojianapp.baoxiaojianapp.activity.LoginActivity;
 import com.example.baoxiaojianapp.baoxiaojianapp.activity.MainActivity;
 import com.example.baoxiaojianapp.baoxiaojianapp.adapter.SubclassitemAdapter;
 import com.example.baoxiaojianapp.baoxiaojianapp.classpakage.Subclass;
@@ -123,16 +127,34 @@ public class AppraisalFragment extends Fragment implements View.OnClickListener 
         subclassitemAdapter.setMyAdapterClick(new SubclassitemAdapter.MyAdapterClick() {
             @Override
             public void onItemClick(String brandName,String imageUrl,String kindKey) {
-                Intent intent=new Intent(getContext(), AppraisalNoticeActivity.class);
-                intent.putExtra("brandName",brandName);
-                intent.putExtra("imageUrl",imageUrl);
-                intent.putExtra("kindKey",kindKey);
-                startActivity(intent);
+                if(UserInfoCashUtils.getUserLoginState()){
+                    Intent intent=new Intent(getContext(), AppraisalNoticeActivity.class);
+                    intent.putExtra("brandName",brandName);
+                    intent.putExtra("imageUrl",imageUrl);
+                    intent.putExtra("kindKey",kindKey);
+                    startActivity(intent);
+                }else{
+                    AlertDialog alertDialog = new AlertDialog.Builder(getContext())
+                            .setMessage(getText(R.string.logintip)).setPositiveButton("取消", new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialogInterface, int i) {
+                                    dialogInterface.dismiss();
+                                }
+                            }).setNegativeButton(getText(R.string.loginnow), new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
+                                    startActivity(new Intent(getContext(), LoginActivity.class));
+                                }
+                            }).create();
+                    alertDialog.show();
+                }
             }
         });
         recyclerView.setAdapter(subclassitemAdapter);
         subclassLayout.setVisibility(View.VISIBLE);
         mainappraisalLayout.setVisibility(View.INVISIBLE);
+
+        MainActivity.bottomNavigationView.setVisibility(View.GONE);
     }
 
 
@@ -182,7 +204,6 @@ public class AppraisalFragment extends Fragment implements View.OnClickListener 
         recyclerView.setLayoutManager(gridLayoutManager);
         subclassButton=view.findViewById(R.id.mainappraisal_subclass_button);
         subclassText=view.findViewById(R.id.subclass_text);
-
         init();
         return view;
     }
@@ -228,12 +249,14 @@ public class AppraisalFragment extends Fragment implements View.OnClickListener 
             }
         });
     }
+
     @Override
     public void onClick(View v) {
         switch (v.getId()){
             case R.id.mainappraisal_subclass_button:
                 subclassLayout.setVisibility(View.INVISIBLE);
                 mainappraisalLayout.setVisibility(View.VISIBLE);
+                MainActivity.bottomNavigationView.setVisibility(View.VISIBLE);
                 break;
             case R.id.bag_card:
                 showSubclass(0);
@@ -246,4 +269,5 @@ public class AppraisalFragment extends Fragment implements View.OnClickListener 
                 break;
         }
     }
+
 }

@@ -61,7 +61,8 @@
         android:id="@+id/greenhand_recyclerView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:padding="24dp"/>
+        android:padding="24dp"
+        android:overScrollMode="never"/>
 
 
 </LinearLayout>

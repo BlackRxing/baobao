@@ -68,7 +68,14 @@ public class SettingActivity extends AppCompatActivity implements View.OnClickLi
                 startActivity(new Intent(this,FeedbackActivity.class));
                 break;
             case R.id.contact_layout:
-                ToastUtils.showLong(getText(R.string.contactus_toast));
+                AlertDialog alertDialog = new AlertDialog.Builder(this)
+                        .setMessage(getText(R.string.contactus_toast)).setPositiveButton("确定", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialogInterface, int i) {
+                                dialogInterface.dismiss();
+                            }
+                        }).create();
+                alertDialog.show();
                 break;
             case R.id.back_layout:
                 finish();

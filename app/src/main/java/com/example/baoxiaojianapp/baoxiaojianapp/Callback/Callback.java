@@ -26,6 +26,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 
 import androidx.fragment.app.FragmentActivity;
@@ -147,7 +148,6 @@ public class Callback {
                         appraisalResult.setAppraisalImage(jsonObject1.getString("imageUrl"));
                         appraisalResult.setType(jsonObject1.getInt("type"));
                         appraisalResult.setDetailModels(jsonObject1.getString("detailModels"));
-                        appraisalResults.add(appraisalResult);
                         FakeFragment.appraisalResults.add(appraisalResult);
                     }
                     if (jsonArray.length() == 0) {
@@ -161,6 +161,7 @@ public class Callback {
                         public void run() {
                             FakeFragment.appraisalItemAdapter = new AppraisalItemAdapter(FakeFragment.appraisalResults);
                             FakeFragment.recyclerView.setAdapter(FakeFragment.appraisalItemAdapter);
+                            appraisalItemAdapter.notifyDataSetChanged();
                         }
                     });
                 } catch (IOException e) {
@@ -190,19 +191,21 @@ public class Callback {
                         appraisalResult.setAppraisalImage(jsonObject1.getString("imageUrl"));
                         appraisalResult.setType(jsonObject1.getInt("type"));
                         appraisalResult.setDetailModels(jsonObject1.getString("detailModels"));
-                        appraisalResults.add(appraisalResult);
+                        GenuineFragment.appraisalResults.add(appraisalResult);
                     }
                     if (jsonArray.length() == 0) {
                         GenuineFragment.hasMoreData = false;
                     } else {
-                        hasMoreData = true;
+                        GenuineFragment.hasMoreData = true;
                     }
                     GenuineFragment.init();
                     fragmentActivity.runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
 //                            GenuineFragment.appraisalItemAdapter = new AppraisalItemAdapter(appraisalResults);
-                            GenuineFragment.recyclerView.setAdapter(appraisalItemAdapter);
+                            GenuineFragment.recyclerView.setAdapter(GenuineFragment.appraisalItemAdapter);
+                            appraisalItemAdapter.notifyDataSetChanged();
+                            ToastUtils.showShort("changed");
                         }
                     });
                 }  catch (JSONException j) {

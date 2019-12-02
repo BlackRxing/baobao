@@ -2,6 +2,7 @@ package com.example.baoxiaojianapp.baoxiaojianapp.activity;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Context;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -20,12 +21,14 @@ public class FeedbackActivity extends AppCompatActivity implements TextWatcher, 
     private TextView feedbackLimitsText;
     private EditText feedbackedit;
     private TextView sendText;
+    private  static Context mcontext;
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_feedback);
+        mcontext=this;
         bindView();
 
     }
@@ -48,12 +51,12 @@ public class FeedbackActivity extends AppCompatActivity implements TextWatcher, 
 
     @Override
     public void onTextChanged(CharSequence s, int start, int before, int count) {
-        feedbackLimitsText.setText("昵称"+s.length()+"/300");
+        feedbackLimitsText.setText("昵称"+s.length()+"/400");
         if(s.length()>=400){
-            ToastUtils.showShort("最多400字哦");
-            feedbackedit.setFocusable(false);
-            feedbackedit.setFocusableInTouchMode(false );
-            KeyboardUtils.hideSoftInput(this);  //取消焦点后收起键盘，没有焦点就无法出发键盘，就无法输入
+//            ToastUtils.showShort("最多400字哦");
+//            feedbackedit.setFocusable(false);
+//            feedbackedit.setFocusableInTouchMode(false );
+//            KeyboardUtils.hideSoftInput(this);  //取消焦点后收起键盘，没有焦点就无法出发键盘，就无法输入
         }
         if(s.length()<400){
             feedbackedit.setFocusable(true);
@@ -67,7 +70,10 @@ public class FeedbackActivity extends AppCompatActivity implements TextWatcher, 
             return;
         }
         NetResquest.UserAdvice(feedbackedit.getText().toString());
+        finish();
     }
+
+
 
     @Override
     public void afterTextChanged(Editable s) {

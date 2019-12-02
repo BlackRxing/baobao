@@ -25,6 +25,7 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.blankj.utilcode.util.ActivityUtils;
 import com.blankj.utilcode.util.ToastUtils;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.target.SimpleTarget;
@@ -108,6 +109,8 @@ public class PersonFragment extends Fragment implements View.OnClickListener {
         return view;
     }
 
+
+
     private void initCredit(){
         if (UserInfoCashUtils.getUserInfoInt("is_enterprise")== Constants.ENTERPRISE){
             personcreditLayout.setVisibility(View.GONE);
@@ -132,7 +135,6 @@ public class PersonFragment extends Fragment implements View.OnClickListener {
         super.onCreate(savedInstanceState);
     }
     {
-
     }
 
 

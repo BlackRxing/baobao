@@ -1,6 +1,7 @@
 
 package com.example.baoxiaojianapp.baoxiaojianapp.activity;
 
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -17,6 +18,7 @@ import rx.schedulers.Schedulers;
 
 import android.app.Dialog;
 import android.content.ContentUris;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.Configuration;
@@ -117,6 +119,7 @@ public class AppraisalActivity extends TakePhotoActivity implements CameraFocusV
     private String[] imagePaths;
     private ImageView staticImage;
     private String[] uuids;
+    private StickFigureAdapter stickFigureAdapter;
 
 
     @Override
@@ -169,7 +172,7 @@ public class AppraisalActivity extends TakePhotoActivity implements CameraFocusV
         pointsstates = new int[appraisalPointItemList.size()];
         imagePaths = new String[appraisalPointItemList.size()];
         uuids = new String[appraisalPointItemList.size()];
-        StickFigureAdapter stickFigureAdapter = new StickFigureAdapter(appraisalPointItemList);
+        stickFigureAdapter= new StickFigureAdapter(appraisalPointItemList);
         stickFigureAdapter.setItemClick(this);
         pointsRecyclerView.setAdapter(stickFigureAdapter);
         pointsRecyclerView.getViewTreeObserver().addOnGlobalLayoutListener(this);
@@ -214,16 +217,37 @@ public class AppraisalActivity extends TakePhotoActivity implements CameraFocusV
         JsonArray jsonArray = new JsonArray();
         for (int state : pointsstates) {
             if (state == Constants.DETECTING) {
-                ToastUtils.showShort(getText(R.string.appraisalerrorcase_2));
+                AlertDialog alertDialog = new AlertDialog.Builder(this)
+                        .setMessage(getText(R.string.appraisalerrorcase_2)).setPositiveButton("确定", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialogInterface, int i) {
+                                dialogInterface.dismiss();
+                            }
+                        }).create();
+                alertDialog.show();
                 return;
             }
 
             if (appraisalPointItemList.get(i).getType() == 1 && state == Constants.FAILURE) {
-                ToastUtils.showShort(getText(R.string.appraisalerrorcase_3));
+                AlertDialog alertDialog = new AlertDialog.Builder(this)
+                        .setMessage(getText(R.string.appraisalerrorcase_3)).setPositiveButton("确定", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialogInterface, int i) {
+                                dialogInterface.dismiss();
+                            }
+                        }).create();
+                alertDialog.show();
                 return;
             }
             if (appraisalPointItemList.get(i).getType() == 1 && state != Constants.SUCCESS) {
-                ToastUtils.showShort(getText(R.string.appraisalerrorcase_1));
+                AlertDialog alertDialog = new AlertDialog.Builder(this)
+                        .setMessage(getText(R.string.appraisalerrorcase_1)).setPositiveButton("确定", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialogInterface, int i) {
+                                dialogInterface.dismiss();
+                            }
+                        }).create();
+                alertDialog.show();
                 return;
             }
             if (state == Constants.SUCCESS) {
@@ -276,7 +300,7 @@ public class AppraisalActivity extends TakePhotoActivity implements CameraFocusV
     }
 
     private void configCompress(TakePhoto takePhoto) {//压缩配置
-        int maxSize = Integer.parseInt("800000");//最大 压缩B
+        int maxSize = Integer.parseInt("2000000");//最大 压缩B
         int width = Integer.parseInt("500");//宽
         int height = Integer.parseInt("500");//高
         CompressConfig config;
@@ -376,7 +400,6 @@ public class AppraisalActivity extends TakePhotoActivity implements CameraFocusV
             @Override
             public void run(JSONObject jsonObject) {
                 try {
-                    ToastUtils.showShort("three");
                     if (jsonObject.getJSONObject("err").getInt("code") == 0) {
                         pointsstates[threadpoint] = Constants.SUCCESS;
                         uuids[threadpoint] = jsonObject.getString("uuid");
@@ -398,8 +421,6 @@ public class AppraisalActivity extends TakePhotoActivity implements CameraFocusV
                             @Override
                             public void run() {
                                 changeOnlystate(threadpoint);
-                                long sed = System.currentTimeMillis() - starttime;
-                                ToastUtils.showShort("sed" + sed);
                             }
                         });
                     }
@@ -456,6 +477,7 @@ public class AppraisalActivity extends TakePhotoActivity implements CameraFocusV
 
     private void seeCase() {
         final AppraisalPointDialog appraisalPointDialog = new AppraisalPointDialog(this);
+        appraisalPointDialog.getWindow().setBackgroundDrawableResource(R.color.transparent);
         TextView pointName = appraisalPointDialog.findViewById(R.id.pointName);
         TextView pointcontent = appraisalPointDialog.findViewById(R.id.pointcontent);
         ImageView pointImage = appraisalPointDialog.findViewById(R.id.pointImage);
@@ -474,15 +496,17 @@ public class AppraisalActivity extends TakePhotoActivity implements CameraFocusV
 
     @Override
     public void onItemClick(int position, StickFigureAdapter.ViewHolder viewHolder) {
-        lastPoint = currentPoint;
-        currentPoint = position;
-        if (lastPoint >= 0) {
-            getRecyclerItemView(lastPoint, R.id.selectstate).setVisibility(View.INVISIBLE);
-        }
-        getRecyclerItemView(currentPoint, R.id.selectstate).setVisibility(View.VISIBLE);
-        Glide.with(this).load(appraisalPointItemList.get(position).getBigStickFigureURL()).fitCenter().into(bigStickFigureImage);
-        Glide.with(this).load(appraisalPointItemList.get(position).getPointimageUrl()).fitCenter().into(pointImage);
-        stateChange(currentPoint);
+            lastPoint = currentPoint;
+            currentPoint = position;
+            Log.d("hererer","cur"+currentPoint+"last"+lastPoint+"position"+position);
+            if (lastPoint >= 0) {
+                getRecyclerItemView(lastPoint, R.id.selectstate).setVisibility(View.INVISIBLE);
+            }
+            getRecyclerItemView(currentPoint, R.id.selectstate).setVisibility(View.VISIBLE);
+            Glide.with(this).load(appraisalPointItemList.get(position).getBigStickFigureURL()).fitCenter().into(bigStickFigureImage);
+            Glide.with(this).load(appraisalPointItemList.get(position).getPointimageUrl()).fitCenter().into(pointImage);
+            stateChange(currentPoint);
+
     }
 
     private void stateChange(int position) {
@@ -534,15 +558,20 @@ public class AppraisalActivity extends TakePhotoActivity implements CameraFocusV
     private void setButtonUnclickable() {
         usePhotoButton.setTextColor(getColor(R.color.grey));
         usePhotoButton.setClickable(false);
+        takePhotoButton.setClickable(false);
     }
 
     private void setButtonClickable() {
         usePhotoButton.setTextColor(getColor(R.color.white));
         usePhotoButton.setClickable(true);
+        takePhotoButton.setClickable(true);
     }
 
     private View getRecyclerItemView(int position, int id) {
-        return pointsRecyclerView.getChildAt(position).findViewById(id);
+//        Log.d("why",""+position);pointsRecyclerView.
+//        return pointsRecyclerView.getLayoutManager().findViewByPosition(position).findViewById(id);
+                return stickFigureAdapter.holders.get(position).itemView.findViewById(id);
+
     }
 
     @Override

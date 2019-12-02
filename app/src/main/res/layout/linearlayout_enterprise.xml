@@ -14,6 +14,7 @@
         android:layout_width="327dp"
         android:hint="@string/account_password"
         android:textColorHint="@color/white"
+        android:inputType="textPassword"
         android:textSize="14sp"
         android:background="@drawable/login_textview_background"
         android:paddingStart="26dp"
