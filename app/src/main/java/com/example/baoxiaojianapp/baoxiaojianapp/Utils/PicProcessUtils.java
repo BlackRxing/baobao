@@ -30,7 +30,7 @@ public class PicProcessUtils {
      */
     public static String convertIconToString(Bitmap bitmap) {
         ByteArrayOutputStream baos = new ByteArrayOutputStream();// outputstream
-        bitmap.compress(Bitmap.CompressFormat.PNG, 80, baos);
+        bitmap.compress(Bitmap.CompressFormat.JPEG, 100, baos);
         byte[] appicon = baos.toByteArray();// 转为byte数组
         String bitString = Base64.encodeToString(appicon, Base64.DEFAULT);
         return bitString;

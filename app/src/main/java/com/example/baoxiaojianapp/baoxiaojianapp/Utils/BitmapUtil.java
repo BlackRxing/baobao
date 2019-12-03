@@ -415,7 +415,6 @@ public class BitmapUtil {
     public static String myrotate(String filePath){
         if (!TextUtils.isEmpty(filePath)) {
             int degree = BitmapUtil.getPhotoDegree(filePath);
-            ToastUtils.showShort(degree+"");
             Bitmap bitmap = BitmapFactory.decodeFile(filePath);
             Bitmap tBitmap = null;
             try {

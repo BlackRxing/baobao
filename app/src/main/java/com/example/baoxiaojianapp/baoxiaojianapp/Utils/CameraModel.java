@@ -61,7 +61,6 @@ public class CameraModel {
 
     public String handlePhoto(byte[] data, int cameraId) {
 
-//        String filePath = new File(PathUtils.getFilePath(MyApplication.getContext(),"appraisalphoto"), System.currentTimeMillis() + ".jpg").getAbsolutePath();
         String filePath = FileUtil.saveFile(data, "/DCIM");
         if (!TextUtils.isEmpty(filePath)) {
             int degree = BitmapUtil.getPhotoDegree(filePath);

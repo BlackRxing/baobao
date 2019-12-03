@@ -1,7 +1,9 @@
 package com.example.baoxiaojianapp.baoxiaojianapp.Callback;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.icu.text.RelativeDateTimeFormatter;
 import android.os.Handler;
 import android.util.Log;
 import android.view.inspector.StaticInspectionCompanionProvider;
@@ -14,6 +16,7 @@ import com.example.baoxiaojianapp.baoxiaojianapp.Utils.MyApplication;
 import com.example.baoxiaojianapp.baoxiaojianapp.Utils.NetInterface;
 import com.example.baoxiaojianapp.baoxiaojianapp.Utils.OkHttpUtils;
 import com.example.baoxiaojianapp.baoxiaojianapp.Utils.UserInfoCashUtils;
+import com.example.baoxiaojianapp.baoxiaojianapp.activity.AppraisalActivity;
 import com.example.baoxiaojianapp.baoxiaojianapp.activity.LoginActivity;
 import com.example.baoxiaojianapp.baoxiaojianapp.adapter.AppraisalItemAdapter;
 import com.example.baoxiaojianapp.baoxiaojianapp.classpakage.AppraisalResult;
@@ -23,13 +26,16 @@ import com.example.baoxiaojianapp.baoxiaojianapp.fragment.GenuineFragment;
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 
+import org.jetbrains.annotations.NotNull;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.IOException;
+import java.net.SocketTimeoutException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 import androidx.fragment.app.FragmentActivity;
 import androidx.recyclerview.widget.RecyclerView;
@@ -210,7 +216,6 @@ public class Callback {
 //                            GenuineFragment.appraisalItemAdapter = new AppraisalItemAdapter(appraisalResults);
                             GenuineFragment.recyclerView.setAdapter(GenuineFragment.appraisalItemAdapter);
                             appraisalItemAdapter.notifyDataSetChanged();
-                            ToastUtils.showShort("changed");
                         }
                     });
                 } catch (JSONException j) {
@@ -263,6 +268,18 @@ public class Callback {
     private static void MyOkhttpThread(RequestBody requestBody, String url, final OkhttpRun okhttpRun, boolean tokenNeed) {
 
         OkHttpClient client = new OkHttpClient.Builder()
+                .readTimeout(10000, TimeUnit.MILLISECONDS)
+                /**
+                 * 设置响应的超时时间
+                 */
+                .writeTimeout(5000,TimeUnit.MILLISECONDS)
+                /**
+                 * 设置连接的超时时间
+                 */
+                .connectTimeout(5000,TimeUnit.MILLISECONDS)
+                /**
+                 * 构建
+                 */
                 .build();
 
         Request.Builder builder = new Request.Builder()
@@ -281,16 +298,31 @@ public class Callback {
         new Thread(new Runnable() {
             @Override
             public void run() {
-                try {
-                    Response response = call.execute();
-                    String responses = response.body().string();
-                    JSONObject jsonObject = new JSONObject(responses);
-                    okhttpRun.run(jsonObject);
-                } catch (IOException e) {
-                    e.printStackTrace();
-                } catch (JSONException j) {
-                    j.printStackTrace();
-                }
+                    call.enqueue(new okhttp3.Callback() {
+                        @Override
+                        public void onFailure(@NotNull Call call, @NotNull IOException e) {
+                            e.printStackTrace();
+                            if (e instanceof SocketTimeoutException){
+                                ActivityUtils.getActivityByContext(AppraisalActivity.mcontext).runOnUiThread(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        ToastUtils.showShort(Callback.CONNECT_OVERTIME+"请推出后重新登录");
+                                    }
+                                });
+                            }
+                        }
+
+                        @Override
+                        public void onResponse(@NotNull Call call, @NotNull Response response) throws IOException {
+                            try{
+                                String responses = response.body().string();
+                                JSONObject jsonObject = new JSONObject(responses);
+                                okhttpRun.run(jsonObject);
+                            }catch (Exception e){
+                                e.printStackTrace();
+                            }
+                        }
+                    });
             }
         }).start();
     }

@@ -16,8 +16,10 @@ import rx.functions.Action1;
 import rx.functions.Func1;
 import rx.schedulers.Schedulers;
 
+import android.app.Activity;
 import android.app.Dialog;
 import android.content.ContentUris;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -124,6 +126,7 @@ public class AppraisalActivity extends TakePhotoActivity implements CameraFocusV
 
     private long mLastClickTime=0;
     public static final long TIME_INTERVAL = 2000L;
+    public static Context mcontext;
 
 
     @Override
@@ -162,6 +165,7 @@ public class AppraisalActivity extends TakePhotoActivity implements CameraFocusV
         clicktorestartButton.setOnClickListener(this);
         usePhotoButton.setOnClickListener(this);
         gotoAppraisalText.setOnClickListener(this);
+
     }
 
     private void initView() {
@@ -311,22 +315,24 @@ public class AppraisalActivity extends TakePhotoActivity implements CameraFocusV
         });
     }
 
+
+
     private void choosePhotoFormGallary() {
         TakePhoto takePhoto = getTakePhoto();
         File file = new File(PathUtils.getFilePath(this, "appraisal"), System.currentTimeMillis() + "_gallary" + ".jpg");
-        configCompress(takePhoto);
+     //   configCompress(takePhoto);
         takePhoto.onPickFromGalleryWithCrop(Uri.fromFile(file), new CropOptions.Builder().setAspectX(1).setAspectY(1).setWithOwnCrop(true).create());
     }
 
     private void configCompress(TakePhoto takePhoto) {//压缩配置
-        int maxSize = Integer.parseInt("2000000");//最大 压缩B
+        int maxSize = Integer.parseInt("3000000");//最大 压缩B
         int width = Integer.parseInt("500");//宽
         int height = Integer.parseInt("500");//高
         CompressConfig config;
         config = new CompressConfig.Builder().setMaxSize(maxSize)
-                .setMaxPixel(width >= height ? width : height)
+         //       .setMaxPixel(width >= height ? width : height)
                 .create();
-        takePhoto.onEnableCompress(config, false);//是否显示进度
+        takePhoto.onEnableCompress(config, true);//是否显示进度
     }
 
     @Override
@@ -397,13 +403,23 @@ public class AppraisalActivity extends TakePhotoActivity implements CameraFocusV
         super.takeSuccess(result);
         pointsstates[currentPoint] = Constants.DETECTING;
         stateChange(currentPoint);
-        String filePath = result.getImage().getCompressPath();
-        filePath = BitmapUtil.myrotate(filePath);  //修正个别（小米三星）系统竖排图片旋转
-        imagePaths[currentPoint] = filePath;
-        staticImage.setImageDrawable(new BitmapDrawable(BitmapUtil.getBitmap(filePath)));
-        final int threadpoint = currentPoint;
-        singlepointAppraisal(imagePaths[currentPoint], threadpoint);
-        return;
+        final String filePath = result.getImage().getOriginalPath() ;
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                String newfilePath=filePath;
+                newfilePath = BitmapUtil.myrotate(newfilePath);  //修正个别（小米三星）系统竖排图片旋转
+                imagePaths[currentPoint] = newfilePath;
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        staticImage.setImageDrawable(new BitmapDrawable(BitmapUtil.getBitmap(imagePaths[currentPoint])));
+                    }
+                });
+                final int threadpoint = currentPoint;
+                singlepointAppraisal(imagePaths[currentPoint], threadpoint);
+            }
+        }).start();
     }
 
     private void singlepointAppraisal(final String path, final int threadpoint) {
@@ -598,4 +614,6 @@ public class AppraisalActivity extends TakePhotoActivity implements CameraFocusV
         if (currentPoint == -1)
             pointsRecyclerView.getChildAt(0).performClick();
     }
+
+
 }

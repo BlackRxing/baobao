@@ -17,8 +17,8 @@
             android:id="@+id/mainappraisal_subclass_button"
             android:layout_width="50dp"
             android:layout_height="match_parent"
-            android:layout_marginLeft="18dp">
-            <Button
+            android:layout_marginLeft="10dp">
+            <ImageView
                 android:layout_width="8dp"
                 android:layout_height="14dp"
                 android:background="@drawable/backarrow"
