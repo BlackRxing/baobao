@@ -89,4 +89,7 @@
     <string name="logintip">登录后才可以使用鉴定功能哦！</string>
     <string name="loginnow">立即登录</string>
 
+    <string name="checkNetConnection">请检查网络连接</string>
+    <string name="NetError">网络请求出错</string>
+
 </resources>

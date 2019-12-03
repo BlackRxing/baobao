@@ -2,10 +2,12 @@ package com.example.baoxiaojianapp.baoxiaojianapp.Callback;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.os.Handler;
 import android.util.Log;
 import android.view.inspector.StaticInspectionCompanionProvider;
 
 import com.blankj.utilcode.util.ActivityUtils;
+import com.blankj.utilcode.util.NetworkUtils;
 import com.blankj.utilcode.util.ToastUtils;
 import com.example.baoxiaojianapp.baoxiaojianapp.Utils.Constants;
 import com.example.baoxiaojianapp.baoxiaojianapp.Utils.MyApplication;
@@ -46,46 +48,49 @@ import static com.example.baoxiaojianapp.baoxiaojianapp.fragment.GenuineFragment
 public class Callback {
     public static int itemlength;
     public static int fakeitemlength;
+    public static final String CHECK_NET_CONNECT="请检查网络连接";
+    public static final String CONNECT_ERROR="网络连接出错";
+
 
     //toke续期
-    public static void tokenRequest(){
+    public static void tokenRequest() {
         SharedPreferences sharedPreferences1 = MyApplication.getContext().getSharedPreferences("userinfo_cash", MODE_PRIVATE);
-         if (System.currentTimeMillis()-sharedPreferences1.getLong("tokentime",0)>=7200000){
-             OkHttpClient client = new OkHttpClient.Builder()
-                     .build();
-             JsonObject jsonObject = new JsonObject();
-             jsonObject.addProperty("id", UserInfoCashUtils.getUserInfoInt("id"));
-             RequestBody requestBody = RequestBody.create(MediaType.parse("application/json; charset=utf-8"), jsonObject.toString());
-             Request request = new Request.Builder()
-                     .url(NetInterface.TSRenewalTokenRequest)
-                     .post(requestBody)
-                     .build();
-             //第四步创建call回调对象
-             final Call call = client.newCall(request);
-             //第五步发起请求
-             new Thread(new Runnable() {
-                 @Override
-                 public void run() {
-                     try{
-                         Response response = call.execute();
-                         String responses=response.body().string();
-                         JSONObject jsonObject = new JSONObject(responses);
-                         if (jsonObject.getInt("code")== Constants.CODE_SUCCESS){
-                             UserInfoCashUtils.setUserInfo("turing_token",jsonObject.getString("newToken"));
-                             UserInfoCashUtils.setUserInfo("tokentime",System.currentTimeMillis());
-                         }
-                     }catch (IOException e) {
-                         e.printStackTrace();
-                     } catch (JSONException j) {
-                         j.printStackTrace();
-                     }
-                 }
-             }).start();
-         }
-
+        if (System.currentTimeMillis() - sharedPreferences1.getLong("tokentime", 0) >= 7200000) {
+            OkHttpClient client = new OkHttpClient.Builder()
+                    .build();
+            JsonObject jsonObject = new JsonObject();
+            jsonObject.addProperty("id", UserInfoCashUtils.getUserInfoInt("id"));
+            RequestBody requestBody = RequestBody.create(MediaType.parse("application/json; charset=utf-8"), jsonObject.toString());
+            Request request = new Request.Builder()
+                    .url(NetInterface.TSRenewalTokenRequest)
+                    .post(requestBody)
+                    .build();
+            //第四步创建call回调对象
+            final Call call = client.newCall(request);
+            //第五步发起请求
+            new Thread(new Runnable() {
+                @Override
+                public void run() {
+                    try {
+                        Response response = call.execute();
+                        String responses = response.body().string();
+                        JSONObject jsonObject = new JSONObject(responses);
+                        if (jsonObject.getInt("code") == Constants.CODE_SUCCESS) {
+                            UserInfoCashUtils.setUserInfo("turing_token", jsonObject.getString("newToken"));
+                            UserInfoCashUtils.setUserInfo("tokentime", System.currentTimeMillis());
+                        }
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    } catch (JSONException j) {
+                        j.printStackTrace();
+                    }
+                }
+            }).start();
+        }
 
 
     }
+
     public static OkHttpUtils.RealCallback LoginTestCallback = new OkHttpUtils.RealCallback() {
         @Override
         public void onResponse(Call call, Response response) {
@@ -115,7 +120,6 @@ public class Callback {
 
 
     public static void FakeloadData(final FragmentActivity fragmentActivity) {
-        tokenRequest();
         SharedPreferences sharedPreferences1 = MyApplication.getContext().getSharedPreferences("userinfo_cash", MODE_PRIVATE);
         String token = sharedPreferences1.getString("turing_token", "");
         OkHttpClient client = new OkHttpClient.Builder()
@@ -180,7 +184,7 @@ public class Callback {
         MyOkhttp(requestBody, NetInterface.TSPersonCenterPageRequest, new OkhttpRun() {
             @Override
             public void run(JSONObject jsonObject) {
-                try{
+                try {
                     JSONArray jsonArray = jsonObject.getJSONArray("realList");
                     for (int i = 0; i < jsonArray.length(); i++) {
                         AppraisalResult appraisalResult = new AppraisalResult();
@@ -208,47 +212,80 @@ public class Callback {
                             ToastUtils.showShort("changed");
                         }
                     });
-                }  catch (JSONException j) {
+                } catch (JSONException j) {
                     j.printStackTrace();
                 }
             }
         });
     }
 
-    public static void refreshUserinfo(OkhttpRun okhttpRun){
-        RequestBody requestBody=RequestBody.create(null,new byte[]{});
-        MyOkhttp(requestBody, NetInterface.TSPersonCenterPageRequest,okhttpRun);
+    public static void refreshUserinfo(OkhttpRun okhttpRun) {
+        RequestBody requestBody = RequestBody.create(null, new byte[]{});
+        MyOkhttp(requestBody, NetInterface.TSPersonCenterPageRequest, okhttpRun);
     }
 
-    public static void signin(OkhttpRun okhttpRun){
-        RequestBody requestBody=RequestBody.create(null,new byte[]{});
-        MyOkhttp(requestBody, NetInterface.TSDailyPunchRequest,okhttpRun);
+    public static void signin(OkhttpRun okhttpRun) {
+        RequestBody requestBody = RequestBody.create(null, new byte[]{});
+        MyOkhttp(requestBody, NetInterface.TSDailyPunchRequest, okhttpRun);
     }
 
 
     public static void MyOkhttp(RequestBody requestBody, String url, final OkhttpRun okhttpRun) {
-        tokenRequest();
-        SharedPreferences sharedPreferences1 = MyApplication.getContext().getSharedPreferences("userinfo_cash", MODE_PRIVATE);
-        String token = sharedPreferences1.getString("turing_token", "");
+        MyOkhttp(requestBody, url, okhttpRun, true);
+    }
+
+    public static void MyOkhttp(final RequestBody requestBody, String url, final OkhttpRun okhttpRun, boolean tokenRequired) {
+        try{
+            if (NetworkUtils.isConnected()){
+                SharedPreferences sharedPreferences1 = MyApplication.getContext().getSharedPreferences("userinfo_cash", MODE_PRIVATE);
+                final String murl = url;
+                if (System.currentTimeMillis() - sharedPreferences1.getLong("tokentime", 0) >= 7200000 && tokenRequired) {
+                    tokenRequest();
+                    new Handler().postDelayed(new Runnable() {
+                        @Override
+                        public void run() {
+                            MyOkhttpThread(requestBody, murl, okhttpRun, true);
+                        }
+                    }, 2000);
+                } else {
+                    MyOkhttpThread(requestBody, url, okhttpRun, tokenRequired);
+                }
+            }else{
+                ToastUtils.showShort(Callback.CHECK_NET_CONNECT);
+            }
+        }catch (Exception e){
+            ToastUtils.showShort(Callback.CONNECT_ERROR);
+        }
+
+    }
+
+    private static void MyOkhttpThread(RequestBody requestBody, String url, final OkhttpRun okhttpRun, boolean tokenNeed) {
+
         OkHttpClient client = new OkHttpClient.Builder()
                 .build();
 
-        Request request = new Request.Builder()
+        Request.Builder builder = new Request.Builder()
                 .url(url)
-                .post(requestBody).addHeader("Authorization", "Token " + token)
-                .build();
+                .post(requestBody);
+        if (tokenNeed) {
+            SharedPreferences sharedPreferences1 = MyApplication.getContext().getSharedPreferences("userinfo_cash", MODE_PRIVATE);
+            String token = sharedPreferences1.getString("turing_token", "");
+            builder.addHeader("Authorization", "Token " + token);
+        }
+
+        Request request = builder.build();
         //第四步创建call回调对象
         final Call call = client.newCall(request);
         //第五步发起请求
         new Thread(new Runnable() {
             @Override
             public void run() {
-                try{
+                try {
                     Response response = call.execute();
-                    String responses=response.body().string();
+                    String responses = response.body().string();
                     JSONObject jsonObject = new JSONObject(responses);
                     okhttpRun.run(jsonObject);
-                }catch (IOException e) {
+                } catch (IOException e) {
                     e.printStackTrace();
                 } catch (JSONException j) {
                     j.printStackTrace();

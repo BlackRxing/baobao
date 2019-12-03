@@ -1,149 +1,166 @@
 <?xml version="1.0" encoding="utf-8"?>
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context=".baoxiaojianapp.fragment.PersonFragment">
+
+
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:layout_marginTop="20dp"
         android:orientation="vertical">
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="25dp"
-            android:orientation="horizontal"
-            android:gravity="end"
-            android:layout_marginTop="5dp">
-            <Button
-                android:id="@+id/setting_button"
-                android:layout_width="20dp"
-                android:layout_height="20dp"
-                android:background="@drawable/setting_button"
-                android:layout_marginRight="25dp"/>
-        </LinearLayout>
+
         <RelativeLayout
             android:id="@+id/online_top"
-            android:layout_height="80dp"
             android:layout_width="match_parent"
+            android:layout_height="80dp"
             android:layout_marginTop="15dp">
 
             <de.hdodenhof.circleimageview.CircleImageView
                 android:id="@+id/profile_image"
                 android:layout_width="80dp"
                 android:layout_height="80dp"
-                android:src="@drawable/touxiang_hold"
-                android:layout_marginLeft="25dp" />
+                android:layout_marginLeft="25dp"
+                android:src="@drawable/touxiang_hold" />
+
             <TextView
                 android:id="@+id/username_text"
                 android:layout_width="160dp"
                 android:layout_height="28dp"
-                android:layout_toRightOf="@+id/profile_image"
                 android:layout_marginLeft="18dp"
                 android:layout_marginTop="8dp"
-                android:textSize="18sp"
-                android:singleLine="true"
-                android:textColor="@color/black"
+                android:layout_toRightOf="@+id/profile_image"
+                android:ellipsize="end"
                 android:gravity="center_vertical"
                 android:lines="1"
-                android:ellipsize="end"/>
-            <include layout="@layout/linearlayout_editinfo"
+                android:singleLine="true"
+                android:textColor="@color/black"
+                android:textSize="18sp" />
+
+            <include
                 android:id="@+id/editinfo_layout"
+                layout="@layout/linearlayout_editinfo"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignParentRight="true"
                 android:layout_marginTop="8dp"
-                android:layout_marginRight="20dp"/>
+                android:layout_marginRight="20dp" />
+
             <RelativeLayout
                 android:id="@+id/personcredit_layout"
                 android:layout_width="match_parent"
                 android:layout_height="24dp"
-                android:orientation="horizontal"
                 android:layout_below="@+id/username_text"
-                android:layout_toRightOf="@+id/profile_image"
-                android:visibility="invisible"
                 android:layout_marginLeft="18dp"
-                android:layout_marginTop="20dp">
+                android:layout_marginTop="20dp"
+                android:layout_toRightOf="@+id/profile_image"
+                android:orientation="horizontal"
+                android:visibility="invisible">
+
                 <TextView
                     android:id="@+id/credit_text"
                     android:layout_width="wrap_content"
                     android:layout_height="24dp"
-                    android:text="@string/current_credit"
-                    android:textSize="11sp"
-                    android:gravity="center_vertical"
-                    android:textColor="#778BD9 "
                     android:background="@drawable/credit_background"
-                    android:paddingLeft="10dp"/>
+                    android:gravity="center_vertical"
+                    android:paddingLeft="10dp"
+                    android:text="@string/current_credit"
+                    android:textColor="#778BD9 "
+                    android:textSize="11sp" />
+
                 <TextView
                     android:id="@+id/credit"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginLeft="60dp"
-                    android:textSize="11sp"
                     android:layout_centerVertical="true"
-                    android:textColor="#FF9722"/>
+                    android:layout_marginLeft="60dp"
+                    android:textColor="#FF9722"
+                    android:textSize="11sp" />
+
                 <Button
                     android:id="@+id/signin_button"
                     android:layout_width="78dp"
                     android:layout_height="24dp"
-                    android:background="@drawable/login_button_background"
-                    android:layout_toRightOf="@id/credit_text"
                     android:layout_marginLeft="25dp"
+                    android:layout_toRightOf="@id/credit_text"
+                    android:background="@drawable/login_button_background"
                     android:text="@string/daily_signin"
-                    android:textSize="11sp"
                     android:textColor="@color/white"
-                    android:visibility="invisible"/>
+                    android:textSize="11sp"
+                    android:visibility="invisible" />
+
                 <Button
                     android:id="@+id/hassignin_button"
                     android:layout_width="78dp"
                     android:layout_height="24dp"
-                    android:background="@drawable/login_textview_background"
-                    android:layout_toRightOf="@id/credit_text"
                     android:layout_marginLeft="25dp"
+                    android:layout_toRightOf="@id/credit_text"
+                    android:background="@drawable/login_textview_background"
                     android:text="@string/hassignin"
-                    android:textSize="11sp"
-                    android:textColor="@color/white"/>
+                    android:textColor="@color/white"
+                    android:textSize="11sp" />
             </RelativeLayout>
+
             <TextView
                 android:id="@+id/enterprise_layout"
                 android:layout_width="70dp"
                 android:layout_height="24dp"
-                android:visibility="invisible"
-                android:background="@drawable/credit_background"
-                android:text="@string/enterprise_user"
-                android:textSize="11sp"
-                android:textColor="#778BD9"
-                android:gravity="center"
                 android:layout_below="@+id/username_text"
-                android:layout_toRightOf="@+id/profile_image"
                 android:layout_marginLeft="18dp"
-                android:layout_marginTop="20dp"/>
+                android:layout_marginTop="20dp"
+                android:layout_toRightOf="@+id/profile_image"
+                android:background="@drawable/credit_background"
+                android:gravity="center"
+                android:text="@string/enterprise_user"
+                android:textColor="#778BD9"
+                android:textSize="11sp"
+                android:visibility="invisible" />
         </RelativeLayout>
-        <include android:id="@+id/offline_top"
+
+        <include
+            android:id="@+id/offline_top"
             layout="@layout/offline_personfragment_top"
-            android:visibility="gone"/>
+            android:visibility="gone" />
+
         <View
-            android:layout_height="1dp"
             android:layout_width="match_parent"
-            android:background="#CCCCCC"
-            android:layout_marginTop="23dp"/>
+            android:layout_height="1dp"
+            android:layout_marginTop="23dp"
+            android:background="#CCCCCC" />
+
         <com.google.android.material.tabs.TabLayout
             android:id="@+id/person_tablayout"
             android:layout_width="match_parent"
             android:layout_height="40dp"
             app:tabIndicatorColor="@color/black"
-            app:tabTextColor="#CCCCCC"
-            app:tabSelectedTextColor="@color/black"
             app:tabIndicatorHeight="4dp"
-            />
+            app:tabSelectedTextColor="@color/black"
+            app:tabTextColor="#CCCCCC" />
 
         <androidx.viewpager.widget.ViewPager
             android:id="@+id/person_viewpager"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_marginTop="10dp"
-            android:layout_marginBottom="50dp">
-        </androidx.viewpager.widget.ViewPager>
+            android:layout_marginBottom="50dp"></androidx.viewpager.widget.ViewPager>
     </LinearLayout>
+    <LinearLayout
+        android:id="@+id/setting_button"
+        android:layout_width="30dp"
+        android:layout_height="30dp"
+        android:layout_marginTop="5dp"
+        android:gravity="center"
+        android:layout_gravity="right|top"
+        android:orientation="horizontal"
+        android:layout_marginRight="20dp">
 
+        <ImageView
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+            android:background="@drawable/setting_button" />
+    </LinearLayout>
 </FrameLayout>

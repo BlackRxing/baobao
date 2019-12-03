@@ -64,7 +64,7 @@ public class PersonFragment extends Fragment implements View.OnClickListener {
 
     private View view;
 
-    private Button settingButton;
+    private LinearLayout settingButton;
     private CircleImageView profileImage;
     private TextView usernameText;
     private LinearLayout editLinearLayout;

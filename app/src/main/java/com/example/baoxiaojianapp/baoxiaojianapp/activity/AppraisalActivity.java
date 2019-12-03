@@ -121,6 +121,9 @@ public class AppraisalActivity extends TakePhotoActivity implements CameraFocusV
     private String[] uuids;
     private StickFigureAdapter stickFigureAdapter;
 
+    private long mLastClickTime=0;
+    public static final long TIME_INTERVAL = 2000L;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -206,7 +209,13 @@ public class AppraisalActivity extends TakePhotoActivity implements CameraFocusV
                 choosePhotoFormGallary();
                 break;
             case R.id.gotoAppraisal:
-                gotoAppraisal();
+                long nowTime=System.currentTimeMillis();
+                if (nowTime-mLastClickTime>TIME_INTERVAL){
+                    gotoAppraisal();
+                    mLastClickTime=nowTime;
+                }else{
+                    mLastClickTime=nowTime;
+                }
                 break;
 
         }

@@ -149,7 +149,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
             //POST方式提交JSON：传递JSON同时设置son类型头（接口找一下）
             JSONObject json = new JSONObject();
             try {
-                json.put("phoneNum", "18252458715");
+                json.put("phoneNum", firstEdit.getText().toString());
             } catch (JSONException e) {
                 e.printStackTrace();
             }

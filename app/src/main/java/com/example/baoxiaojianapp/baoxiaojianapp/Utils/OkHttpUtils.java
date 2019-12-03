@@ -8,6 +8,8 @@ import android.preference.PreferenceManager;
 import android.util.Log;
 
 import com.blankj.utilcode.util.DeviceUtils;
+import com.blankj.utilcode.util.NetworkUtils;
+import com.blankj.utilcode.util.ToastUtils;
 
 import java.io.IOException;
 import java.util.concurrent.TimeUnit;
@@ -184,8 +186,17 @@ public class OkHttpUtils {
      * @param requestBody    请求参数
      */
     public void post(String url, RequestBody requestBody, final RealCallback realCallback,boolean needToken){
-        com.example.baoxiaojianapp.baoxiaojianapp.Callback.Callback.tokenRequest();
-        postRequest(url,requestBody,realCallback,needToken);
+        try{
+            if (NetworkUtils.isConnected()){
+                postRequest(url,requestBody,realCallback,needToken);
+            }else{
+                ToastUtils.showShort(com.example.baoxiaojianapp.baoxiaojianapp.Callback.Callback.CHECK_NET_CONNECT);
+            }
+        }catch (Exception e){
+            ToastUtils.showShort(com.example.baoxiaojianapp.baoxiaojianapp.Callback.Callback.CONNECT_ERROR);
+            e.printStackTrace();
+        }
+
     }
 
     public void post(String url, RequestBody requestBody, final RealCallback realCallback){
