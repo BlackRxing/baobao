@@ -54,7 +54,7 @@ public class CameraFocusView extends View {
 
     public CameraFocusView(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
-        init();
+        //init();
     }
 
     private void init() {
@@ -90,13 +90,13 @@ public class CameraFocusView extends View {
             case MotionEvent.ACTION_UP:
                 int x = (int) event.getX();
                 int y = (int) event.getY();
-                lastValue = 0;
-                mPaint.setColor(Color.WHITE);
-                radius = (int) (mScreenWidth * 0.1);
-                centerPoint = null;
+//                lastValue = 0;
+//                mPaint.setColor(Color.WHITE);
+//                radius = (int) (mScreenWidth * 0.1);
+//                centerPoint = null;
                 if(y>TOP_CONTROL_HEIGHT&&y<ScreenSizeUtil.getScreenHeight()-BETTOM_CONTROL_HEIGHT){//状态栏和底部禁止点击获取焦点（显示体验不好）
-                    centerPoint = new Point(x, y);
-                    showAnimView();
+//                    centerPoint = new Point(x, y);
+//                    showAnimView();
                     //开始对焦
                     if (mIAutoFocus != null) {
                         mIAutoFocus.autoFocus(event.getX(),event.getY());

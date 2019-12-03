@@ -50,6 +50,7 @@ public class Callback {
     public static int fakeitemlength;
     public static final String CHECK_NET_CONNECT="请检查网络连接";
     public static final String CONNECT_ERROR="网络连接出错";
+    public static final String CONNECT_OVERTIME="网络请求超时";
 
 
     //toke续期

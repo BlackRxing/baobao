@@ -51,6 +51,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.blankj.utilcode.util.NetworkUtils;
 import com.blankj.utilcode.util.ToastUtils;
 import com.bumptech.glide.Glide;
 import com.example.baoxiaojianapp.R;
@@ -194,19 +195,28 @@ public class AppraisalActivity extends TakePhotoActivity implements CameraFocusV
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.back_layout:
+                FileUtil.deleteFolderFile(PathUtils.getFilePath(this, "appraisal"),false);
                 finish();
                 break;
             case R.id.seecase_button:
                 seeCase();
                 break;
             case R.id.takephoto_button:
-                savePhoto();
+                if(NetworkUtils.isConnected()){
+                    savePhoto();
+                }else {
+                    ToastUtils.showShort(Callback.CHECK_NET_CONNECT);
+                }
                 break;
             case R.id.restart_button:
                 restartPoint();
                 break;
             case R.id.usephoto_button:
-                choosePhotoFormGallary();
+                if(NetworkUtils.isConnected()){
+                    choosePhotoFormGallary();
+                }else{
+                    ToastUtils.showShort(Callback.CHECK_NET_CONNECT);
+                }
                 break;
             case R.id.gotoAppraisal:
                 long nowTime=System.currentTimeMillis();
