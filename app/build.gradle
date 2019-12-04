@@ -25,6 +25,19 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
     }
+
+    //自定义输出apk名字
+    applicationVariants.all {
+        variant ->
+            variant.outputs.all { output ->
+                if (buildType.name == 'release') {
+                    outputFileName = new File("baoxiaojian" + defaultConfig.versionName + "_" +
+                            new Date().format("yyyy-MM-dd") + "_" +
+                            buildType.name + ".apk")
+                }
+            }
+    }
+
 }
 
 dependencies {

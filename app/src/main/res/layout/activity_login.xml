@@ -65,7 +65,7 @@
             android:paddingStart="26dp"/>
         <include layout="@layout/linearlayout_person"/>
         <include layout="@layout/linearlayout_enterprise"
-            android:visibility="gone"/>
+            android:visibility="invisible"/>
 
         <RelativeLayout
             android:layout_width="327dp"

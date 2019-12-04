@@ -10,10 +10,14 @@
         android:layout_gravity="center"/>
     <TextView
         android:id="@+id/subclass_text"
-        android:layout_width="144dp"
+        android:layout_width="130dp"
         android:layout_height="134dp"
         android:layout_gravity="center"
         android:gravity="center"
+        android:maxLines="1"
+        android:autoSizeTextType="uniform"
+        android:autoSizeMaxTextSize="15sp"
+        android:autoSizeMinTextSize="8sp"
         android:textSize="18sp"
         android:textColor="@color/white" />
 </FrameLayout>

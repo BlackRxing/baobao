@@ -71,10 +71,11 @@
             android:layout_marginRight="15dp"
             android:layout_toRightOf="@id/brandImage"
             android:textColor="@color/black"
-            android:textSize="19sp"
-            android:ellipsize="end"
+            android:autoSizeTextType="uniform"
+            android:autoSizeMinTextSize="8sp"
+            android:autoSizeMaxTextSize="18sp"
             android:textStyle="bold"
-            android:singleLine="true"/>
+            android:maxLines="1"/>
 
         <TextView
             android:id="@+id/className"

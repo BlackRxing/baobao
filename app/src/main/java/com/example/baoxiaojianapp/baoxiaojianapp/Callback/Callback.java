@@ -104,11 +104,15 @@ public class Callback {
             if (response.isSuccessful()) {
                 try {
                     JSONObject jsonObject = new JSONObject(response.body().string());
-                    User user = new Gson().fromJson(jsonObject.getJSONObject("user").toString(), User.class);
-                    UserInfoCashUtils userInfoCashUtils = UserInfoCashUtils.getInstance();
-                    userInfoCashUtils.saveUserInfoCash(user);
-                    userInfoCashUtils.setLogin();
-                    LoginActivity.afterLogin();
+                    if (jsonObject.getInt("code")==0){
+                        User user = new Gson().fromJson(jsonObject.getJSONObject("user").toString(), User.class);
+                        UserInfoCashUtils userInfoCashUtils = UserInfoCashUtils.getInstance();
+                        userInfoCashUtils.saveUserInfoCash(user);
+                        userInfoCashUtils.setLogin();
+                        LoginActivity.afterLogin();
+                    }else {
+                        ToastUtils.showShort("所填信息不正确");
+                    }
                 } catch (IOException e) {
                     e.printStackTrace();
                 } catch (JSONException j) {

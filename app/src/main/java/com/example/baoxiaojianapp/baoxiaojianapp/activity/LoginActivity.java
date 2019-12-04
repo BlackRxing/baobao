@@ -220,7 +220,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
 
     private void login() {
         if (linearLayout_person.getVisibility() == View.VISIBLE) {
-            if (!RegexUtils.checkVertifyCode(vertify_code_Edit.getText().toString())) {
+            if (!RegexUtils.checkPhoneNumber(firstEdit.getText().toString())) {
                 ToastUtils.showShort("所填信息不正确");
                 return;
             }
