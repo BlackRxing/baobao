@@ -272,7 +272,7 @@ public class Callback {
     private static void MyOkhttpThread(RequestBody requestBody, String url, final OkhttpRun okhttpRun, boolean tokenNeed) {
 
         OkHttpClient client = new OkHttpClient.Builder()
-                .readTimeout(10000, TimeUnit.MILLISECONDS)
+                .readTimeout(40000, TimeUnit.MILLISECONDS)
                 /**
                  * 设置响应的超时时间
                  */
@@ -306,11 +306,18 @@ public class Callback {
                         @Override
                         public void onFailure(@NotNull Call call, @NotNull IOException e) {
                             e.printStackTrace();
-                            if (e instanceof SocketTimeoutException){
-                                ActivityUtils.getActivityByContext(AppraisalActivity.mcontext).runOnUiThread(new Runnable() {
+                            if (true){
+                                ActivityUtils.getTopActivity().runOnUiThread(new Runnable() {
                                     @Override
                                     public void run() {
-                                        ToastUtils.showShort(Callback.CONNECT_OVERTIME+"请推出后重新登录");
+                                        ToastUtils.showShort(Callback.CONNECT_ERROR);
+                                        JSONObject jsonObject=new JSONObject();
+                                        try{
+                                            jsonObject.put("err",Callback.CONNECT_ERROR);
+                                        }catch (Exception e){
+
+                                        }
+                                        okhttpRun.run(jsonObject);
                                     }
                                 });
                             }

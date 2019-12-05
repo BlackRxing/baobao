@@ -32,6 +32,9 @@ public class AppraisalItemAdapter extends RecyclerView.Adapter<AppraisalItemAdap
     private List<AppraisalResult> appraisalResults;
     private View itemView;
     private AppraisalItemAdapterClick appraisalItemAdapterClick;
+    private long mLastClickTime=0;
+    public static final long TIME_INTERVAL = 500L;
+
 
 
     public AppraisalItemAdapter(List<AppraisalResult> appraisalResults){
@@ -57,16 +60,20 @@ public class AppraisalItemAdapter extends RecyclerView.Adapter<AppraisalItemAdap
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //appraisalItemAdapterClick.onItemClick(position);
-                AppraisalResult appraisalResult=appraisalResults.get(position);
-                Intent intent=new Intent(GenuineFragment.mContext, AppraisalResultActivity.class);
-                intent.putExtra("imageUrl",appraisalResult.getAppraisalImage());
-                intent.putExtra("brandName",appraisalResult.getAppraisalBrand());
-                intent.putExtra("modelNumber",appraisalResult.getAppraisalId());
-                intent.putExtra("timestamp",appraisalResult.getAppraisalData());
-                intent.putExtra("type",appraisalResult.getType());
-                intent.putExtra("detailModels",appraisalResult.getDetailModels());
-                startActivity(intent);
+                long nowTime=System.currentTimeMillis();
+                if (nowTime-mLastClickTime>TIME_INTERVAL){
+                    mLastClickTime=nowTime;
+                    //appraisalItemAdapterClick.onItemClick(position);
+                    AppraisalResult appraisalResult=appraisalResults.get(position);
+                    Intent intent=new Intent(GenuineFragment.mContext, AppraisalResultActivity.class);
+                    intent.putExtra("imageUrl",appraisalResult.getAppraisalImage());
+                    intent.putExtra("brandName",appraisalResult.getAppraisalBrand());
+                    intent.putExtra("modelNumber",appraisalResult.getAppraisalId());
+                    intent.putExtra("timestamp",appraisalResult.getAppraisalData());
+                    intent.putExtra("type",appraisalResult.getType());
+                    intent.putExtra("detailModels",appraisalResult.getDetailModels());
+                    startActivity(intent);
+                }
             }
         });
     }

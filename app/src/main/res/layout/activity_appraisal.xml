@@ -23,15 +23,16 @@
 
     <ImageView
         android:id="@+id/bigstickfigure_image"
-        android:layout_width="250dp"
-        android:layout_height="250dp"
-        android:layout_marginTop="195dp"
-        android:scaleType="fitCenter"
+        android:layout_width="235dp"
+        android:layout_height="235dp"
+        android:layout_marginTop="210dp"
+        android:scaleType="centerInside"
         android:layout_gravity="center_horizontal"
         />
 
 
     <ImageView
+        android:background="@color/white"
         android:id="@+id/point_image"
         android:layout_width="110dp"
         android:layout_height="110dp"
@@ -43,11 +44,14 @@
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent">
-        <include android:id="@+id/result_dialog"
+
+        <include
+            android:id="@+id/result_dialog"
             layout="@layout/pointresult_dialog"
             android:layout_width="207dp"
             android:layout_height="136dp"
             android:layout_centerInParent="true" />
+
         <Button
             android:id="@+id/restart_button"
             android:layout_width="150dp"
@@ -55,7 +59,8 @@
             android:layout_below="@+id/result_dialog"
             android:layout_centerHorizontal="true"
             android:layout_marginTop="45dp"
-            android:background="@drawable/clicktorestartimage"/>
+            android:background="@drawable/clicktorestartimage" />
+
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="60dp"
@@ -74,8 +79,8 @@
                     android:layout_width="15dp"
                     android:layout_height="15dp"
                     android:layout_centerInParent="true"
-                    android:scaleType="fitCenter"
-                    android:background="@drawable/white_back" />
+                    android:background="@drawable/white_back"
+                    android:scaleType="fitCenter" />
 
             </RelativeLayout>
 

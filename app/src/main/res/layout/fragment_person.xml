@@ -29,7 +29,7 @@
 
             <TextView
                 android:id="@+id/username_text"
-                android:layout_width="160dp"
+                android:layout_width="130dp"
                 android:layout_height="28dp"
                 android:layout_marginLeft="18dp"
                 android:layout_marginTop="8dp"
@@ -39,15 +39,15 @@
                 android:lines="1"
                 android:singleLine="true"
                 android:textColor="@color/black"
-                android:textSize="18sp" />
+                android:textSize="15sp" />
 
             <include
                 android:id="@+id/editinfo_layout"
                 layout="@layout/linearlayout_editinfo"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_width="70dp"
+                android:layout_height="30dp"
                 android:layout_alignParentRight="true"
-                android:layout_marginTop="8dp"
+                android:layout_marginTop="7dp"
                 android:layout_marginRight="20dp" />
 
             <RelativeLayout
@@ -137,7 +137,7 @@
             android:layout_width="match_parent"
             android:layout_height="40dp"
             app:tabIndicatorColor="@color/black"
-            app:tabIndicatorHeight="4dp"
+            app:tabIndicatorHeight="2dp"
             app:tabSelectedTextColor="@color/black"
             app:tabTextColor="#CCCCCC" />
 
@@ -146,7 +146,9 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_marginTop="10dp"
-            android:layout_marginBottom="50dp"></androidx.viewpager.widget.ViewPager>
+            android:layout_marginBottom="50dp">
+
+        </androidx.viewpager.widget.ViewPager>
     </LinearLayout>
     <LinearLayout
         android:id="@+id/setting_button"

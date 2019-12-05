@@ -3,40 +3,27 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
     tools:context=".baoxiaojianapp.activity.AppraisalNoticeActivity">
 
     <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="30dp"
+        android:layout_height="40dp"
         android:layout_marginTop="32dp"
         android:gravity="center_vertical">
-
         <RelativeLayout
             android:id="@+id/back_layout"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_centerVertical="true"
-            android:layout_marginLeft="18dp">
-
-            <Button
-                android:id="@+id/back_button"
+            android:layout_width="50dp"
+            android:layout_height="match_parent"
+            android:layout_marginLeft="10dp">
+            <ImageView
                 android:layout_width="8dp"
                 android:layout_height="14dp"
-                android:layout_centerVertical="true"
-                android:background="@drawable/backarrow" />
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_centerVertical="true"
-                android:layout_marginLeft="10dp"
-                android:layout_toRightOf="@+id/back_button"
-                android:gravity="center_vertical"
-                android:text="@string/back"
-                android:textColor="@color/black"
-                android:textSize="17sp" />
+                android:background="@drawable/backarrow"
+                android:layout_centerInParent="true"/>
         </RelativeLayout>
+
 
         <TextView
             android:layout_width="wrap_content"
@@ -44,7 +31,7 @@
             android:layout_centerInParent="true"
             android:text="@string/appraisalNotice"
             android:textColor="@color/black"
-            android:textSize="17sp" />
+            android:textSize="16sp" />
     </RelativeLayout>
 
     <RelativeLayout
@@ -60,7 +47,8 @@
             android:layout_width="119dp"
             android:layout_height="86dp"
             android:layout_marginLeft="26dp"
-            android:layout_marginTop="15dp" />
+            android:layout_marginTop="15dp"
+            android:scaleType="fitCenter" />
 
         <TextView
             android:id="@+id/brandName"
@@ -94,8 +82,9 @@
         android:layout_marginLeft="24dp"
         android:layout_marginTop="44dp"
         android:text="@string/needappraisalPoint"
+        android:textStyle="bold"
         android:textColor="@color/black"
-        android:textSize="16sp" />
+        android:textSize="13sp" />
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/appraisal_point_recyclerView"
@@ -117,13 +106,14 @@
             android:layout_height="28dp"
             android:text="@string/greenNotice"
             android:textColor="@color/black"
-            android:textSize="16sp" />
+            android:textSize="13sp"
+            android:textStyle="bold"/>
         <ImageView
-            android:layout_width="19dp"
-            android:layout_height="17dp"
+            android:layout_width="17dp"
+            android:layout_height="15dp"
             android:scaleType="centerCrop"
             android:src="@drawable/greennotice"
-            android:layout_marginLeft="6.1dp"/>
+            android:layout_marginLeft="10dp"/>
     </LinearLayout>
     <Button
         android:id="@+id/appraisal_button"
@@ -131,7 +121,7 @@
         android:layout_height="48dp"
         android:layout_marginLeft="50dp"
         android:layout_marginRight="50dp"
-        android:layout_marginTop="100dp"
+        android:layout_marginTop="70dp"
         android:background="@drawable/offline_button_background"
         android:text="@string/gotoAppraisal"/>
 </LinearLayout>

@@ -1,14 +1,19 @@
 package com.example.baoxiaojianapp.baoxiaojianapp.activity;
 
 import android.os.Bundle;
+import android.util.DisplayMetrics;
 import android.util.Log;
+import android.util.TypedValue;
 import android.view.MenuItem;
+import android.view.View;
+import android.view.ViewGroup;
 import android.widget.FrameLayout;
 
 import com.blankj.utilcode.util.ToastUtils;
 import com.example.baoxiaojianapp.R;
 import com.example.baoxiaojianapp.baoxiaojianapp.fragment.AppraisalFragment;
 import com.example.baoxiaojianapp.baoxiaojianapp.fragment.PersonFragment;
+import com.google.android.material.bottomnavigation.BottomNavigationMenuView;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 import java.util.ArrayList;
@@ -107,5 +112,7 @@ public class MainActivity extends BaseActivity implements BottomNavigationView.O
         }
         return false;
     }
+
+
 
 }

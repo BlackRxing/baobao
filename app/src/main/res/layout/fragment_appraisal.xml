@@ -1,12 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context=".baoxiaojianapp.fragment.AppraisalFragment">
-    <include layout="@layout/mainappraisal_subclass_layout"
-        android:visibility="gone"/>
+
+    <include
+        layout="@layout/mainappraisal_subclass_layout"
+        android:visibility="gone" />
+
     <RelativeLayout
         android:id="@+id/mainappraisal_layout"
         android:layout_width="match_parent"
@@ -15,60 +18,90 @@
         <ImageView
             android:id="@+id/main_title"
             android:layout_width="match_parent"
-            android:layout_height="25dp"
-            android:src="@drawable/baoxiaojianfont"
-            android:scaleType="fitCenter"
-            android:textSize="40sp"
+            android:layout_height="18dp"
             android:layout_marginTop="10dp"
-            />
+            android:scaleType="fitCenter"
+            android:src="@drawable/baoxiaojianfont"
+            android:textSize="40sp" />
+
         <ImageView
             android:id="@+id/main_banner"
             android:layout_width="match_parent"
             android:layout_height="385dp"
             android:layout_below="@+id/main_title"
-            android:textSize="40sp"
             android:layout_marginTop="5dp"
-            />
+            android:textSize="40sp" />
+
         <TextView
             android:id="@+id/main_apparasal_text"
-            android:layout_height="wrap_content"
             android:layout_width="match_parent"
+            android:layout_height="wrap_content"
             android:layout_below="@+id/main_banner"
-            android:text="鉴    定"
-            android:textSize="25sp"
-            android:textStyle="bold"
-            android:textColor="@color/black"
+            android:layout_marginTop="15dp"
             android:gravity="center_horizontal"
-            android:layout_marginTop="19dp"
-            />
+            android:text="鉴       定"
+            android:textColor="@color/black"
+            android:textSize="18sp"
+            android:textStyle="bold" />
+
         <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="200dp"
-            android:layout_below="@+id/main_apparasal_text"
-            >
+            android:layout_height="170dp"
+            android:layout_below="@+id/main_apparasal_text">
+
             <androidx.cardview.widget.CardView
                 android:id="@+id/bag_card"
                 android:layout_width="111dp"
                 android:layout_height="134dp"
-                android:layout_toLeftOf="@+id/shoe_card"
                 android:layout_centerVertical="true"
                 android:layout_marginRight="10dp"
-                />
+                android:layout_toLeftOf="@+id/shoe_card">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="包"
+                    android:textColor="@color/white"
+                    android:layout_gravity="bottom|right"
+                    android:textSize="15sp"
+                    android:layout_marginRight="10dp"
+                    android:layout_marginBottom="10dp"/>
+            </androidx.cardview.widget.CardView>
+
             <androidx.cardview.widget.CardView
                 android:id="@+id/shoe_card"
                 android:layout_width="111dp"
                 android:layout_height="134dp"
-                android:layout_centerInParent="true"/>
+                android:layout_centerInParent="true">
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="鞋"
+                    android:textColor="@color/white"
+                    android:layout_gravity="bottom|right"
+                    android:textSize="15sp"
+                    android:layout_marginRight="10dp"
+                    android:layout_marginBottom="10dp"/>
+            </androidx.cardview.widget.CardView>
+
             <androidx.cardview.widget.CardView
                 android:id="@+id/watch_card"
                 android:layout_width="111dp"
                 android:layout_height="134dp"
-                android:layout_toRightOf="@+id/shoe_card"
                 android:layout_centerVertical="true"
-                android:layout_marginLeft="10dp"/>
+                android:layout_marginLeft="10dp"
+                android:layout_toRightOf="@+id/shoe_card">
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="表"
+                    android:textColor="@color/white"
+                    android:layout_gravity="bottom|right"
+                    android:textSize="15sp"
+                    android:layout_marginRight="10dp"
+                    android:layout_marginBottom="10dp"/>
+            </androidx.cardview.widget.CardView>
         </RelativeLayout>
-
-
 
 
     </RelativeLayout>

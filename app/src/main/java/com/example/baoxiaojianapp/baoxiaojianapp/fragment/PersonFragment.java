@@ -48,6 +48,7 @@ import com.ogaclejapan.smarttablayout.utils.v4.FragmentPagerItems;
 
 import org.json.JSONObject;
 
+import java.lang.reflect.Field;
 import java.util.ArrayList;
 
 import static android.content.Context.MODE_PRIVATE;
@@ -79,7 +80,8 @@ public class PersonFragment extends Fragment implements View.OnClickListener {
     private Button hasSigninButton;
     private TextView enterpriseLayout;
 
-
+    private long mLastClickTime=0;
+    public static final long TIME_INTERVAL = 500L;
 
 
     @Override
@@ -106,6 +108,8 @@ public class PersonFragment extends Fragment implements View.OnClickListener {
         settingButton.setOnClickListener(this);
         loginButton.setOnClickListener(this);
         signinButton.setOnClickListener(this);
+
+
         return view;
     }
 
@@ -224,6 +228,8 @@ public class PersonFragment extends Fragment implements View.OnClickListener {
         init();
     }
 
+
+
     @Override
     public void onStart() {
         super.onStart();
@@ -279,19 +285,23 @@ public class PersonFragment extends Fragment implements View.OnClickListener {
 
     @Override
     public void onClick(View v) {
-        switch (v.getId()){
-            case R.id.editinfo_layout:
-                startActivity(new Intent(getContext(), InfoSettingActivity.class));
-                break;
-            case R.id.setting_button:
-                startActivity(new Intent(getContext(), SettingActivity.class));
-                break;
-            case R.id.login_button:
-                startActivity(new Intent(getContext(), LoginActivity.class));
-                break;
-            case R.id.signin_button:
-                signin();
-                break;
+        long nowTime=System.currentTimeMillis();
+        if (nowTime-mLastClickTime>TIME_INTERVAL){
+            mLastClickTime=nowTime;
+            switch (v.getId()){
+                case R.id.editinfo_layout:
+                    startActivity(new Intent(getContext(), InfoSettingActivity.class));
+                    break;
+                case R.id.setting_button:
+                    startActivity(new Intent(getContext(), SettingActivity.class));
+                    break;
+                case R.id.login_button:
+                    startActivity(new Intent(getContext(), LoginActivity.class));
+                    break;
+                case R.id.signin_button:
+                    signin();
+                    break;
+            }
         }
     }
 }

@@ -81,6 +81,7 @@
             android:singleLine="true"
             android:layout_width="200dp"
             android:ellipsize="end"
+            android:gravity="right"
             android:layout_alignParentRight="true"
             android:layout_gravity="center_vertical"
             />

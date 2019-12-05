@@ -49,6 +49,7 @@ import android.view.Window;
 import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -72,6 +73,7 @@ import com.example.baoxiaojianapp.baoxiaojianapp.classpakage.AppraisalPointItem;
 import com.example.baoxiaojianapp.baoxiaojianapp.view.AppraisalPointDialog;
 import com.example.baoxiaojianapp.baoxiaojianapp.view.CameraFocusView;
 import com.example.baoxiaojianapp.baoxiaojianapp.view.CameraSurfaceView;
+import com.google.android.material.tabs.TabLayout;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import com.jph.takephoto.app.TakePhoto;
@@ -87,6 +89,7 @@ import org.json.JSONObject;
 
 import java.io.File;
 import java.io.IOException;
+import java.lang.reflect.Field;
 import java.sql.Time;
 import java.util.ArrayList;
 import java.util.Date;
@@ -435,34 +438,36 @@ public class AppraisalActivity extends TakePhotoActivity implements CameraFocusV
             @Override
             public void run(JSONObject jsonObject) {
                 try {
+                  //  Log.d("wrong",jsonObject.toString());
                     if (jsonObject.getJSONObject("err").getInt("code") == 0) {
                         pointsstates[threadpoint] = Constants.SUCCESS;
                         uuids[threadpoint] = jsonObject.getString("uuid");
                     } else {
                         pointsstates[threadpoint] = Constants.FAILURE;
                     }
-                    if (currentPoint == threadpoint) {
+                } catch (Exception e) {
+                    e.printStackTrace();
+                    ToastUtils.showShort(Callback.CONNECT_ERROR);
+                    pointsstates[threadpoint] = Constants.FAILURE;
+                }
+                if (currentPoint == threadpoint) {
 //                        ToastUtils.showShort("current" + currentPoint + "threadpoint" + threadpoint);
-                        runOnUiThread(new Runnable() {
-                            @Override
-                            public void run() {
-                                stateChange(threadpoint);
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            stateChange(threadpoint);
 //                                long sed = System.currentTimeMillis() - starttime;
 //                                ToastUtils.showShort("sed" + sed);
-                            }
-                        });
-                    } else {
-                        runOnUiThread(new Runnable() {
-                            @Override
-                            public void run() {
-                                changeOnlystate(threadpoint);
-                            }
-                        });
-                    }
-                } catch (JSONException j) {
-                    j.printStackTrace();
+                        }
+                    });
+                } else {
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            changeOnlystate(threadpoint);
+                        }
+                    });
                 }
-
             }
         });
     }
@@ -538,7 +543,7 @@ public class AppraisalActivity extends TakePhotoActivity implements CameraFocusV
                 getRecyclerItemView(lastPoint, R.id.selectstate).setVisibility(View.INVISIBLE);
             }
             getRecyclerItemView(currentPoint, R.id.selectstate).setVisibility(View.VISIBLE);
-            Glide.with(this).load(appraisalPointItemList.get(position).getBigStickFigureURL()).fitCenter().into(bigStickFigureImage);
+            Glide.with(this).load(appraisalPointItemList.get(position).getBigStickFigureURL()).into(bigStickFigureImage);
             Glide.with(this).load(appraisalPointItemList.get(position).getPointimageUrl()).fitCenter().into(pointImage);
             stateChange(currentPoint);
 
@@ -589,6 +594,8 @@ public class AppraisalActivity extends TakePhotoActivity implements CameraFocusV
                 break;
         }
     }
+
+
 
     private void setButtonUnclickable() {
         usePhotoButton.setTextColor(getColor(R.color.grey));

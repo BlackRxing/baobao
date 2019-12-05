@@ -153,18 +153,6 @@ public class FakeFragment extends Fragment {
     }
 
 
-    public void LoginTest(){
-        LoginRequest loginRequest = new LoginRequest();
-        loginRequest.setLoginType(1);
-        loginRequest.setSms("1116");
-        loginRequest.setPhoneNum("18051982306");
-        Gson gson = new Gson();
-        String json = gson.toJson(loginRequest);
-        OkHttpUtils okHttpUtils = OkHttpUtils.getInstance();
-        final RequestBody requestBodyJson = RequestBody.create(MediaType.parse("application/json; charset=utf-8"), json);
-        okHttpUtils.post(NetInterface.TSloginRequest, requestBodyJson,Callback.LoginTestCallback);
-    }
-
     @Override
     public void onResume() {
         appraisalResults.clear();

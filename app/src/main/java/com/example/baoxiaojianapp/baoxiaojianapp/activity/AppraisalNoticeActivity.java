@@ -1,6 +1,9 @@
 package com.example.baoxiaojianapp.baoxiaojianapp.activity;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import okhttp3.Call;
@@ -13,6 +16,7 @@ import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -24,6 +28,10 @@ import android.widget.TextView;
 
 import com.blankj.utilcode.util.ToastUtils;
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.resource.bitmap.RoundedCorners;
+import com.bumptech.glide.request.RequestOptions;
+import com.bumptech.glide.request.target.SimpleTarget;
+import com.bumptech.glide.request.transition.Transition;
 import com.example.baoxiaojianapp.R;
 import com.example.baoxiaojianapp.baoxiaojianapp.Utils.NetInterface;
 import com.example.baoxiaojianapp.baoxiaojianapp.Utils.OkHttpUtils;
@@ -44,6 +52,8 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
+import static com.blankj.utilcode.util.SnackbarUtils.getView;
+
 public class AppraisalNoticeActivity extends AppCompatActivity implements View.OnClickListener {
 
     private RelativeLayout backLayout;
@@ -55,6 +65,9 @@ public class AppraisalNoticeActivity extends AppCompatActivity implements View.O
     private LinearLayout greenhandlinearLayout;
     private List<AppraisalPointItem> appraisalPointItemList;
     private String brandName;
+    private long mLastClickTime=0;
+    public static final long TIME_INTERVAL = 500L;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -94,9 +107,11 @@ public class AppraisalNoticeActivity extends AppCompatActivity implements View.O
         appraisalButton.setOnClickListener(this);
     }
 
-    public void initView(String brandName, String imageUrl, String kindKey) {
+    public void initView(final String brandName, String imageUrl, String kindKey) {
         this.brandName=brandName;
-        Glide.with(this).load(imageUrl).centerCrop().into(brandImage);
+        RequestOptions options = new RequestOptions().bitmapTransform(new RoundedCorners(5));
+        Glide.with(this).load(imageUrl).apply(options).fitCenter().into(brandImage);
+ //       Glide.with(this).load(imageUrl).apply(options).into();
         brandText.setText(brandName);
         switch (kindKey) {
             case "shoe":
@@ -194,16 +209,20 @@ public class AppraisalNoticeActivity extends AppCompatActivity implements View.O
 
     @Override
     public void onClick(View v) {
-        switch (v.getId()) {
-            case R.id.back_layout:
-                finish();
-                break;
-            case R.id.appraisal_button:
-                gotoAppraisal();
-                break;
-            case R.id.greenhand_layout:
-                gotoGreenHand();
-                break;
+        long nowTime=System.currentTimeMillis();
+        if (nowTime-mLastClickTime>TIME_INTERVAL){
+            mLastClickTime=nowTime;
+            switch (v.getId()) {
+                case R.id.back_layout:
+                    finish();
+                    break;
+                case R.id.appraisal_button:
+                    gotoAppraisal();
+                    break;
+                case R.id.greenhand_layout:
+                    gotoGreenHand();
+                    break;
+            }
         }
     }
 }

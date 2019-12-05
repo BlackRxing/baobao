@@ -14,6 +14,7 @@ import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.blankj.utilcode.util.ActivityUtils;
 import com.blankj.utilcode.util.ConvertUtils;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners;
@@ -138,6 +139,8 @@ public class AppraisalResultActivity extends AppCompatActivity implements View.O
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.back_layout:
+                ActivityUtils.finishActivity(AppraisalActivity.class);
+                ActivityUtils.finishActivity(AppraisalNoticeActivity.class);
                 finish();
                 break;
             case R.id.generarereport_button:

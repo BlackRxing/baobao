@@ -127,9 +127,11 @@ public class AboutActivity extends AppCompatActivity implements View.OnClickList
                 finish();
                 break;
             case R.id.share_button:
-                showShareBottom();
+                ToastUtils.showShort("正在开发中");
+//                showShareBottom();
                 break;
             case R.id.RateLayout:
+                ToastUtils.showShort("正在开发中");
                 break;
             case R.id.corporateInfoLayout:
                 startActivity(new Intent(this,CorporationInfoActivity.class));

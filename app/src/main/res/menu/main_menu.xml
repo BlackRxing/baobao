@@ -7,5 +7,6 @@
     <item
         android:id="@+id/main_person"
         android:icon="@drawable/person_tab_unselect"
-        android:title="@string/person"/>
+        android:title="@string/person"
+        />
 </menu>

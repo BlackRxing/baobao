@@ -24,7 +24,8 @@ public class SubclassitemAdapter extends RecyclerView.Adapter<SubclassitemAdapte
     private List<Subclass> subclassList;
     private View itemView;
     public MyAdapterClick myAdapterClick;
-
+    private long mLastClickTime=0;
+    public static final long TIME_INTERVAL = 500L;
 
     public SubclassitemAdapter(List<Subclass> subclassList){
         this.subclassList=subclassList;
@@ -49,7 +50,11 @@ public class SubclassitemAdapter extends RecyclerView.Adapter<SubclassitemAdapte
         holder.subclassText.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                myAdapterClick.onItemClick(subclassList.get(position).getSubclassText(),subclassList.get(position).getSubclassImage(),subclassList.get(position).getKindKey());
+                long nowTime=System.currentTimeMillis();
+                if (nowTime-mLastClickTime>TIME_INTERVAL){
+                    myAdapterClick.onItemClick(subclassList.get(position).getSubclassText(),subclassList.get(position).getSubclassImage(),subclassList.get(position).getKindKey());
+                    mLastClickTime=nowTime;
+                }
             }
         });
     }
