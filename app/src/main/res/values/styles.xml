@@ -36,5 +36,8 @@
     </style>
 
 
-
+    <style name="My_CheckBox" parent="@android:style/Widget.Material.CompoundButton.CheckBox">
+        <item name="android:colorControlActivated">@color/transparent_grey</item>
+<!--        <item name="android:colorControlNormal">@color/transparent_grey</item>-->
+    </style>
 </resources>

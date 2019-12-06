@@ -1,7 +1,9 @@
 package com.example.baoxiaojianapp.baoxiaojianapp.activity;
 
+import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.CountDownTimer;
@@ -10,8 +12,12 @@ import android.text.InputType;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.CheckBox;
+import android.widget.CompoundButton;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.RadioGroup;
 import android.widget.RelativeLayout;
 
 import com.blankj.utilcode.util.ActivityUtils;
@@ -19,6 +25,7 @@ import com.blankj.utilcode.util.EncryptUtils;
 import com.blankj.utilcode.util.ToastUtils;
 import com.example.baoxiaojianapp.R;
 import com.example.baoxiaojianapp.baoxiaojianapp.Callback.Callback;
+import com.example.baoxiaojianapp.baoxiaojianapp.Utils.Constants;
 import com.example.baoxiaojianapp.baoxiaojianapp.Utils.MyApplication;
 import com.example.baoxiaojianapp.baoxiaojianapp.Utils.NetInterface;
 import com.example.baoxiaojianapp.baoxiaojianapp.Utils.OkHttpUtils;
@@ -27,6 +34,10 @@ import com.example.baoxiaojianapp.baoxiaojianapp.Utils.UserInfoCashUtils;
 import com.example.baoxiaojianapp.baoxiaojianapp.classpakage.LoginRequest;
 import com.example.baoxiaojianapp.baoxiaojianapp.classpakage.User;
 import com.google.gson.Gson;
+import com.tencent.mm.opensdk.constants.ConstantsAPI;
+import com.tencent.mm.opensdk.modelmsg.SendAuth;
+import com.tencent.mm.opensdk.openapi.IWXAPI;
+import com.tencent.mm.opensdk.openapi.WXAPIFactory;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -42,7 +53,7 @@ import okhttp3.OkHttpClient;
 import okhttp3.RequestBody;
 import okhttp3.Response;
 
-public class LoginActivity extends AppCompatActivity implements View.OnClickListener {
+public class LoginActivity extends AppCompatActivity implements View.OnClickListener, CompoundButton.OnCheckedChangeListener {
 
     Button person_login_button;
     Button enterprise_button;
@@ -54,10 +65,16 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     EditText account_password_Edit;
     RelativeLayout linearLayout_person;
     LinearLayout linearLayout_enterprise;
-    public static boolean isSuccess=false;
+    private ImageView weixinButton;
+    private ImageView weiboButton;
+    private CheckBox userprotocalCheckBox;
+    private CheckBox privacycheckBox;
+    public static boolean isSuccess = false;
 
-    private long mLastClickTime=0;
-    public static final long TIME_INTERVAL = 1000L;
+    private long mLastClickTime = 0;
+    public static final long TIME_INTERVAL = 300L;
+
+    private IWXAPI iwxapi;
 
 
     @Override
@@ -75,7 +92,10 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         get_verfitycode_button.setOnClickListener(this);
         loginButton.setOnClickListener(this);
         skipButton.setOnClickListener(this);
-
+        weixinButton.setOnClickListener(this);
+        weiboButton.setOnClickListener(this);
+        userprotocalCheckBox.setOnCheckedChangeListener(this);
+        privacycheckBox.setOnCheckedChangeListener(this);
     }
 
     public void bindView() {
@@ -86,41 +106,82 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         linearLayout_person = findViewById(R.id.linearlayout_person);
         get_verfitycode_button = findViewById(R.id.vertify_code);
         vertify_code_Edit = findViewById(R.id.vertify_edit);
-        skipButton=findViewById(R.id.skip_button);
+        skipButton = findViewById(R.id.skip_button);
         account_password_Edit = findViewById(R.id.enterprise_password_edit);
         loginButton = findViewById(R.id.login_button);
+        weixinButton = findViewById(R.id.weixin_button);
+        weiboButton = findViewById(R.id.weibo_button);
+        userprotocalCheckBox=findViewById(R.id.userprotocal_checkbox);
+        privacycheckBox=findViewById(R.id.privacypolicy_checkbox);
     }
 
 
     @Override
     public void onClick(View v) {
-        switch (v.getId()) {
-            case R.id.person_login:
-                personLogin();
-                break;
-            case R.id.enterprise:
-                enterpriseLogin();
-                break;
-            case R.id.vertify_code:
-                requestVertifyCode();
-                break;
-            case R.id.login_button:
-                long nowTime=System.currentTimeMillis();
-                if(nowTime-mLastClickTime>TIME_INTERVAL){
-                    login();
-                    mLastClickTime=nowTime;
-                }else{
-                    mLastClickTime=nowTime;
-                }
-                break;
-            case R.id.skip_button:
-                skip();
-                break;
+        long nowTime = System.currentTimeMillis();
+        if (nowTime - mLastClickTime > TIME_INTERVAL) {
+            mLastClickTime = nowTime;
+            switch (v.getId()) {
+                case R.id.person_login:
+                    personLogin();
+                    break;
+                case R.id.enterprise:
+                    enterpriseLogin();
+                    break;
+                case R.id.vertify_code:
+                    requestVertifyCode();
+                    break;
+                case R.id.login_button:
+                    if(userprotocalCheckBox.isChecked()&&privacycheckBox.isChecked()){
+                        login();
+                    }else {
+                        ToastUtils.showShort(getText(R.string.tickcheckbox_tip));
+                    }
+                    break;
+                case R.id.skip_button:
+                    if(userprotocalCheckBox.isChecked()&&privacycheckBox.isChecked()){
+                        skip();
+                    }else {
+                        ToastUtils.showShort(getText(R.string.tickcheckbox_tip));
+                    }
+                    break;
+                case R.id.weibo_button:
+                    weiboLogin();
+                    break;
+                case R.id.weixin_button:
+                    weixinLogin();
+                    break;
+            }
+        } else {
         }
     }
 
-    private void skip(){
-        startActivity(new Intent(this,MainActivity.class));
+
+    private void weiboLogin(){
+
+    }
+
+
+
+    private void weixinLogin(){
+        regToWx();
+        final SendAuth.Req req=new SendAuth.Req();
+        req.scope="snsapi_userinfo";
+        iwxapi.sendReq(req);
+    }
+
+    private void regToWx(){
+        iwxapi= WXAPIFactory.createWXAPI(this, Constants.APP_ID,true);
+        iwxapi.registerApp(Constants.APP_ID);
+        registerReceiver(new BroadcastReceiver() {
+            @Override
+            public void onReceive(Context context, Intent intent) {
+                iwxapi.registerApp(Constants.APP_ID);
+            }
+        },new IntentFilter(ConstantsAPI.ACTION_REFRESH_WXAPP));
+    }
+    private void skip() {
+        startActivity(new Intent(this, MainActivity.class));
         finish();
     }
 
@@ -216,8 +277,6 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     }
 
 
-
-
     private void login() {
         if (linearLayout_person.getVisibility() == View.VISIBLE) {
             if (!RegexUtils.checkPhoneNumber(firstEdit.getText().toString())) {
@@ -232,7 +291,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
             String json = gson.toJson(loginRequest);
             OkHttpUtils okHttpUtils = OkHttpUtils.getInstance();
             final RequestBody requestBodyJson = RequestBody.create(MediaType.parse("application/json; charset=utf-8"), json);
-            okHttpUtils.post(NetInterface.TSloginRequest, requestBodyJson,Callback.LoginTestCallback);
+            okHttpUtils.post(NetInterface.TSloginRequest, requestBodyJson, Callback.LoginTestCallback);
         } else {
             LoginRequest loginRequest = new LoginRequest();
             loginRequest.setLoginType(0);
@@ -242,25 +301,37 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
             String json = gson.toJson(loginRequest);
             OkHttpUtils okHttpUtils = OkHttpUtils.getInstance();
             final RequestBody requestBodyJson = RequestBody.create(MediaType.parse("application/json; charset=utf-8"), json);
-            okHttpUtils.post(NetInterface.TSloginRequest, requestBodyJson,Callback.LoginTestCallback);
+            okHttpUtils.post(NetInterface.TSloginRequest, requestBodyJson, Callback.LoginTestCallback);
         }
     }
 
-    public static void afterLogin(){
+    public static void afterLogin() {
         ActivityUtils.finishOtherActivities(LoginActivity.class);
         new Handler().postDelayed(new Runnable() {
             @Override
             public void run() {
-                Intent intent=new Intent(MyApplication.getContext(),MainActivity.class);
-                intent.putExtra("success","登录成功");
+                Intent intent = new Intent(MyApplication.getContext(), MainActivity.class);
+                intent.putExtra("success", "登录成功");
                 ActivityUtils.startActivity(intent);
                 ActivityUtils.finishActivity(LoginActivity.class);
             }
-        },500);
+        }, 500);
     }
 
 
-
-
-
+    @Override
+    public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+        switch (buttonView.getId()){
+            case R.id.userprotocal_checkbox:
+                if(isChecked){
+                    startActivity(new Intent(this,UserProtacalActivity.class));
+                }
+                break;
+            case R.id.privacypolicy_checkbox:
+                if (isChecked){
+                    startActivity(new Intent(this,PrivatePolicyActivity.class));
+                }
+                break;
+        }
+    }
 }
