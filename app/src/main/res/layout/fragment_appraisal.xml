@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".baoxiaojianapp.fragment.AppraisalFragment">
+    tools:context=".fragment.AppraisalFragment">
 
     <include
         layout="@layout/mainappraisal_subclass_layout"

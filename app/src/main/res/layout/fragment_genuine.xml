@@ -3,7 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".baoxiaojianapp.fragment.GenuineFragment"
+    tools:context=".fragment.GenuineFragment"
     android:layout_gravity="center_horizontal"
     >
     <ImageView

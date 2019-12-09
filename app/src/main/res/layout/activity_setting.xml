@@ -4,7 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context=".baoxiaojianapp.activity.InfoSettingActivity"
+    tools:context=".activity.InfoSettingActivity"
     android:id="@+id/container_layout">
     <LinearLayout
         android:orientation="vertical"

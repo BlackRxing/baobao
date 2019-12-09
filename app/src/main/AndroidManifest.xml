@@ -13,7 +13,7 @@
     <uses-permission android:name="android.permission.CAMERA" />
 
     <application
-        android:name=".baoxiaojianapp.Utils.MyApplication"
+        android:name=".Utils.MyApplication"
         android:allowBackup="false"
         android:icon="@drawable/icon"
         android:label="@string/app_name"
@@ -23,28 +23,27 @@
         android:usesCleartextTraffic="true"
         tools:ignore="GoogleAppIndexingWarning"
         tools:replace="android:allowBackup">
-        <activity android:name=".baoxiaojianapp.activity.AppraisalResultActivity"></activity>
+        <activity android:name=".activity.BindPhoneActivity"></activity>
+        <activity android:name=".activity.AppraisalResultActivity" />
         <activity
-            android:name=".baoxiaojianapp.activity.AppraisalActivity"
-            android:screenOrientation="portrait"></activity>
-        <activity android:name=".baoxiaojianapp.activity.GreenhandNoticeActivity" />
-        <activity android:name=".baoxiaojianapp.activity.AppraisalNoticeActivity" />
-        <activity android:name=".baoxiaojianapp.activity.PrivatePolicyActivity" />
-        <activity android:name=".baoxiaojianapp.activity.UserProtacalActivity" />
-        <activity android:name=".baoxiaojianapp.activity.CorporationInfoActivity" />
-        <activity android:name=".baoxiaojianapp.activity.AboutActivity" />
-        <activity android:name=".baoxiaojianapp.activity.FeedbackActivity" />
-        <activity android:name=".baoxiaojianapp.activity.SettingActivity" />
-        <activity android:name=".baoxiaojianapp.activity.EditNickNameActivity" />
+            android:name=".activity.AppraisalActivity"
+            android:screenOrientation="portrait" />
+        <activity android:name=".activity.GreenhandNoticeActivity" />
+        <activity android:name=".activity.AppraisalNoticeActivity" />
+        <activity android:name=".activity.PrivatePolicyActivity" />
+        <activity android:name=".activity.UserProtacalActivity" />
+        <activity android:name=".activity.CorporationInfoActivity" />
+        <activity android:name=".activity.AboutActivity" />
+        <activity android:name=".activity.FeedbackActivity" />
+        <activity android:name=".activity.SettingActivity" />
+        <activity android:name=".activity.EditNickNameActivity" />
         <activity
-            android:name=".baoxiaojianapp.activity.InfoSettingActivity"
+            android:name=".activity.InfoSettingActivity"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".baoxiaojianapp.activity.MainActivity"
-            android:launchMode="singleTask">
-
-        </activity>
-        <activity android:name=".baoxiaojianapp.activity.SplashActivity" >
+            android:name=".activity.MainActivity"
+            android:launchMode="singleTask"></activity>
+        <activity android:name=".activity.SplashActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -52,12 +51,19 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".baoxiaojianapp.activity.LoginActivity"
+            android:name=".activity.LoginActivity"
             android:launchMode="singleTask"
             android:screenOrientation="portrait" />
+        <activity
+            android:name=".wxapi.WXEntryActivity"
+            android:exported="true"
+            android:label="@string/app_name"
+            android:launchMode="singleTask"
+            android:taskAffinity="com.example.baoxiaojianapp"
+            android:theme="@android:style/Theme.Translucent.NoTitleBar"></activity>
 
         <provider
-            android:name=".baoxiaojianapp.Utils.MyProvider"
+            android:name=".Utils.MyProvider"
             android:authorities="com.example.baoxiaojianapp.filesProvider"
             android:exported="false"
             android:grantUriPermissions="true">
