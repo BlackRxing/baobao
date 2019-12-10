@@ -78,8 +78,8 @@ public class WXEntryActivity extends Activity implements IWXAPIEventHandler {
                 result = R.string.errcode_unknown;
                 break;
         }
-
-        ToastUtils.showShort( getString(result) + ", type=" + baseResp.getType());
+//显示微信端操作
+    //    ToastUtils.showShort( getString(result) );
 
 
 
@@ -145,7 +145,6 @@ public class WXEntryActivity extends Activity implements IWXAPIEventHandler {
                         String openId, accessToken, refreshToken, scope;
                         openId = json.getString("openid");
                         accessToken = json.getString("access_token");
-                        ToastUtils.showShort(openId);
                         refreshToken = json.getString("refresh_token");
                         scope = json.getString("scope");
                         Intent intent = new Intent(wxEntryActivityWeakReference.get(), LoginActivity.class);

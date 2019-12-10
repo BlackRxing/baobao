@@ -202,6 +202,9 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     }
 
     public boolean checkPhoneNumber() {
+
+
+
         String phoneNum = firstEdit.getText().toString();
         if (phoneNum.length() == 0 || phoneNum == null) {
             ToastUtils.showShort("请输入手机号");
@@ -376,7 +379,11 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                             UserInfoCashUtils userInfoCashUtils = UserInfoCashUtils.getInstance();
                             userInfoCashUtils.saveUserInfoCash(user);
                             userInfoCashUtils.setLogin();
-                            LoginActivity.afterLogin();
+                            ActivityUtils.finishOtherActivities(LoginActivity.class);
+                            Intent intent = new Intent(MyApplication.getContext(), MainActivity.class);
+                            intent.putExtra("success", "登录成功");
+                            ActivityUtils.startActivity(intent);
+                            finish();
                         }
                     }else{
                         ToastUtils.showShort(getString(R.string.thirdparty_failure));

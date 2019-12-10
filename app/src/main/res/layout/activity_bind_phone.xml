@@ -77,7 +77,7 @@
             android:id="@+id/vertifycode_edit"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:maxLength="4"
+            android:maxLength="6"
             android:textSize="18sp"
             android:inputType="number"
             android:layout_toLeftOf="@id/vertify_code"

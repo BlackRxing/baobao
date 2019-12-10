@@ -5,6 +5,8 @@ import android.os.Handler;
 import android.util.Log;
 
 import com.blankj.utilcode.util.ActivityUtils;
+import com.blankj.utilcode.util.DeviceUtils;
+import com.blankj.utilcode.util.LogUtils;
 import com.blankj.utilcode.util.NetworkUtils;
 import com.blankj.utilcode.util.ToastUtils;
 import com.example.baoxiaojianapp.Utils.Constants;
@@ -279,13 +281,22 @@ public class Callback {
 
         Request.Builder builder = new Request.Builder()
                 .url(url)
-                .post(requestBody);
+                .post(requestBody).
+                addHeader("TS-DEVICE-I", DeviceUtils.getMacAddress()).
+                addHeader("TS-VERSION","V1.0").
+                addHeader("TS-MOBILE",DeviceUtils.getModel()).
+                addHeader("TS-VERSION","TS-PLATFORM ANDROID");
+        SharedPreferences sharedPreferences1 = MyApplication.getContext().getSharedPreferences("userinfo_cash", MODE_PRIVATE);
         if (tokenNeed) {
-            SharedPreferences sharedPreferences1 = MyApplication.getContext().getSharedPreferences("userinfo_cash", MODE_PRIVATE);
             String token = sharedPreferences1.getString("turing_token", "");
             builder.addHeader("Authorization", "Token " + token);
         }
-
+        //有两个请求需要在头部加入sessionid
+        if(url==NetInterface.TSThirdPartyBindPhoneRequest||url==NetInterface.TSloginRequest){
+            SharedPreferences sharedPreferences2=MyApplication.getContext().getSharedPreferences("Session",MODE_PRIVATE);
+            String sessionid= sharedPreferences2.getString("sessionid","");
+            builder.addHeader("cookie",sessionid);
+        }
         Request request = builder.build();
         //第四步创建call回调对象
         final Call call = client.newCall(request);

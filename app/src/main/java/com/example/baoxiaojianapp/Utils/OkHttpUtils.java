@@ -97,8 +97,6 @@ public class OkHttpUtils {
         SharedPreferences sharedPreferences1=MyApplication.getContext().getSharedPreferences("userinfo_cash",MODE_PRIVATE);
         String sessionid= sharedPreferences.getString("sessionid","");
         String token=sharedPreferences1.getString("turing_token","");
-        Log.i("session_out",sessionid);
-        Log.i("token",token+"no?");
         Request.Builder builder;
         builder= new Request.Builder().url(url).post(requestBody).
                 addHeader("TS-DEVICE-I", DeviceUtils.getMacAddress()).
