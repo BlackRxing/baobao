@@ -13,7 +13,7 @@ public interface Constants {
      * 当前 DEMO 应用的回调页，第三方应用可以使用自己的回调页。
      * 建议使用默认回调页：https://api.weibo.com/oauth2/default.html
      */
-    public static final String REDIRECT_URL = "http://www.sina.com";
+    public static final String REDIRECT_URL = "https://api.weibo.com/oauth2/default.html";
 
     /**
      * WeiboSDKDemo 应用对应的权限，第三方开发者一般不需要这么多，可直接设置成空即可。

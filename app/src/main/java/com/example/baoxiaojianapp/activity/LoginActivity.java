@@ -35,6 +35,12 @@ import com.example.baoxiaojianapp.classpakage.LoginRequest;
 import com.example.baoxiaojianapp.classpakage.User;
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
+import com.sina.weibo.sdk.WbSdk;
+import com.sina.weibo.sdk.auth.AuthInfo;
+import com.sina.weibo.sdk.auth.Oauth2AccessToken;
+import com.sina.weibo.sdk.auth.WbAuthListener;
+import com.sina.weibo.sdk.auth.WbConnectErrorMessage;
+import com.sina.weibo.sdk.auth.sso.SsoHandler;
 import com.tencent.mm.opensdk.constants.ConstantsAPI;
 import com.tencent.mm.opensdk.modelmsg.SendAuth;
 import com.tencent.mm.opensdk.openapi.IWXAPI;
@@ -46,6 +52,7 @@ import org.json.JSONObject;
 import java.io.IOException;
 import java.util.List;
 
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import okhttp3.Call;
 import okhttp3.Headers;
@@ -77,16 +84,21 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
 
     private Context mcontext;
 
+    //weixin
     private IWXAPI iwxapi;
 
     private BroadcastReceiver broadcastReceiver;
+
+    //weibo
+    private Oauth2AccessToken oauth2AccessToken;
+    private SsoHandler ssoHandler;
 
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
-        mcontext=this;
+        mcontext = this;
         bindView();
         init();
     }
@@ -117,8 +129,8 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         loginButton = findViewById(R.id.login_button);
         weixinButton = findViewById(R.id.weixin_button);
         weiboButton = findViewById(R.id.weibo_button);
-        userprotocalCheckBox=findViewById(R.id.userprotocal_checkbox);
-        privacycheckBox=findViewById(R.id.privacypolicy_checkbox);
+        userprotocalCheckBox = findViewById(R.id.userprotocal_checkbox);
+        privacycheckBox = findViewById(R.id.privacypolicy_checkbox);
     }
 
 
@@ -138,16 +150,16 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                     requestVertifyCode();
                     break;
                 case R.id.login_button:
-                    if(userprotocalCheckBox.isChecked()&&privacycheckBox.isChecked()){
+                    if (userprotocalCheckBox.isChecked() && privacycheckBox.isChecked()) {
                         login();
-                    }else {
+                    } else {
                         ToastUtils.showShort(getText(R.string.tickcheckbox_tip));
                     }
                     break;
                 case R.id.skip_button:
-                    if(userprotocalCheckBox.isChecked()&&privacycheckBox.isChecked()){
+                    if (userprotocalCheckBox.isChecked() && privacycheckBox.isChecked()) {
                         skip();
-                    }else {
+                    } else {
                         ToastUtils.showShort(getText(R.string.tickcheckbox_tip));
                     }
                     break;
@@ -163,30 +175,32 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     }
 
 
-    private void weiboLogin(){
-
+    private void weiboLogin() {
+        WbSdk.install(this,new AuthInfo(this, Constants.APP_KEY,Constants.REDIRECT_URL,Constants.SCOPE));
+        ssoHandler=new SsoHandler(this);
+        ssoHandler.authorize(new SelfWbAthListener());
     }
 
 
-
-    private void weixinLogin(){
+    private void weixinLogin() {
         regToWx();
-        final SendAuth.Req req=new SendAuth.Req();
-        req.scope="snsapi_userinfo";
+        final SendAuth.Req req = new SendAuth.Req();
+        req.scope = "snsapi_userinfo";
         iwxapi.sendReq(req);
     }
 
-    private void regToWx(){
-        iwxapi= WXAPIFactory.createWXAPI(this, Constants.APP_ID,true);
+    private void regToWx() {
+        iwxapi = WXAPIFactory.createWXAPI(this, Constants.APP_ID, true);
         iwxapi.registerApp(Constants.APP_ID);
-        broadcastReceiver=new BroadcastReceiver() {
+        broadcastReceiver = new BroadcastReceiver() {
             @Override
             public void onReceive(Context context, Intent intent) {
                 iwxapi.registerApp(Constants.APP_ID);
             }
         };
-        registerReceiver(broadcastReceiver,new IntentFilter(ConstantsAPI.ACTION_REFRESH_WXAPP));
+        registerReceiver(broadcastReceiver, new IntentFilter(ConstantsAPI.ACTION_REFRESH_WXAPP));
     }
+
     private void skip() {
         startActivity(new Intent(this, MainActivity.class));
         finish();
@@ -202,7 +216,6 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     }
 
     public boolean checkPhoneNumber() {
-
 
 
         String phoneNum = firstEdit.getText().toString();
@@ -340,15 +353,15 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
 
     @Override
     public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-        switch (buttonView.getId()){
+        switch (buttonView.getId()) {
             case R.id.userprotocal_checkbox:
-                if(isChecked){
-                    startActivity(new Intent(this,UserProtacalActivity.class));
+                if (isChecked) {
+                    startActivity(new Intent(this, UserProtacalActivity.class));
                 }
                 break;
             case R.id.privacypolicy_checkbox:
-                if (isChecked){
-                    startActivity(new Intent(this,PrivatePolicyActivity.class));
+                if (isChecked) {
+                    startActivity(new Intent(this, PrivatePolicyActivity.class));
                 }
                 break;
         }
@@ -357,7 +370,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     @Override
     protected void onNewIntent(Intent intent) {
         super.onNewIntent(intent);
-        final String wxopenId=intent.getStringExtra("openId");
+        final String wxopenId = intent.getStringExtra("openId");
         JsonObject jsonObject = new JsonObject();
         jsonObject.addProperty("thirdParty", Constants.WEIXIN_ID);
         jsonObject.addProperty("weiXin_id", wxopenId);
@@ -365,16 +378,15 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         Callback.MyOkhttp(requestBody, NetInterface.TSThirdPartyloginRequest, new Callback.OkhttpRun() {
             @Override
             public void run(JSONObject jsonObject) {
-                try{
-                    if (jsonObject.getInt("code")==Constants.CODE_SUCCESS)
-                    {
-                        final int state=jsonObject.getInt("state");
-                        if (state==0||state==1){
-                            Intent intent=new Intent(mcontext,BindPhoneActivity.class);
-                            intent.putExtra("wxopenId",wxopenId);
-                            intent.putExtra("thirdParty",Constants.WEIXIN_ID);
+                try {
+                    if (jsonObject.getInt("code") == Constants.CODE_SUCCESS) {
+                        final int state = jsonObject.getInt("state");
+                        if (state == 0 || state == 1) {
+                            Intent intent = new Intent(mcontext, BindPhoneActivity.class);
+                            intent.putExtra("wxopenId", wxopenId);
+                            intent.putExtra("thirdParty", Constants.WEIXIN_ID);
                             startActivity(intent);
-                        }else{
+                        } else {
                             User user = new Gson().fromJson(jsonObject.getJSONObject("user").toString(), User.class);
                             UserInfoCashUtils userInfoCashUtils = UserInfoCashUtils.getInstance();
                             userInfoCashUtils.saveUserInfoCash(user);
@@ -385,15 +397,79 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                             ActivityUtils.startActivity(intent);
                             finish();
                         }
-                    }else{
+                    } else {
                         ToastUtils.showShort(getString(R.string.thirdparty_failure));
                     }
-                }catch (Exception e){
+                } catch (Exception e) {
                     e.printStackTrace();
                     ToastUtils.showShort(getString(R.string.thirdparty_failure));
 
                 }
             }
-        },false);
+        }, false);
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if(ssoHandler!=null){
+            ssoHandler.authorizeCallBack(requestCode,resultCode,data);
+        }
+
+    }
+
+    private class SelfWbAthListener implements WbAuthListener{
+
+        @Override
+        public void onSuccess(final Oauth2AccessToken oauth2AccessToken) {
+            if(oauth2AccessToken.isSessionValid()){
+                JsonObject jsonObject = new JsonObject();
+                jsonObject.addProperty("thirdParty", Constants.WEIBO_ID);
+                jsonObject.addProperty("weiBo_id", oauth2AccessToken.getUid());
+                RequestBody requestBody = RequestBody.create(MediaType.parse("application/json; charset=utf-8"), jsonObject.toString());
+                Callback.MyOkhttp(requestBody, NetInterface.TSThirdPartyloginRequest, new Callback.OkhttpRun() {
+                    @Override
+                    public void run(JSONObject jsonObject) {
+                        try {
+                            if (jsonObject.getInt("code") == Constants.CODE_SUCCESS) {
+                                final int state = jsonObject.getInt("state");
+                                if (state == 0 || state == 1) {
+                                    Intent intent = new Intent(mcontext, BindPhoneActivity.class);
+                                    intent.putExtra("weiboId", oauth2AccessToken.getUid());
+                                    intent.putExtra("thirdParty", Constants.WEIBO_ID);
+                                    startActivity(intent);
+                                } else {
+                                    User user = new Gson().fromJson(jsonObject.getJSONObject("user").toString(), User.class);
+                                    UserInfoCashUtils userInfoCashUtils = UserInfoCashUtils.getInstance();
+                                    userInfoCashUtils.saveUserInfoCash(user);
+                                    userInfoCashUtils.setLogin();
+                                    ActivityUtils.finishOtherActivities(LoginActivity.class);
+                                    Intent intent = new Intent(MyApplication.getContext(), MainActivity.class);
+                                    intent.putExtra("success", "登录成功");
+                                    ActivityUtils.startActivity(intent);
+                                    finish();
+                                }
+                            } else {
+                                ToastUtils.showShort(getString(R.string.thirdparty_failure));
+                            }
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                            ToastUtils.showShort(getString(R.string.thirdparty_failure));
+
+                        }
+                    }
+                }, false);
+            }
+        }
+
+        @Override
+        public void cancel() {
+            ToastUtils.showShort(getText(R.string.weibocancel));
+        }
+
+        @Override
+        public void onFailure(WbConnectErrorMessage wbConnectErrorMessage) {
+            ToastUtils.showShort(wbConnectErrorMessage.getErrorMessage());
+        }
     }
 }

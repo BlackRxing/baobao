@@ -30,6 +30,8 @@ import com.example.baoxiaojianapp.Utils.RegexUtils;
 import com.example.baoxiaojianapp.Utils.UserInfoCashUtils;
 import com.example.baoxiaojianapp.classpakage.User;
 import com.google.gson.Gson;
+import com.sina.weibo.sdk.auth.Oauth2AccessToken;
+import com.sina.weibo.sdk.auth.sso.SsoHandler;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -44,6 +46,7 @@ public class BindPhoneActivity extends AppCompatActivity implements View.OnClick
     private EditText verifyCodeEdit;
     private Button verifyCodeButton;
     private Button loginButton;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -87,15 +90,20 @@ public class BindPhoneActivity extends AppCompatActivity implements View.OnClick
             final JSONObject json = new JSONObject();
             json.put("phoneNum", phoneNumEdit.getText().toString());
             json.put("sms",verifyCodeEdit.getText().toString());
-            json.put("weiXin_id",getIntent().getStringExtra("wxopenId"));
+            if (getIntent().getIntExtra("thirdParty",-1)==Constants.WEIXIN_ID){
+                json.put("weiXin_id",getIntent().getStringExtra("wxopenId"));
+            }else {
+                json.put("weiBo_id",getIntent().getStringExtra("weiboId"));
+            }
             json.put("thirdParty",getIntent().getIntExtra("thirdParty",-1));//微博是1，微信是2
             RequestBody requestBodyJson = RequestBody.create(MediaType.parse("application/json; charset=utf-8"), String.valueOf(json));
             Callback.MyOkhttp(requestBodyJson, NetInterface.TSThirdPartyBindPhoneRequest, new Callback.OkhttpRun() {
                 @Override
                 public void run(JSONObject jsonObject) {
                     try{
+                        Log.d("ff",jsonObject.toString());
                         if(jsonObject.getInt("code")==Constants.CODE_SUCCESS){
-                            Log.d("ff",jsonObject.toString());
+
                             ActivityUtils.finishOtherActivities(BindPhoneActivity.class);
                             User user = new Gson().fromJson(jsonObject.getJSONObject("user").toString(), User.class);
                             UserInfoCashUtils userInfoCashUtils = UserInfoCashUtils.getInstance();
@@ -107,7 +115,7 @@ public class BindPhoneActivity extends AppCompatActivity implements View.OnClick
                             finish();
                         }else{
                             final int code=jsonObject.getJSONObject("err").getInt("code");
-                            if(code==30003||code==30004){
+                            if(code==30003||code==30002){
                                 ToastUtils.showShort(jsonObject.getJSONObject("err").getString("title"));
                                 finish();
                             }else{
@@ -122,7 +130,6 @@ public class BindPhoneActivity extends AppCompatActivity implements View.OnClick
         }catch (Exception e){
             e.printStackTrace();
         }
-
     }
 
     private void vertifyCodeCountDown() {

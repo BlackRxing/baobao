@@ -95,6 +95,7 @@
     <string name="enter_verifycode">请输入验证码</string>
     <string name="enter_phoneNum">请输入手机号</string>
     <string name="wronginfo">输入信息有误</string>
+    <string name="weibocancel">已取消</string>
 
 
 
