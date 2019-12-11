@@ -164,9 +164,11 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                     }
                     break;
                 case R.id.weibo_button:
+                    ToastUtils.showShort(getString(R.string.openweibo));
                     weiboLogin();
                     break;
                 case R.id.weixin_button:
+                    ToastUtils.showShort(getString(R.string.openweixin));
                     weixinLogin();
                     break;
             }
@@ -309,6 +311,11 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     }
 
 
+    @Override
+    public void finish() {
+        super.finish();
+    }
+
     private void login() {
         if (linearLayout_person.getVisibility() == View.VISIBLE) {
             if (!RegexUtils.checkPhoneNumber(firstEdit.getText().toString())) {
@@ -411,10 +418,15 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        if(ssoHandler!=null){
-            ssoHandler.authorizeCallBack(requestCode,resultCode,data);
+        try{
+            if(ssoHandler!=null){
+                ssoHandler.authorizeCallBack(requestCode,resultCode,data);
+            }
+        }catch (Exception e){
+            e.printStackTrace();
+
         }
+        super.onActivityResult(requestCode, resultCode, data);
 
     }
 
@@ -422,6 +434,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
 
         @Override
         public void onSuccess(final Oauth2AccessToken oauth2AccessToken) {
+            Log.e("wrong","ff");
             if(oauth2AccessToken.isSessionValid()){
                 JsonObject jsonObject = new JsonObject();
                 jsonObject.addProperty("thirdParty", Constants.WEIBO_ID);

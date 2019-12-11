@@ -56,7 +56,7 @@ public class SettingActivity extends AppCompatActivity implements View.OnClickLi
                 if (UserInfoCashUtils.getUserLoginState()){
                     offLineDialog();
                 }else {
-                    startActivity(new Intent(this,LoginActivity.class).setFlags(Intent.FLAG_ACTIVITY_NO_HISTORY));
+                    startActivity(new Intent(this,LoginActivity.class));
                 }
                 break;
             case R.id.about_layout:

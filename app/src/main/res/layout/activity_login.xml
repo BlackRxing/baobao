@@ -150,12 +150,13 @@
         <RelativeLayout
             android:layout_width="130dp"
             android:layout_height="40dp"
-            android:layout_below="@+id/login_other_way"
             android:layout_centerHorizontal="true"
-            android:layout_marginTop="20dp"
-            android:layout_marginBottom="20dp"
+
+            android:layout_alignParentBottom="true"
             android:orientation="horizontal"
-            android:visibility="visible">
+            android:layout_marginBottom="40dp"
+            android:visibility="visible"
+            >
 
             <ImageView
                 android:id="@+id/weixin_button"
