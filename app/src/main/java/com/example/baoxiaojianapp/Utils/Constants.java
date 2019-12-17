@@ -2,7 +2,7 @@ package com.example.baoxiaojianapp.Utils;
 
 public interface Constants {
 
-    public static final String  shareLink="https://www.jianshu.com/p/eb570935d586";
+    public static final String  shareLink="https://android.myapp.com/myapp/detail.htm?apkName=com.example.baoxiaojianapp";
 
 
     //weibo

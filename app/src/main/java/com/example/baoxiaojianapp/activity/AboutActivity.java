@@ -8,6 +8,7 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.net.Uri;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
@@ -15,6 +16,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.blankj.utilcode.util.ToastUtils;
 import com.bumptech.glide.Glide;
@@ -119,11 +121,10 @@ public class AboutActivity extends AppCompatActivity implements View.OnClickList
                 finish();
                 break;
             case R.id.share_button:
-                ToastUtils.showShort("正在开发中");
-//                showShareBottom();
+                showShareBottom();
                 break;
             case R.id.RateLayout:
-                ToastUtils.showShort("正在开发中");
+                rateus();
                 break;
             case R.id.corporateInfoLayout:
                 startActivity(new Intent(this,CorporationInfoActivity.class));
@@ -189,6 +190,20 @@ public class AboutActivity extends AppCompatActivity implements View.OnClickList
 
     private void showShareBottom(){
         bottomSheetDialog.show();
+    }
+
+    private void rateus(){
+        try {
+            Uri uri = Uri.parse("market://details?id=" + getPackageName());
+            Intent intent = new Intent(Intent.ACTION_VIEW, uri);
+            intent.setPackage("com.tencent.android.qqdownloader");
+            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            startActivity(intent);
+        } catch (Exception e) {
+            e.printStackTrace();
+            ToastUtils.showShort("请安装应用宝最新版本");
+        }
+
     }
 
 
