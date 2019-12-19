@@ -23,29 +23,29 @@ public class UiTestActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_ui_test);
-        bxjBottomNavigator=findViewById(R.id.bxjbottomnavigator);
-        bxjBottomNavigator.setLeftItemClick(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                ToastUtils.showShort("hahahha");
-            }
-        });
-        bxjBottomNavigator.setCenterButtonClick(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                initBottomView();
-            }
-        });
+//        bxjBottomNavigator=findViewById(R.id.bxjbottomnavigator);
+//        bxjBottomNavigator.setLeftItemClick(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                ToastUtils.showShort("hahahha");
+//            }
+//        });
+//        bxjBottomNavigator.setCenterButtonClick(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                initBottomView();
+//            }
+//        });
     }
 
-    private void initBottomView(){
-        View bottomview=View.inflate(this,R.layout.share_bottomsheet_layout,null);
-
-        bottomSheetDialog=new BottomSheetDialog(this);
-        bottomSheetDialog.setContentView(bottomview);
-        ViewGroup viewGroup=(ViewGroup) bottomview.getParent();
-        viewGroup.setBackgroundResource(R.color.transparent);
-        bottomSheetDialog.getWindow().setBackgroundDrawableResource(R.color.transparent);
-        bottomSheetDialog.show();//test
-    }
+//    private void initBottomView(){
+//        View bottomview=View.inflate(this,R.layout.share_bottomsheet_layout,null);
+//
+//        bottomSheetDialog=new BottomSheetDialog(this);
+//        bottomSheetDialog.setContentView(bottomview);
+//        ViewGroup viewGroup=(ViewGroup) bottomview.getParent();
+//        viewGroup.setBackgroundResource(R.color.transparent);
+//        bottomSheetDialog.getWindow().setBackgroundDrawableResource(R.color.transparent);
+//        bottomSheetDialog.show();//test
+//    }
 }

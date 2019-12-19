@@ -7,15 +7,15 @@
     tools:context=".activity.UiTestActivity"
     android:gravity="bottom"
     android:background="@drawable/whiteradiusconer_background">
-    <com.example.baoxiaojianapp.view.BxjBottomNavigator
-        android:id="@+id/bxjbottomnavigator"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        app:leftItemText="@string/enter_verifycode"
-        app:RightItemResource="@drawable/icon"
-        tools:ignore="MissingConstraints"
-        app:RightItemText="@string/enter_verifycode"
-        app:leftItemResource="@drawable/icon"
-        app:centerItemResource="@drawable/icon" />
+<!--    <com.example.baoxiaojianapp.view.BxjBottomNavigator-->
+<!--        android:id="@+id/bxjbottomnavigator"-->
+<!--        android:layout_width="match_parent"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        app:leftItemText="@string/enter_verifycode"-->
+<!--        app:RightItemResource="@drawable/icon"-->
+<!--        tools:ignore="MissingConstraints"-->
+<!--        app:RightItemText="@string/enter_verifycode"-->
+<!--        app:leftItemResource="@drawable/icon"-->
+<!--        app:centerItemResource="@drawable/icon" />-->
 
 </RelativeLayout>
