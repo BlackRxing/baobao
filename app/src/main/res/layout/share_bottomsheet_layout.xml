@@ -1,61 +1,72 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="horizontal" android:layout_width="match_parent"
-    android:layout_height="80dp">
+    android:layout_width="match_parent"
+    android:layout_height="80dp"
+    android:background="@drawable/bottomsheet_background"
+    android:orientation="horizontal">
+
     <LinearLayout
         android:id="@+id/weibo_button"
-        android:orientation="vertical"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerVertical="true"
+        android:layout_marginRight="70dp"
         android:layout_toLeftOf="@+id/weixin_button"
-        android:layout_marginRight="70dp">
+        android:orientation="vertical">
+
         <ImageView
             android:layout_width="40dp"
             android:layout_height="40dp"
-            android:src="@drawable/share_weibo"/>
+            android:src="@drawable/share_weibo" />
+
         <TextView
             android:layout_width="40dp"
             android:layout_height="wrap_content"
-            android:text="@string/weibo"
             android:gravity="center"
-            android:textColor="@color/black"/>
+            android:text="@string/weibo"
+            android:textColor="@color/black" />
     </LinearLayout>
+
     <LinearLayout
         android:id="@+id/weixin_button"
-        android:orientation="vertical"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_centerInParent="true">
+        android:layout_centerInParent="true"
+        android:orientation="vertical">
+
         <ImageView
             android:layout_width="40dp"
             android:layout_height="40dp"
-            android:src="@drawable/wechat"/>
+            android:src="@drawable/wechat" />
+
         <TextView
             android:layout_width="40dp"
             android:layout_height="wrap_content"
-            android:text="@string/weixin"
             android:gravity="center"
-            android:textColor="@color/black"/>
+            android:text="@string/weixin"
+            android:textColor="@color/black" />
     </LinearLayout>
+
     <LinearLayout
         android:id="@+id/friendcircle_button"
-        android:orientation="vertical"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_toRightOf="@id/weixin_button"
         android:layout_centerVertical="true"
-        android:layout_marginLeft="70dp">
+        android:layout_marginLeft="70dp"
+        android:layout_toRightOf="@id/weixin_button"
+        android:orientation="vertical">
+
         <ImageView
             android:layout_width="40dp"
             android:layout_height="40dp"
-            android:src="@drawable/share_wechat_timeline"/>
+            android:src="@drawable/share_wechat_timeline" />
+
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/friendcircle"
+            android:layout_gravity="center_horizontal"
             android:gravity="center"
-            android:textColor="@color/black"
-            android:layout_gravity="center_horizontal"/>
+            android:text="@string/friendcircle"
+            android:textColor="@color/black" />
     </LinearLayout>
 </RelativeLayout>
