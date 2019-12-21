@@ -1,5 +1,7 @@
 package com.example.baoxiaojianapp.fragment;
 
+import android.app.Activity;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.drawable.Drawable;
@@ -28,6 +30,7 @@ import android.widget.TextView;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.target.SimpleTarget;
 import com.bumptech.glide.request.transition.Transition;
+import com.example.baoxiaojianapp.Callback.Callback;
 import com.example.baoxiaojianapp.R;
 import com.example.baoxiaojianapp.Utils.NetInterface;
 import com.example.baoxiaojianapp.Utils.OkHttpUtils;
@@ -58,12 +61,14 @@ public class AppraisalFragment extends Fragment implements View.OnClickListener 
     private TextView subclassText;
     private ImageView bannerImage;
     private RecyclerView recyclerView;
+    private Activity mcontext;
 
 
     private static final String[] subClasscategory=new String[]{"bag","shoe","watch"};
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        mcontext=getActivity();
         loadPic();
     }
 
@@ -75,30 +80,25 @@ public class AppraisalFragment extends Fragment implements View.OnClickListener 
     }
 
     private void loadPic(){
-
-        OkHttpUtils okHttpUtils = OkHttpUtils.getInstance();
         RequestBody requestBody = RequestBody.create(null, new byte[]{});
-        okHttpUtils.post(NetInterface.TSAppraisalPageReques,requestBody,new OkHttpUtils.RealCallback() {
+        Callback.MyOkhttp(requestBody, NetInterface.TSAppraisalPageReques, new Callback.OkhttpRun() {
             @Override
-            public void onResponse(Call call, Response response) {
+            public void run(JSONObject jsonObject) {
                 try {
-                    JSONObject jsonObject = new JSONObject(response.body().string());
-                    JSONArray jsonArray=jsonObject.getJSONArray("appraisalKindList");
-                    String banner=jsonObject.getString("bannerList");
-                    showPic(jsonArray,banner);
+                    final JSONArray jsonArray=jsonObject.getJSONArray("appraisalKindList");
+                    final String banner=jsonObject.getString("bannerList");
+                    mcontext.runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            showPic(jsonArray,banner);
+                        }
+                    });
                     //   Log.i("return info",jsonObject.toString());
-                } catch (IOException e) {
-                    e.printStackTrace();
                 } catch (JSONException j){
                     j.printStackTrace();
                 }
             }
-
-            @Override
-            public void onFailure(Call call, IOException e) {
-
-            }
-        });
+        },false);
     }
 
     private void showSubclassPic(JSONArray jsonArray){
@@ -158,6 +158,7 @@ public class AppraisalFragment extends Fragment implements View.OnClickListener 
 
 
     private void showPic(JSONArray jsonArray,String banner){
+
         try {
             String imageurl=jsonArray.getJSONObject(0).getString("imageUrl");
             Glide.with(getView()).load(imageurl).into(new SimpleTarget<Drawable>() {
@@ -218,7 +219,6 @@ public class AppraisalFragment extends Fragment implements View.OnClickListener 
                 subclassText.setText("表");
                 break;
         }
-
         JSONObject json = new JSONObject();
         try {
             json.put("type", subClasscategory[i]);
@@ -226,26 +226,22 @@ public class AppraisalFragment extends Fragment implements View.OnClickListener 
             e.printStackTrace();
         }
         RequestBody requestBodyJson = RequestBody.create(MediaType.parse("application/json; charset=utf-8"), String.valueOf(json));
-        String subclassrequest=NetInterface.TSCategoryPageRequest;
-        OkHttpUtils okHttpUtils = OkHttpUtils.getInstance();
-        okHttpUtils.post(subclassrequest,requestBodyJson,new OkHttpUtils.RealCallback() {
+        Callback.MyOkhttp(requestBodyJson, NetInterface.TSCategoryPageRequest, new Callback.OkhttpRun() {
             @Override
-            public void onResponse(Call call, Response response) {
+            public void run(JSONObject jsonObject) {
                 try {
-                    JSONObject jsonObject = new JSONObject(response.body().string());
-                    JSONArray jsonArray=jsonObject.getJSONArray("appraisalBrand");
-                    showSubclassPic(jsonArray);
-                } catch (IOException e) {
-                    e.printStackTrace();
-                } catch (JSONException j){
+                    final JSONArray jsonArray=jsonObject.getJSONArray("appraisalBrand");
+                    mcontext.runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            showSubclassPic(jsonArray);
+                        }
+                    });
+                }catch (JSONException j){
                     j.printStackTrace();
                 }
             }
-            @Override
-            public void onFailure(Call call, IOException e) {
-
-            }
-        });
+        },false);
     }
 
     @Override

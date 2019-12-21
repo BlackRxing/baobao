@@ -261,7 +261,6 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                     SharedPreferences share = getApplicationContext().getSharedPreferences("Session", MODE_PRIVATE);
                     SharedPreferences.Editor edit = share.edit();//编辑文件
                     edit.putString("sessionid", sessionid);
-                    Log.i("sessionid_in", session);
                     edit.commit();
                 }
 

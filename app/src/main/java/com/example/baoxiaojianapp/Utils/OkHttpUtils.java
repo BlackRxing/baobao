@@ -5,6 +5,7 @@ import android.os.Handler;
 import android.os.Looper;
 import android.util.Log;
 
+import com.blankj.utilcode.util.AppUtils;
 import com.blankj.utilcode.util.DeviceUtils;
 import com.blankj.utilcode.util.NetworkUtils;
 import com.blankj.utilcode.util.ToastUtils;
@@ -103,7 +104,7 @@ public class OkHttpUtils {
                 addHeader("TS-VERSION","V1.0").
                 addHeader("TS-MOBILE",DeviceUtils.getModel()).
                 addHeader("TS-VERSION","TS-PLATFORM ANDROID");
-        if (url=="https://dev2.turingsenseai.com/account/login"){
+        if (url.contains("/account/login")){
              builder.addHeader("cookie",sessionid);
         }else{
             if (needToken){
@@ -195,6 +196,7 @@ public class OkHttpUtils {
     }
 
     public void post(String url, RequestBody requestBody, final RealCallback realCallback){
+        url= AppUtils.isAppDebug()?NetInterface.DebugEnvironment+url:NetInterface.ReleaseEnvironment+url;
         post(url,requestBody,realCallback,false);
     }
     /**

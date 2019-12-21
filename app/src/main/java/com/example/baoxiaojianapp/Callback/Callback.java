@@ -5,6 +5,7 @@ import android.os.Handler;
 import android.util.Log;
 
 import com.blankj.utilcode.util.ActivityUtils;
+import com.blankj.utilcode.util.AppUtils;
 import com.blankj.utilcode.util.DeviceUtils;
 import com.blankj.utilcode.util.LogUtils;
 import com.blankj.utilcode.util.NetworkUtils;
@@ -61,8 +62,9 @@ public class Callback {
             JsonObject jsonObject = new JsonObject();
             jsonObject.addProperty("id", UserInfoCashUtils.getUserInfoInt("id"));
             RequestBody requestBody = RequestBody.create(MediaType.parse("application/json; charset=utf-8"), jsonObject.toString());
+            String url=AppUtils.isAppDebug()?NetInterface.DebugEnvironment+NetInterface.TSRenewalTokenRequest:NetInterface.ReleaseEnvironment+NetInterface.TSRenewalTokenRequest;
             Request request = new Request.Builder()
-                    .url(NetInterface.TSRenewalTokenRequest)
+                    .url(url)
                     .post(requestBody)
                     .build();
             //第四步创建call回调对象
@@ -87,8 +89,6 @@ public class Callback {
                 }
             }).start();
         }
-
-
     }
 
     public static OkHttpUtils.RealCallback LoginTestCallback = new OkHttpUtils.RealCallback() {
@@ -115,7 +115,6 @@ public class Callback {
             } else {
             }
         }
-
         @Override
         public void onFailure(Call call, IOException e) {
             Log.e("error", e.toString());
@@ -130,22 +129,11 @@ public class Callback {
                 .build();
         //第二步创建RequestBody
         RequestBody requestBody = RequestBody.create(null, new byte[]{});
-        //第三步创建Rquest
-        Request request = new Request.Builder()
-                .url(NetInterface.TSPersonCenterPageRequest)
-                .post(requestBody).addHeader("Authorization", "Token " + token)
-                .build();
-        //第四步创建call回调对象
-        final Call call = client.newCall(request);
-        //第五步发起请求
-        new Thread(new Runnable() {
+        //第三步创建Rquestd
+        MyOkhttp(requestBody, NetInterface.TSPersonCenterPageRequest, new OkhttpRun() {
             @Override
-            public void run() {
+            public void run(JSONObject jsonObject) {
                 try {
-                    Response response = call.execute();
-                    String result = response.body().string();
-                    Log.i("response", result);
-                    JSONObject jsonObject = new JSONObject(result);
                     JSONArray jsonArray = jsonObject.getJSONArray("fakeList");
                     for (int i = 0; i < jsonArray.length(); i++) {
                         AppraisalResult appraisalResult = new AppraisalResult();
@@ -172,13 +160,11 @@ public class Callback {
                             appraisalItemAdapter.notifyDataSetChanged();
                         }
                     });
-                } catch (IOException e) {
-                    e.printStackTrace();
                 } catch (JSONException j) {
                     j.printStackTrace();
                 }
             }
-        }).start();
+        },true);
     }
 
     public static void loadData(final FragmentActivity fragmentActivity) {
@@ -238,6 +224,11 @@ public class Callback {
     }
 
     public static void MyOkhttp(final RequestBody requestBody, String url, final OkhttpRun okhttpRun, boolean tokenRequired) {
+        if(AppUtils.isAppDebug()){
+            url=NetInterface.DebugEnvironment+url;
+        }else{
+            url=NetInterface.ReleaseEnvironment+url;
+        }
         try{
             if (NetworkUtils.isConnected()){
                 SharedPreferences sharedPreferences1 = MyApplication.getContext().getSharedPreferences("userinfo_cash", MODE_PRIVATE);
@@ -324,7 +315,6 @@ public class Callback {
                                 });
                             }
                         }
-
                         @Override
                         public void onResponse(@NotNull Call call, @NotNull Response response) throws IOException {
                             try{
@@ -356,22 +346,10 @@ public class Callback {
         jsonObject.addProperty("key", "personcenter_fake_key");
         jsonObject.addProperty("page", String.valueOf(currentPage));
         RequestBody requestBody = RequestBody.create(MediaType.parse("application/json; charset=utf-8"), jsonObject.toString());
-
-        Request request = new Request.Builder()
-                .url(NetInterface.TSPageBackwardRequest)
-                .post(requestBody).addHeader("Authorization", "Token " + token)
-                .build();
-        //第四步创建call回调对象
-        final Call call = client.newCall(request);
-        //第五步发起请求
-        new Thread(new Runnable() {
+        MyOkhttp(requestBody, NetInterface.TSPageBackwardRequest, new OkhttpRun() {
             @Override
-            public void run() {
+            public void run(JSONObject jsonObject) {
                 try {
-                    Response response = call.execute();
-                    String result = response.body().string();
-//                    Log.i("userresponse", result);
-                    JSONObject jsonObject = new JSONObject(result);
                     JSONArray jsonArray = jsonObject.getJSONArray("list");
                     for (int i = 0; i < jsonArray.length(); i++) {
                         AppraisalResult appraisalResult = new AppraisalResult();
@@ -388,13 +366,12 @@ public class Callback {
                     if (jsonArray.length() < 10) {
                         FakeFragment.hasMoreData = false;
                     }
-                } catch (IOException e) {
-                    e.printStackTrace();
                 } catch (JSONException j) {
                     j.printStackTrace();
                 }
             }
-        }).start();
+        },true);
+
     }
 
 
@@ -408,22 +385,10 @@ public class Callback {
         jsonObject.addProperty("key", "personcenter_real_key");
         jsonObject.addProperty("page", String.valueOf(currentPage));
         RequestBody requestBody = RequestBody.create(MediaType.parse("application/json; charset=utf-8"), jsonObject.toString());
-
-        Request request = new Request.Builder()
-                .url(NetInterface.TSPageBackwardRequest)
-                .post(requestBody).addHeader("Authorization", "Token " + token)
-                .build();
-        //第四步创建call回调对象
-        final Call call = client.newCall(request);
-        //第五步发起请求
-        new Thread(new Runnable() {
+        MyOkhttp(requestBody, NetInterface.TSPageBackwardRequest, new OkhttpRun() {
             @Override
-            public void run() {
+            public void run(JSONObject jsonObject) {
                 try {
-                    Response response = call.execute();
-                    String result = response.body().string();
-//                    Log.i("userresponse", result);
-                    JSONObject jsonObject = new JSONObject(result);
                     JSONArray jsonArray = jsonObject.getJSONArray("list");
                     for (int i = 0; i < jsonArray.length(); i++) {
                         AppraisalResult appraisalResult = new AppraisalResult();
@@ -440,14 +405,11 @@ public class Callback {
                     if (jsonArray.length() < 10) {
                         hasMoreData = false;
                     }
-                } catch (IOException e) {
-                    e.printStackTrace();
                 } catch (JSONException j) {
                     j.printStackTrace();
                 }
             }
-        }).start();
+        }, true);
     }
-
 
 }

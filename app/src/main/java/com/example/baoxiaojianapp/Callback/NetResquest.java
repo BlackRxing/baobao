@@ -1,5 +1,6 @@
 package com.example.baoxiaojianapp.Callback;
 
+import com.blankj.utilcode.util.AppUtils;
 import com.blankj.utilcode.util.ToastUtils;
 import com.example.baoxiaojianapp.Utils.NetInterface;
 import com.example.baoxiaojianapp.Utils.OkHttpUtils;
@@ -30,7 +31,8 @@ public class NetResquest {
         }
         RequestBody requestBodyJson = RequestBody.create(MediaType.parse("application/json; charset=utf-8"), String.valueOf(json));
         OkHttpUtils okHttpUtils = OkHttpUtils.getInstance();
-        okHttpUtils.post(NetInterface.TSSetUserInfoRequest, requestBodyJson, new OkHttpUtils.RealCallback() {
+        String url=AppUtils.isAppDebug()?NetInterface.DebugEnvironment+NetInterface.TSSetUserInfoRequest:NetInterface.ReleaseEnvironment+NetInterface.TSSetUserInfoRequest;
+        okHttpUtils.post(url, requestBodyJson, new OkHttpUtils.RealCallback() {
             @Override
             public void onResponse(Call call, Response response) {
                 try{
@@ -79,7 +81,8 @@ public class NetResquest {
         }
         RequestBody requestBodyJson = RequestBody.create(MediaType.parse("application/json; charset=utf-8"), String.valueOf(json));
         OkHttpUtils okHttpUtils = OkHttpUtils.getInstance();
-        okHttpUtils.post(NetInterface.TSUserAdviceRequest, requestBodyJson, new OkHttpUtils.RealCallback() {
+        String url=AppUtils.isAppDebug()?NetInterface.DebugEnvironment+NetInterface.TSUserAdviceRequest:NetInterface.ReleaseEnvironment+NetInterface.TSUserAdviceRequest;
+        okHttpUtils.post(url, requestBodyJson, new OkHttpUtils.RealCallback() {
             @Override
             public void onResponse(Call call, Response response) {
                 try{

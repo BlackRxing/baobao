@@ -23,6 +23,7 @@ import android.widget.TextView;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners;
 import com.bumptech.glide.request.RequestOptions;
+import com.example.baoxiaojianapp.Callback.Callback;
 import com.example.baoxiaojianapp.R;
 import com.example.baoxiaojianapp.Utils.NetInterface;
 import com.example.baoxiaojianapp.Utils.OkHttpUtils;
@@ -115,25 +116,22 @@ public class AppraisalNoticeActivity extends AppCompatActivity implements View.O
         jsonObject.addProperty("brand", brandName);
         final RequestBody requestBody = RequestBody.create(MediaType.parse("application/json; charset=utf-8"), jsonObject.toString());
         OkHttpUtils okHttpUtils = OkHttpUtils.getInstance();
-        okHttpUtils.post(NetInterface.TSAppraisalProcessV2Request, requestBody, new OkHttpUtils.RealCallback() {
+        Callback.MyOkhttp(requestBody, NetInterface.TSAppraisalProcessV2Request, new Callback.OkhttpRun() {
             @Override
-            public void onResponse(Call call, Response response) {
+            public void run(JSONObject jsonObject) {
                 try {
-                    JSONObject jsonObject = new JSONObject(response.body().string());
-                    JSONArray jsonArray = jsonObject.getJSONArray("pointList");
-                    bindData(jsonArray);
-                } catch (IOException e) {
-
-                } catch (JSONException j) {
-
+                    final JSONArray jsonArray = jsonObject.getJSONArray("pointList");
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            bindData(jsonArray);
+                        }
+                    });
+                } catch (Exception e) {
                 }
             }
+        },true);
 
-            @Override
-            public void onFailure(Call call, IOException e) {
-
-            }
-        }, true);
     }
 
     private void bindData(JSONArray jsonArray) {
